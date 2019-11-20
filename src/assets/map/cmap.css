@@ -1,0 +1,16 @@
+
+.rangeSetterContainer,.markLabelEditor {
+    position: fixed;
+}
+.rangeSetterContainer input {
+    padding: 2px;
+}
+
+.markLabelEditor{
+    text-align: right;
+}
+
+.markLabelEditor textarea{
+    text-align: left;
+}
+
