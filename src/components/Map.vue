@@ -162,6 +162,7 @@
 <template>
   <div class="MapContainer">
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
+    <gis-header></gis-header>
     <div id="mapElement"></div>
     <time-line
       @hingeMsgEvent="hingeMsgEvent"
@@ -219,7 +220,7 @@ import selectsElm from "../view/selectElm/index.vue";
 import event from "../view/event/event.vue";
 import replay from "../view/replay/index.vue";
 import info from "../view/infoTime/list.vue";
-
+import gisHeader from "../view/header/header.vue";
 import MapTool from "../view/toolbar/maptool.vue";
 import DisplayController from "../view/toolbar/displayController.vue";
 
@@ -297,7 +298,8 @@ export default {
     replay,
     info,
     timeLine,
-    DisplayController
+    DisplayController,
+    gisHeader
   },
   mounted() {
     let that = this;
