@@ -1,19 +1,21 @@
 <template>
 	<div class="replay" :style="{ left: left + 'px', top: top + 'px' }">
 		<div class="replay-cont" v-if="isShow">
-			<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
-			<div class="close" @click="isShow=false">
-				x
-			</div>
-			<div class="nav">综合信息</div>
-			<div class="header">
-				<span @click="curNav=item" :class="{curnav: item == curNav}" v-for="item in nav" :key="item">{{item}}</span>
-			</div>
-			<div class="cont">
-				<bulletin v-show="curNav=='简报'" :dataInfo="dataInfo" :WebSocketData="WebSocketData"></bulletin>
-				<terrace ref='myterrace' v-show="curNav=='平台信息'" :setTime="setTime" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
-				<event v-show="curNav=='事件列表'" :setTime="setTime" @uploading="uploading" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
-				<buoy ref='mybuoy'  v-show="curNav=='目标'" :setTime="setTime" :WebSocketData="WebSocketData"/>
+			<div style="width: 360px;height: 600px;">
+				<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
+				<div class="close" @click="isShow=false">
+					x
+				</div>
+				<div class="nav">数据统计分析</div>
+				<!--<div class="header">-->
+					<!--<span @click="curNav=item" :class="{curnav: item == curNav}" v-for="item in nav" :key="item">{{item}}</span>-->
+				<!--</div>-->
+				<div class="cont">
+					<bulletin v-show="curNav=='简报'" :dataInfo="dataInfo" :WebSocketData="WebSocketData"></bulletin>
+					<terrace ref='myterrace' v-show="curNav=='平台信息'" :setTime="setTime" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
+					<event v-show="curNav=='事件列表'" :setTime="setTime" @uploading="uploading" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
+					<buoy ref='mybuoy'  v-show="curNav=='目标'" :setTime="setTime" :WebSocketData="WebSocketData"/>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -159,11 +161,11 @@ export default {
 	}
 	.replay-cont {
 		width: 360px;
-		height: 600px;
+		height: 750px;
 		background: url("../../../public/static/image/replay/tree.png");
 		background-size: 100% 100%;
 		background-repeat: no-repeat;
-		padding: 60px 40px 40px;
+		padding: 50px 40px 40px;
 	}
 	.replay .close {
 		position: absolute;
@@ -180,18 +182,17 @@ export default {
 		position: absolute;
     top: 0;
     font-size: 14px;
-    font-weight: 600;
-    left: 40%;
-    width: 20%;
+    font-weight: 500;
+    left: 37%;
+    width: 28%;
     height: 40px;
     line-height: 50px;
     text-align: center;
-    letter-spacing: 5px;
+    letter-spacing: 2px;
 	}
 	.replay .cont {
 		width: 100%;
-    border: 1px solid #104284;
-    height: calc(100% - 90px);
+    	border: 1px solid #104284;
 	}
 	.replay-foote {
 		position: absolute;

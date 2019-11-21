@@ -67,7 +67,7 @@
 
   background-size: 100% 100% !important;
 } */
-.icon-bigdiv {
+setTime.icon-bigdiv {
   background: url(../assets/time_1.png) no-repeat !important;
   background-size: 100% 100% !important;
 }
@@ -181,24 +181,16 @@
     <display-controller></display-controller>
 
     <div id="hinge-msg">{{hingeMsg}}</div>
-    <line-chart v-show="chartF" ref="lineChart" class="line-chart"></line-chart>
     <muen :dataInfo="dataInfo" :visible="visible" :type="type" @close="visible=false"></muen>
     <replay
       ref="myreplay"
-      v-if="sleC"
+
       :setTime="setTime"
       :dataInfo="info"
       :WebSocketData="WebSocketData"
       @uploading="uploading"
     ></replay>
     <info v-if="sleC" :dataInfo="buoyInfo" :visible="showInfo" @close="showInfo=false"></info>
-    <event
-      v-if="sleC"
-      ref="myEventL"
-      :setTime="setTime"
-      :dataInfo="info"
-      :WebSocketData="WebSocketData"
-    ></event>
     <selects-elm
       @buildSocket="buildSocket"
       ref="selectsElm"
@@ -372,7 +364,7 @@ export default {
   methods: {
     timeDown() {
       window.Map.FlyCompare.ClearPath();
-      this.$refs["lineChart"].setLineOption(false);
+      this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
     },
     uploading(data) {
       //this.setVisItem(data.time);
@@ -413,7 +405,7 @@ export default {
         this.$refs["timeLine"].timeline.focus(y[0].id);
         this.$refs["timeLine"].timeline.setSelection(y[0].id);
         window.Map.FlyCompare.ClearPath();
-        this.$refs["lineChart"].setLineOption(false);
+        this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
         this.newDate = "00:00:00";
         $.get(`${globalUrl.host}/find/triggerSocket`, {
           startTime: new Date(y[0].start),
@@ -1165,7 +1157,7 @@ export default {
         window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
           new Date(newDate)
         );
-        this.$refs["lineChart"].setLineOption(data[0].data);
+        this.$refs["myreplay"].$refs['myterrace'].setLineOption(data[0].data);
         let y = [];
 
         //--------------------------比对当前播放时间是否到达标绘时间点
