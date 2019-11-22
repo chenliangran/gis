@@ -218,7 +218,7 @@ export default {
 		background-position: center center;
 	}
 	.event-item >div:last-child {
-		max-height: 140px;
+		max-height: 65px;
 		overflow: auto;
 	}
 	.event-item p {

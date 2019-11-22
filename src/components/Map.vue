@@ -162,7 +162,7 @@ setTime.icon-bigdiv {
 <template>
   <div class="MapContainer">
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
-    <gis-header></gis-header>
+    <gis-header @mapTool="maptool" @controller="controller"></gis-header>
     <div id="mapElement"></div>
     <time-line
       @hingeMsgEvent="hingeMsgEvent"
@@ -178,8 +178,8 @@ setTime.icon-bigdiv {
       @closeplay="closeplay"
       ref="timeLine"
     ></time-line>
-    <map-tool></map-tool>
-    <display-controller></display-controller>
+    <map-tool v-show='toolF'></map-tool>
+    <display-controller v-show='controllerF'></display-controller>
 
     <div id="hinge-msg">{{hingeMsg}}</div>
     <muen :dataInfo="dataInfo" :visible="visible" :type="type" @close="visible=false"></muen>
@@ -272,7 +272,9 @@ export default {
       type: "",
       WebSocketData: {},
       buoyInfo: {},
-      showInfo: false
+      showInfo: false,
+      toolF:false,
+      controllerF:false
     };
   },
 
@@ -363,6 +365,12 @@ export default {
   },
 
   methods: {
+    maptool(flag){
+      this.toolF = flag;
+    },
+    controller(flag){
+      this.controllerF = flag;
+    },
     timeDown() {
       window.Map.FlyCompare.ClearPath();
       this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
@@ -1228,9 +1236,7 @@ export default {
           }
         });
         //---------------------------
-
         this.$refs["myreplay"].updtea({ a, b, c, d });
-
         if (a.length > 0) {
           a.map((item, i) => {
             dealCtSJMB(item, i);
