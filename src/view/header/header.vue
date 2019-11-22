@@ -28,7 +28,7 @@
              <ul>
                 <li><i class="icon icon4"></i><span>图层控制</span></li>
                 <li><i class="icon icon5"></i><span>绘图工具</span></li>
-                <li><i class="icon icon6"></i><span>截屏</span></li>
+                <li @click="clip"><i class="icon icon6" ></i><span>截屏</span></li>
                 <li style="margin-right: 30px;"><i class="icon icon7"></i><span>FPS信息</span></li>
             </ul>
         </div>
@@ -54,7 +54,22 @@ export default {
 		load() {
 			let id = sessionStorage.getItem("selectEd")
 			window.open(globalUrl.host+'/find/loadWordFile?fileName='+this.name)
-		}	
+		},
+        clip(){
+            var clientWidth = document.documentElement.clientWidth || document.body.clientWidth
+            var clientHeight = document.documentElement.clientHeight || document.body.clientHeight
+            // 更新canvas宽高
+            $("#bg_canvas").attr("width", clientWidth);
+            $("#bg_canvas").attr("height", clientHeight);
+            $("#bg_canvas").hide();
+            setTimeout(()=>{
+                $("#bg_canvas").show();
+                this.$nextTick(()=>{
+                    clipScreenshots("bg_canvas");
+                })
+            },500)
+            //调用选取截屏
+        }
     },
     watch: {
         WebSocketData: {
