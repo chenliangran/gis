@@ -268,7 +268,7 @@ export default {
 		text-align: center;
 	}
 	.buoy-item .list ul {
-		max-height: 80px;
+		max-height: 65px;
 		overflow: auto;
 	}
 	.buoy-item .list ul li{

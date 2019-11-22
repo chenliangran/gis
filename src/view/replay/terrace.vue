@@ -319,7 +319,7 @@ export default {
 		margin:5px 10px;
 		width: 335px;
 		overflow: auto;
-		max-height: 160px;
+		max-height: 100px;
 	}
 	.terrace-item .list >div:first-child{
 		height: 30px;

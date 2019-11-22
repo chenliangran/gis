@@ -2,7 +2,7 @@
     <div class="cms-nav">
         <div class="cmsNav cms-left">
             <ul>
-                <li style="margin-left: 30px;">
+                <li style="margin-left: 30px;" @click="dataShow(flag)"> 
                     <i class="icon icon1"></i>
                     <span>数据分析</span>
                 </li>
@@ -20,16 +20,16 @@
             <ul>
                 <li><i class="feiji"></i><span>1</span></li>
                 <li><i class="zhinan"></i><span>N</span></li>
-                <li><span class="time">2018年10月12日 10:12:12</span></li>
-                <li><i class="group"></i><span>1</span></li>
+                <li><span class="time">{{NowTime}}</span></li>
+                <li><i class="group"></i><span>{{groupNum}}</span></li>
             </ul>
         </div>
         <div class="cmsNav cms-right">
              <ul>
-                <li><i class="icon icon4"></i><span>图层控制</span></li>
-                <li><i class="icon icon5"></i><span>绘图工具</span></li>
+                <li @click="controller(flag1)"><i class="icon icon4"></i><span>图层控制</span></li>
+                <li @click="tool(flag)"><i class="icon icon5"></i><span>绘图工具</span></li>
                 <li><i class="icon icon6"></i><span>截屏</span></li>
-                <li style="margin-right: 30px;"><i class="icon icon7"></i><span>FPS信息</span></li>
+                <li style="margin-right: 30px;"><i class="icon icon7"></i><span>FPS信息：{{FPS}}</span></li>
             </ul>
         </div>
     </div>
@@ -40,10 +40,85 @@ export default {
 	data() {
 		return {
 			dataInfo: {},
-			name: ''
+            name: '',
+            FPS:0,
+            flag:false,
+            flag1:false,
+            groupNum:'',
+            name:'',
+            NowTime:''
 		}
 	},
 	methods: {
+        groupNow(){
+            let that = this
+            let groupNowNum = JSON.parse(sessionStorage.getItem('groupNum'))
+            let id = sessionStorage.getItem("selectEd")
+            if(groupNowNum){
+                that.groupNum = groupNowNum
+                setTimeout(function(){
+                    let id = sessionStorage.getItem("selectEd")
+                    let ptData = JSON.parse(sessionStorage.getItem("ptData"))
+                    ptData.map(item => {
+                        if(item.id == id) {
+                            that.name = item.ptmc
+                        }
+                    })
+                },500)
+            }else{
+                $.get(`${globalUrl.host}/find/findAllGroupName`).then(data => {
+                    if(data){
+                        data.map(item=>{
+                            if(groupNowNum == item.groupNum){
+                                that.groupNum = item.groupNum
+                                that.name = item.ptmc+"架次" 
+                            }else{
+                                that.isShow = false 
+                            }     
+                        })
+                    }else{
+                        that.isShow = false 
+                    }
+                });
+            }
+
+
+        },
+        CurentTime(){ 
+            var now = new Date();
+            
+            var year = now.getFullYear();       //年
+            var month = now.getMonth() + 1;     //月
+            var day = now.getDate();            //日
+            
+            var hh = now.getHours();            //时
+            var mm = now.getMinutes();          //分
+            var ss = now.getSeconds();           //秒
+            
+            var clock = year + "年";
+            
+            if(month < 10)
+                clock += "0";
+            
+            clock += month + "月";
+            
+            if(day < 10)
+                clock += "0";
+                
+            clock += day + "日" + '\xa0\xa0\xa0\xa0';
+            
+            if(hh < 10)
+                clock += "0";
+                
+            clock += hh + ":";
+            if (mm < 10) clock += '0'; 
+            clock += mm + ":"; 
+            
+            if (ss < 10) clock += '0'; 
+            clock += ss; 
+            return(clock); 
+        },
+       
 		getDataInfo() {
             let id = sessionStorage.getItem("selectEd")
             $.get(globalUrl.host+'/find/getWordIOFromServer',{id: id}).then(data => {
@@ -54,7 +129,64 @@ export default {
 		load() {
 			let id = sessionStorage.getItem("selectEd")
 			window.open(globalUrl.host+'/find/loadWordFile?fileName='+this.name)
-		}	
+        },
+        dataShow(flag){
+                      
+        },	
+        tool(flag){
+            this.flag = !flag;
+            this.$emit("mapTool",this.flag)  
+        },
+        controller(flag1){
+            this.flag1 = !flag1;
+            this.$emit("controller",this.flag1)  
+        },
+        showFPS(){ 
+            let _this = this
+            var requestAnimationFrame =  
+                window.requestAnimationFrame || //Chromium  
+                window.webkitRequestAnimationFrame || //Webkit 
+                window.mozRequestAnimationFrame || //Mozilla Geko 
+                window.oRequestAnimationFrame || //Opera Presto 
+                window.msRequestAnimationFrame || //IE Trident? 
+                function(callback) { //Fallback function 
+                    window.setTimeout(callback, 1000/60); 
+                }; 
+            var e,pe,pid,fps,last,offset,step,appendFps; 
+    
+            fps = 0; 
+            last = Date.now(); 
+            step = function(){ 
+                offset = Date.now() - last; 
+                fps += 1; 
+                if( offset >= 1000 ){ 
+                last += offset; 
+                appendFps(fps); 
+                fps = 0; 
+                } 
+                requestAnimationFrame( step ); 
+            }; 
+            //显示fps; 如果未指定元素id，默认<body>标签 
+            appendFps = function(fps){ 
+
+                _this.FPS = fps
+
+                // if(!e) e=document.createElement('span'); 
+                // pe=pid?document.getElementById(pid):document.getElementsByTagName('body')[0]; 
+                // e.innerHTML = "fps: " + fps; 
+                // pe.appendChild(e); 
+            } 
+            return { 
+                setParentElementId :  function(id){pid=id;}, 
+                go          :  function(){step();} 
+            } 
+        },
+    },
+     mounted() {
+       this.showFPS().go();
+       this.NowTime  = this.CurentTime();
+        //   this.getAllDate()
+        
     },
     watch: {
         WebSocketData: {
@@ -72,8 +204,11 @@ export default {
 		}
     },
     created() {
-       this.getDataInfo()
+       this.getDataInfo();
+       this.groupNow();
+      
     }
+
 }
 </script>
 

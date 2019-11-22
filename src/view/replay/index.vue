@@ -32,8 +32,8 @@ export default {
 		return {
 			nav: ["平台信息","目标","简报"],
 			curNav: "平台信息",
-			left: 40,
-			top: 10,
+			left: 5,
+			top: 55,
 			isShow: true
 		}
 	},
@@ -161,7 +161,7 @@ export default {
 	}
 	.replay-cont {
 		width: 360px;
-		height: 750px;
+		height: 600px;
 		background: url("../../../public/static/image/replay/tree.png");
 		background-size: 100% 100%;
 		background-repeat: no-repeat;
