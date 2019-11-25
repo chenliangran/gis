@@ -2,14 +2,14 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style >
 .event-filter{
-	width: 400px;
+	/* width: 400px;
 	height: 250px;
 	background: url(../../assets/icon/事件过滤bg.png) no-repeat!important;
-	background-size: 100% 100%!important;
+	background-size: 100% 100%!important; */
 	position: fixed;
 	z-index: 1000;
-	bottom: 150px;
-    right: 20px;
+	bottom: 80px;
+    left: 55%;
 
 }
 .event-filter-big{
@@ -71,22 +71,27 @@
 	font-size: 12px;
 	left: 1px;
 } */
-
+.title{
+	color: #83efe6;
+	font-size: 14px;
+}
 </style>
 
 <template>
   <div class="event-filter">
       
     <div class="event-filter-big">
+		
 		<div class='event-filter-checkbox-div'>
+            <div class="title"><span>事件类型：</span></div>
 			<p><input class="event-filter-checkbox" type="checkbox" name="item"><span data-type='浮标投放'>✔</span><label>浮标投放</label></p>
             <p><input class="event-filter-checkbox" type="checkbox" name="item"><span data-type='目标探测'>✔</span><label>目标探测</label></p>
             <p><input class="event-filter-checkbox" type="checkbox" name="item"><span data-type='手动事件'>✔</span><label>手动事件</label></p>
 		</div>
-		<div class='event-filter-bottom-div'>
+		<!-- <div class='event-filter-bottom-div'>
 			<div @click='confirm'>确定</div>
 			<div @click='cancel'>取消</div>
-		</div>
+		</div> -->
 	</div>
     
   </div>
