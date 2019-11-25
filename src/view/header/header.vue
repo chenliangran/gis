@@ -32,6 +32,34 @@
                 <li style="margin-right: 30px;"><i class="icon icon7"></i><span>FPS信息：{{FPS}}</span></li>
             </ul>
         </div>
+        <div id="dv" v-show="dvShow" :style="dvStyle" @dblclick="clipImg"></div>
+        <el-dialog
+                title="设置截取尺寸"
+                :visible.sync="dialogVisible"
+                width="20%"
+                append-to-body
+        >
+            <el-row style="margin: 10px 0">
+                <el-col :span="8"><span style="line-height: 32px">截取框长度</span></el-col>
+                <el-col :span="8">
+                    <el-input-number v-model="imgWidth" :min="100">
+                    </el-input-number>
+                </el-col>
+                <el-col :span="8"></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="8"><span style="line-height: 32px">截取框宽度</span></el-col>
+                <el-col :span="8">
+                    <el-input-number v-model="imgHeight" :min="100">
+                    </el-input-number>
+                </el-col>
+                <el-col :span="8"></el-col>
+            </el-row>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="setXy">确 定</el-button>
+          </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -45,7 +73,18 @@ export default {
             flag:false,
             flag1:false,
             groupNum:'',
-            NowTime:''
+            NowTime:'',
+            dvStyle:{
+                width:'300px',
+                height:'300px',
+                position:'absolute',
+                border: '1px solid red',
+                zIndex: 999999
+            },
+            imgWidth:"300",
+            imgHeight:"300",
+            dialogVisible:false,
+            dvShow:false
 		}
 	},
 	methods: {
@@ -130,6 +169,15 @@ export default {
 			window.open(globalUrl.host+'/find/loadWordFile?fileName='+this.name)
 		},
         clip(){
+            this.dialogVisible = true;
+        },
+        setXy(){
+            this.dialogVisible = false;
+            this.dvStyle.width = this.imgWidth + "px";
+            this.dvStyle.height = this.imgHeight + "px";
+            this.dvShow = true;
+        },
+        clipImg(){
             var clientWidth = document.documentElement.clientWidth || document.body.clientWidth
             var clientHeight = document.documentElement.clientHeight || document.body.clientHeight
             // 更新canvas宽高
@@ -139,10 +187,10 @@ export default {
             setTimeout(()=>{
                 $("#bg_canvas").show();
                 this.$nextTick(()=>{
-                    clipScreenshots("bg_canvas");
+                    clipScreenshots("bg_canvas",this.imgWidth,this.imgHeight);
                 })
+                this.dvShow = false
             },500)
-            //调用选取截屏
         },
         dataShow(flag){
                       
