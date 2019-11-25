@@ -299,7 +299,7 @@ export default {
   },
   mounted() {
     let that = this;
-      this.init();
+      //this.init();
     document.onselectstart = function() {
       return false;
     };
@@ -624,7 +624,7 @@ export default {
         this.allDate.endT = this.toDate(data.endTime);
         this.$refs["timeLine"].allDate.startT = this.toDate(data.startTime);
         this.$refs["timeLine"].allDate.endT = this.toDate(data.endTime);
-        //this.init();
+        this.init();
         // this.buildSocket()
       });
     },

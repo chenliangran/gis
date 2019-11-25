@@ -60,6 +60,36 @@
             <el-button type="primary" @click="setXy">确 定</el-button>
           </span>
         </el-dialog>
+        <el-dialog
+                title="经纬度设置"
+                :visible.sync="jwdVisible"
+                width="30%"
+                append-to-body
+        >
+            <el-button type="primary" @click="addDomain">新增点</el-button>
+            <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+                <el-col>
+                    <el-form-item
+                            v-for="(domain, index) in dynamicValidateForm.domains"
+                            :label="`点迹${index+1}`"
+                            :key="'点迹' + index"
+                            :prop="'domains.' + index + '.value'"
+                    >
+                        <el-input style="width: 35%;margin-right: 10px" v-model="domain.jd">
+                            <i slot="suffix">经度</i>
+                        </el-input>
+                        <el-input style="width: 35%;margin-right: 10px" v-model="domain.wd">
+                            <i slot="suffix">纬度</i>
+                        </el-input>
+                        <el-button type="danger" @click.prevent="removeDomain(domain)">删除</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="jwdVisible = false">取 消</el-button>
+            <el-button type="primary" @click="drawPolygon">确 定</el-button>
+          </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -73,12 +103,8 @@ export default {
             flag:false,
             flag1:false,
             groupNum:'',
-<<<<<<< HEAD
-            name:'',
             NowTime:'',
-            tudeShow:false
-=======
-            NowTime:'',
+            jwdVisible:false,
             dvStyle:{
                 width:'300px',
                 height:'300px',
@@ -89,8 +115,14 @@ export default {
             imgWidth:"300",
             imgHeight:"300",
             dialogVisible:false,
-            dvShow:false
->>>>>>> e143d04559bbfb68d26dd001a06cea7d65c4081d
+            dvShow:false,
+            dynamicValidateForm: {
+                domains: [{
+                    jd: "",
+                    wd:"",
+                    key: ""
+                }],
+            }
 		}
 	},
 	methods: {
@@ -220,9 +252,28 @@ export default {
             this.flag1 = !flag1;
             this.$emit("controller",this.flag1)  
         },
-        tudeShow(tudeShow){
-            this.tudeShow = !tudeShow;
-            this.$emit("tudeShow",this.tudeShow) 
+        tudeShow(){
+            this.jwdVisible =true
+        },
+        addDomain() {
+            this.dynamicValidateForm.domains.push({
+                jd: "",
+                wd:"",
+                key: Date.now()
+            });
+        },
+        drawPolygon(){
+            this.jwdVisible = false;
+            let arr = [];
+            this.dynamicValidateForm.domains.map(s=>{
+                arr.push(Number(s.jd),Number(s.wd));
+            })
+            var redPolygon = window.Map.viewer.entities.add({
+                 polygon : {
+                     hierarchy : Cesium.Cartesian3.fromDegreesArray(arr),
+                     material : Cesium.Color.BLUE.withAlpha(0.5)
+                 }
+            });
         },
         showFPS(){ 
             let _this = this
@@ -264,57 +315,17 @@ export default {
                 go          :  function(){step();} 
             } 
         },
+        removeDomain(item) {
+            var index = this.dynamicValidateForm.domains.indexOf(item)
+            if (index !== -1) {
+                this.dynamicValidateForm.domains.splice(index, 1)
+            }
+        },
     },
      mounted() {
        this.showFPS().go();
        this.NowTime  = this.CurentTime();
         //   this.getAllDate()
-
-//        let linePositions = [{"lon":71.37,"lat":56.11,"height":0},{"lon":104.32,"lat":49.53,"height":0},{"lon":120.11,"lat":55.2,"height":0},{"lon":116.68,"lat":60.99,"height":0},{"lon":99.64,"lat":61.9,"height":0}]
-//         let path = [];
-//
-//         let lastP = _.last(linePositions);
-//         _.forEach(linePositions, (item) => {
-//
-//             path.push(item.lon);
-//             path.push(item.lat);
-//         })
-//
-//         currentLine.polyline.positions = linePositions;
-//
-//         if(MarkConfig.shape == 'line_distance'){
-//
-//             let midP = Tool.GetCenter([lastP.lon, lastP.lat], [_gps.lon, _gps.lat] )
-//
-//             Drawer.Draw({
-//                 position : Ce.ToPoint(midP),
-//                 parent : MarkParent,
-//                 point : {
-//                     pixelSize : 5,
-//                     color : Ce.CssColor('yellow')
-//                 },
-//                 label : {
-//                     text : (Ce.Distance([lastP.lon, lastP.lat, 0],[_gps.lon, _gps.lat, 0]) / 1000).toFixed(2) + ' KM',
-//                     font : '16px',
-//                     showBackground : true,
-//                     verticalOrigin : Cesium.VerticalOrigin.BOTTOM
-//                 }
-//             })
-//         }
-
-
-//         var redPolygon = window.Map.viewer.entities.add({
-//             name : 'Red polygon on surface',
-//             polygon : {
-//                 hierarchy : Cesium.Cartesian3.fromDegreesArray([-115.0, 37.0,
-//                     -115.0, 32.0,
-//                     -107.0, 33.0,
-//                     -102.0, 31.0,
-//                     -102.0, 35.0]),
-//                 material : Cesium.Color.RED
-//             }
-//         });
-
 
      },
     watch: {
