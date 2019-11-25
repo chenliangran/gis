@@ -186,7 +186,6 @@ setTime.icon-bigdiv {
     <muen :dataInfo="dataInfo" :visible="visible" :type="type" @close="visible=false"></muen>
     <replay
       ref="myreplay"
-
       :setTime="setTime"
       :dataInfo="info"
       :WebSocketData="WebSocketData"
@@ -582,7 +581,7 @@ export default {
               zjwd: that.fjposData[1]
             });
             window.Map.FlyCompare.ClearPath();
-            that.$refs["lineChart"].setLineOption(false);
+            this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
             window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
               new Date(that.allDate.startT)
             );
@@ -827,7 +826,7 @@ export default {
         function(e) {
           that.diffTime(new Cesium.JulianDate.toDate(viewer.clock.currentTime));
           window.Map.FlyCompare.ClearPath();
-          that.$refs["lineChart"].setLineOption(false);
+          this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
           $.get(`${globalUrl.host}/find/triggerSocket`, {
             startTime: new Cesium.JulianDate.toDate(viewer.clock.currentTime),
             name: sessionStorage.getItem("groupNum"),
@@ -1243,10 +1242,7 @@ export default {
           }
         });
         //---------------------------
-
-        // this.$refs["myEventL"].updtea({ a, b, c, d });
-        // this.$refs["myreplay"].updtea({ a, b, c, d });
-
+        this.$refs["myreplay"].updtea({ a, b, c, d });
         if (a.length > 0) {
           a.map((item, i) => {
             dealCtSJMB(item, i);
@@ -1495,7 +1491,7 @@ export default {
                   zjwd: that.fjposData[1]
                 });
                 window.Map.FlyCompare.ClearPath();
-                that.$refs["lineChart"].setLineOption(false);
+                this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
                 window[
                   "Map"
                 ].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
