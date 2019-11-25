@@ -99,7 +99,7 @@ export class Events{
                 if(MarkConfig.shape.indexOf('line') != -1){
 
                     if(linePositions.length){
-
+                        debugger
                         let path = [];
 
                         let lastP = _.last(linePositions);

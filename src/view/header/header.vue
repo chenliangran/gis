@@ -170,6 +170,17 @@ export default {
 		},
         clip(){
             this.dialogVisible = true;
+            var redPolygon = window.Map.viewer.entities.add({
+                name : 'Red polygon on surface',
+                polygon : {
+                    hierarchy : Cesium.Cartesian3.fromDegreesArray([-115.0, 37.0,
+                        -115.0, 32.0,
+                        -107.0, 33.0,
+                        -102.0, 31.0,
+                        -102.0, 35.0]),
+                    material : Cesium.Color.RED
+                }
+            });
         },
         setXy(){
             this.dialogVisible = false;
@@ -248,7 +259,54 @@ export default {
        this.showFPS().go();
        this.NowTime  = this.CurentTime();
         //   this.getAllDate()
-    },
+
+//        let linePositions = [{"lon":71.37,"lat":56.11,"height":0},{"lon":104.32,"lat":49.53,"height":0},{"lon":120.11,"lat":55.2,"height":0},{"lon":116.68,"lat":60.99,"height":0},{"lon":99.64,"lat":61.9,"height":0}]
+//         let path = [];
+//
+//         let lastP = _.last(linePositions);
+//         _.forEach(linePositions, (item) => {
+//
+//             path.push(item.lon);
+//             path.push(item.lat);
+//         })
+//
+//         currentLine.polyline.positions = linePositions;
+//
+//         if(MarkConfig.shape == 'line_distance'){
+//
+//             let midP = Tool.GetCenter([lastP.lon, lastP.lat], [_gps.lon, _gps.lat] )
+//
+//             Drawer.Draw({
+//                 position : Ce.ToPoint(midP),
+//                 parent : MarkParent,
+//                 point : {
+//                     pixelSize : 5,
+//                     color : Ce.CssColor('yellow')
+//                 },
+//                 label : {
+//                     text : (Ce.Distance([lastP.lon, lastP.lat, 0],[_gps.lon, _gps.lat, 0]) / 1000).toFixed(2) + ' KM',
+//                     font : '16px',
+//                     showBackground : true,
+//                     verticalOrigin : Cesium.VerticalOrigin.BOTTOM
+//                 }
+//             })
+//         }
+
+
+//         var redPolygon = window.Map.viewer.entities.add({
+//             name : 'Red polygon on surface',
+//             polygon : {
+//                 hierarchy : Cesium.Cartesian3.fromDegreesArray([-115.0, 37.0,
+//                     -115.0, 32.0,
+//                     -107.0, 33.0,
+//                     -102.0, 31.0,
+//                     -102.0, 35.0]),
+//                 material : Cesium.Color.RED
+//             }
+//         });
+
+
+     },
     watch: {
         WebSocketData: {
 			handler:function(v) {
@@ -256,7 +314,6 @@ export default {
 				v.map(item => {
 					//浮标投放数据
 					if(item.type == "FBTFSJ") {
-                        debugger
 						this.bulletinData = item.data
 					}
 				})
