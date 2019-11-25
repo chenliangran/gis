@@ -7,7 +7,7 @@
 					飞行曲线
 				</span>
 			</div>
-			<div id="airChart" style="width: 370px;height:180px;margin-left: 5px"></div>
+			<div id="airChart" style="width: 370px;height:250px;margin-left: 5px;top:-40px"></div>
 		</div>
         <div class="terrace-item" v-if="detectorData.length > 0">
 			<div>
@@ -354,6 +354,6 @@ export default {
 		text-align: center;
 	}
 	.terrace-item{
-		max-height: 280px;
+		max-height: 220px;
 	}
 </style>

@@ -164,6 +164,7 @@ setTime.icon-bigdiv {
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
     <gis-header @mapTool="maptool" @controller="controller"></gis-header>
     <div id="mapElement"></div>
+    <tude v-if="tudeF"></tude>
     <time-line
       @hingeMsgEvent="hingeMsgEvent"
       @timeDown="timeDown"
@@ -215,7 +216,7 @@ import info from "../view/infoTime/list.vue";
 import gisHeader from "../view/header/header.vue";
 import MapTool from "../view/toolbar/maptool.vue";
 import DisplayController from "../view/toolbar/displayController.vue";
-
+import tude from "../view/tude/tude.vue";
 const _ = require("lodash");
 
 const CMap = require("../assets/map/CMap.js");
@@ -275,7 +276,8 @@ export default {
       buoyInfo: {},
       showInfo: false,
       toolF:false,
-      controllerF:false
+      controllerF:false,
+      tudeF:false
     };
   },
 
@@ -293,7 +295,8 @@ export default {
     info,
     timeLine,
     DisplayController,
-    gisHeader
+    gisHeader,
+    tude
   },
   mounted() {
     let that = this;
@@ -371,6 +374,9 @@ export default {
     },
     controller(flag){
       this.controllerF = flag;
+    },
+    tudeShow(flag){
+       this.tudeF = flag;
     },
     timeDown() {
       window.Map.FlyCompare.ClearPath();

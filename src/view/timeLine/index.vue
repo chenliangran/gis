@@ -60,15 +60,17 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    bottom:160px;
-    right:20px;
+    bottom:70px;
+    left: 40% ;
+    z-index: 10000;
+    margin: 0 auto;
     /* background: url(../assets/time_1.png) no-repeat!important; */
     background-size: 100% 100%!important;
 }
 .icon-bigdiv{
 
-    background: url(../../assets/time_1.png) no-repeat!important;
-    background-size: 100% 100%!important;
+    /* background: url(../../assets/time_1.png) no-repeat!important;
+    background-size: 100% 100%!important; */
 }
 .bottonContainer button{
     margin:0 5px;
@@ -117,7 +119,7 @@
     width: calc(100% - 20px);
     position: absolute;
     height: 100px;
-    bottom:57px;
+    bottom:10px;
     background: url(../../assets/time_bg.png) no-repeat;
     background-size: 100% 100%;
     z-index: 0;
@@ -191,7 +193,7 @@
 }
 .icon-div{
     margin: 5px 0;
-    border-right: 1px solid #155073;
+    /* border-right: 1px solid #155073; */
 }
 .time-label{
     width: 346px;
@@ -253,6 +255,21 @@
     width: 12px;
     height: 12px;
 } */
+.showFilter{
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    bottom:70px;
+    right: 400px;
+    z-index: 10000;
+    margin: 0 auto;
+}
+.showFilter p{
+    width: 100px;
+    color: #83efe6;
+	font-size: 14px;
+}
 </style>
 
 <template>
@@ -260,18 +277,16 @@
       
     <!-- <div id="mapElement"></div> -->
     <div class="bottonContainer">
-        <span style='color:#8efffb;text-shadow: 2px 2px 2px rgb(0,0,0);'>FPS:{{FPS}}</span>
+        <!-- <span style='color:#8efffb;text-shadow: 2px 2px 2px rgb(0,0,0);'>FPS:{{FPS}}</span> -->
         <!-- <div class='icon-div-'> -->
-                <button class=" icon-filter" @click="filters()"></button>
+                <!-- <button class=" icon-filter" @click="filters()"></button> -->
             <!-- </div> -->
         <div style="display:flex" class="icon-bigdiv">
-            
-
-            <!-- <div class='icon-div'>
-                <button class="icon-button icon-rest" @click="start()"></button>
-            </div> -->
             <div class='icon-div'>
-                <button  :class="{'icon-Pause':playFlag,'icon-button':true,'icon-play':!playFlag}"  @click="sendCommond('pause')"></button>
+                <button class="icon-button icon-play" @click="sendCommond('pause')"></button>
+            </div>
+            <div class='icon-div'>
+                <button class="icon-button icon-Pause" @click="sendCommond('pause')"></button>
             </div>
             <div class='icon-div'>
                 <button class="icon-button icon-Previous-t" @click="forBackWard('back')"></button>
@@ -298,16 +313,21 @@
             <div class='icon-div'>
                 <button class="icon-button icon-chart" @click="chart()"></button>
             </div>
+            <div class='showFilter'>
+                <p>事件显隐：</p>
+                <button class="icon-filter"  @click="filters()"></button>
+
+            </div>
         </div>
         
-        <span style='color:#8efffb;text-shadow: 2px 2px 2px rgb(0,0,0);'>x{{num}}</span>
+        <!-- <span style='color:#8efffb;text-shadow: 2px 2px 2px rgb(0,0,0);'>x{{num}}</span> -->
     </div>
     <!-- <div class="infoContainer">
         {{mouseInfo.lon}}/{{mouseInfo.lat}}
     </div> -->
     <div class="bigTimeDiv">
-        <div id="visualization" :style="visStyle"></div>
-        <div id='xdsj'></div>
+        <!-- <div id="visualization" :style="visStyle"></div>
+        <div id='xdsj'></div> -->
         <div v-show='timeLabelF' :style='timeLabelS' class="time-label">
             <ul v-show="timeLabelType&&buoyDataType == '浮标投放'">
                 <li>浮标编号：<span>{{buoyData['fbbh']}}</span></li>
@@ -551,7 +571,7 @@ export default {
           this.filtersF = false
       },
       filters(){
-          this.filtersF = true
+          this.filtersF = !this.filtersF
       },
       chart(){
           this.$emit('chart')

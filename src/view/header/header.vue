@@ -10,7 +10,7 @@
                     <i class="icon icon2"></i>
                     <div class="export" @click="load">报告导出</div>
                 </li>
-                <li>
+                <li @click="tudeShow(tudeShow)">
                     <i class="icon icon3"></i>
                     <span>经纬度设置</span>
                 </li>
@@ -46,7 +46,8 @@ export default {
             flag1:false,
             groupNum:'',
             name:'',
-            NowTime:''
+            NowTime:'',
+            tudeShow:false
 		}
 	},
 	methods: {
@@ -140,6 +141,10 @@ export default {
         controller(flag1){
             this.flag1 = !flag1;
             this.$emit("controller",this.flag1)  
+        },
+        tudeShow(tudeShow){
+            this.tudeShow = !tudeShow;
+            this.$emit("tudeShow",this.tudeShow) 
         },
         showFPS(){ 
             let _this = this
