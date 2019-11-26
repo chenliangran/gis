@@ -233,13 +233,11 @@ export default {
             $("#bg_canvas").attr("width", clientWidth);
             $("#bg_canvas").attr("height", clientHeight);
             $("#bg_canvas").hide();
-            setTimeout(()=>{
                 $("#bg_canvas").show();
                 this.$nextTick(()=>{
                     clipScreenshots("bg_canvas",this.imgWidth,this.imgHeight);
                 })
                 this.dvShow = false
-            },500)
         },
         dataShow(flag){
                       
@@ -325,6 +323,10 @@ export default {
      mounted() {
        this.showFPS().go();
        this.NowTime  = this.CurentTime();
+       setTimeout(()=>{
+           console.log(Canvas2Image)
+       },2000)
+
         //   this.getAllDate()
 
      },
