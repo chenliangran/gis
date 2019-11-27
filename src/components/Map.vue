@@ -162,9 +162,8 @@ setTime.icon-bigdiv {
 <template>
   <div class="MapContainer">
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
-    <gis-header @mapTool="maptool" @controller="controller"></gis-header>
+    <gis-header @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum" :CTnum="CTnum"></gis-header>
     <div id="mapElement"></div>
-    <tude v-if="tudeF"></tude>
     <time-line
       @hingeMsgEvent="hingeMsgEvent"
       @timeDown="timeDown"
@@ -215,7 +214,6 @@ import info from "../view/infoTime/list.vue";
 import gisHeader from "../view/header/header.vue";
 import MapTool from "../view/toolbar/maptool.vue";
 import DisplayController from "../view/toolbar/displayController.vue";
-import tude from "../view/tude/tude.vue";
 const _ = require("lodash");
 
 const CMap = require("../assets/map/CMap.js");
@@ -276,7 +274,8 @@ export default {
       showInfo: false,
       toolF:false,
       controllerF:false,
-      tudeF:false
+      FBnum: 0,
+      CTnum:0,
     };
   },
 
@@ -295,7 +294,6 @@ export default {
     timeLine,
     DisplayController,
     gisHeader,
-    tude
   },
   mounted() {
     let that = this;
@@ -401,11 +399,12 @@ export default {
     },
 
     setVisItem(time) {
+      let that = this;
       let y = [];
 
-      if (this.$refs["timeLine"].timeItemArr.length > 0) {
+      if (that.$refs["timeLine"].timeItemArr.length > 0) {
         // console.log(this.$refs["timeLine"].timeItemArr)
-        y = this.$refs["timeLine"].timeItemArr.filter(item => {
+        y = that.$refs["timeLine"].timeItemArr.filter(item => {
           // let timeBuoy = item.start
           //   ? item.data["sb"]
           //   : item.data["mbsj"];
@@ -417,10 +416,10 @@ export default {
         window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
           new Date(y[0].start)
         );
-        this.$refs["timeLine"].timeline.focus(y[0].id);
-        this.$refs["timeLine"].timeline.setSelection(y[0].id);
+        that.$refs["timeLine"].timeline.focus(y[0].id);
+        that.$refs["timeLine"].timeline.setSelection(y[0].id);
         window.Map.FlyCompare.ClearPath();
-        this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+        that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
         this.newDate = "00:00:00";
         $.get(`${globalUrl.host}/find/triggerSocket`, {
           startTime: new Date(y[0].start),
@@ -581,7 +580,7 @@ export default {
               zjwd: that.fjposData[1]
             });
             window.Map.FlyCompare.ClearPath();
-            this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+            that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
             window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
               new Date(that.allDate.startT)
             );
@@ -731,6 +730,8 @@ export default {
      */
     upateGis(data) {
       let that = this;
+      that.FBnum = 0;
+      that.CTnum = 0;
       window["Map"].viewer.entities.removeAll();
       window.Map.AddCompare("feiji", {
         id: "plane_1",
@@ -741,12 +742,12 @@ export default {
       });
       if (data["CTMBSJ"].length > 0) {
         data["CTMBSJ"].map((item, i) => {
-          dealCtSJMB(item, i);
+          dealCtSJMB(item, i,that);
         });
       }
       if (data["FBSJ"].length > 0) {
         data["FBSJ"].map(item => {
-          dealFbSJ(item);
+          dealFbSJ(item,that);
         });
       }
       if (data["FBMBSJ"].length > 0) {
@@ -756,17 +757,21 @@ export default {
       }
 
       // 处理浮标数据
-      function dealFbSJ(item) {
+      function dealFbSJ(item,that) {
         // console.log(item);
         // console.log(Number(item['fbsswzjd1']),Number(item['fbsswzwd1']))
+
         if (item["jcxxid"] != "0") {
+           that.FBnum = ++that.FBnum;
           window.Map.Detector.Add({
             id: "detector_" + item["fbbh"],
             positions: [Number(item["llcrswzjd"]), Number(item["llcrswzwd"])],
             R: 2000,
             origin: item
           });
+
         }
+        console.log(that.FBnum)
       }
 
       // 处理浮标目标数据
@@ -783,13 +788,15 @@ export default {
       }
 
       // 处理磁探数据
-      function dealCtSJMB(item, i) {
+      function dealCtSJMB(item, i,that) {
+        that.CTnum = ++that.CTnum;
         window.Map.AddCtTarget({
           id: "citan_" + item["mbbh"],
           positions: [Number(item["mbjd"]), Number(item["mbwd"])],
           origin: item
         });
       }
+      console.log(that.CTnum)
     },
     /**
      * @param {object} viewer cesium viewer对象
@@ -826,7 +833,7 @@ export default {
         function(e) {
           that.diffTime(new Cesium.JulianDate.toDate(viewer.clock.currentTime));
           window.Map.FlyCompare.ClearPath();
-          this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+          that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
           $.get(`${globalUrl.host}/find/triggerSocket`, {
             startTime: new Cesium.JulianDate.toDate(viewer.clock.currentTime),
             name: sessionStorage.getItem("groupNum"),
@@ -1172,12 +1179,12 @@ export default {
         window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
           new Date(newDate)
         );
-        this.$refs["myreplay"].$refs['myterrace'].setLineOption(data[0].data);
+        _this.$refs["myreplay"].$refs['myterrace'].setLineOption(data[0].data);
         let y = [];
 
         //--------------------------比对当前播放时间是否到达标绘时间点
-        if (this.$refs["timeLine"].timeItemArr.length > 0) {
-          y = this.$refs["timeLine"].timeItemArr.filter(item => {
+        if (_this.$refs["timeLine"].timeItemArr.length > 0) {
+          y = _this.$refs["timeLine"].timeItemArr.filter(item => {
             return (
               new Date(item.start).getTime() == new Date(newDate).getTime()
             );
@@ -1187,8 +1194,8 @@ export default {
 
         if (y.length > 0) {
           this.hingeMsgEvent(y[0].data.nr);
-          this.$refs["timeLine"].timeline.focus(y[0].id);
-          this.$refs["timeLine"].timeline.setSelection(y[0].id);
+          _this.$refs["timeLine"].timeline.focus(y[0].id);
+          _this.$refs["timeLine"].timeline.setSelection(y[0].id);
         }
         this.newDate = newDate;
         //--------------------------比对当前播放时间之前所有数据
@@ -1245,12 +1252,12 @@ export default {
         this.$refs["myreplay"].updtea({ a, b, c, d });
         if (a.length > 0) {
           a.map((item, i) => {
-            dealCtSJMB(item, i);
+            dealCtSJMB(item, i,_this);
           });
         }
         if (b.length > 0) {
           b.map(item => {
-            dealFbSJ(item);
+            dealFbSJ(item,_this);
           });
         }
         if (c.length > 0) {
@@ -1260,11 +1267,13 @@ export default {
         }
 
         // 处理浮标数据
-        function dealFbSJ(item) {
+        function dealFbSJ(item,_this) {
+          //debugger
           if (window.Map.viewer.entities.getById("detector_" + item["fbbh"]))
             return;
           if (item["jcxxid"] != "0") {
             if (Number(item["llcrswzjd"]) && Number(item["llcrswzwd"])) {
+              _this.FBnum = ++_this.FBnum;
               window.Map.Detector.Add({
                 id: "detector_" + item["fbbh"],
                 positions: [
@@ -1276,6 +1285,7 @@ export default {
               });
             }
           }
+          console.log(_this.FBnum)
         }
 
         // 处理浮标目标数据
@@ -1298,16 +1308,18 @@ export default {
         }
 
         // 处理磁探数据
-        function dealCtSJMB(item, i) {
+        function dealCtSJMB(item, i,_this) {
           if (window.Map.viewer.entities.getById("citan_" + item["mbbh"]))
             return;
           if (Number(item["mbjd"]) && Number(item["mbwd"])) {
+            _this.CTnum = ++_this.CTnum;
             window.Map.AddCtTarget({
               id: "citan_" + item["mbbh"],
               positions: [Number(item["mbjd"]), Number(item["mbwd"])],
               origin: item
             });
           }
+          console.log( _this.CTnum )
         }
 
         //console.log(this.dataBH,data)
@@ -1491,7 +1503,7 @@ export default {
                   zjwd: that.fjposData[1]
                 });
                 window.Map.FlyCompare.ClearPath();
-                this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+                that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
                 window[
                   "Map"
                 ].viewer.clock.currentTime = Cesium.JulianDate.fromDate(

@@ -19,9 +19,9 @@
         <div class="cms-middle">
             <ul>
                 <li><i class="feiji"></i><span>1</span></li>
-                <li><i class="zhinan"></i><span>N</span></li>
+                <li><i class="fubiao"></i><span>{{FBnum}}</span></li>
                 <li><span class="time">{{NowTime}}</span></li>
-                <li><i class="group"></i><span>{{groupNum}}</span></li>
+                <li><i class="group"></i><span>{{CTnum}}</span></li>
             </ul>
         </div>
         <div class="cmsNav cms-right">
@@ -65,6 +65,7 @@
 
 <script>
 export default {
+    props: ["WebSocketData","FBnum","CTnum"],
 	data() {
 		return {
 			dataInfo: {},
@@ -73,11 +74,6 @@ export default {
             flag:false,
             flag1:false,
             groupNum:'',
-<<<<<<< HEAD
-            name:'',
-            NowTime:'',
-            tudeShow:false
-=======
             NowTime:'',
             dvStyle:{
                 width:'300px',
@@ -89,8 +85,9 @@ export default {
             imgWidth:"300",
             imgHeight:"300",
             dialogVisible:false,
-            dvShow:false
->>>>>>> e143d04559bbfb68d26dd001a06cea7d65c4081d
+            dvShow:false,
+            FBnum:0,
+            CTnum:0
 		}
 	},
 	methods: {
@@ -255,25 +252,29 @@ export default {
         },
     },
      mounted() {
-       this.showFPS().go();
-       this.NowTime  = this.CurentTime();
-        //   this.getAllDate()
+        this.showFPS().go();
+        let that = this
+        setInterval(function(){
+                that.NowTime  = that.CurentTime();
+        },1000);
     },
     watch: {
-        WebSocketData: {
-			handler:function(v) {
-                console.log(v)
-				v.map(item => {
-					//浮标投放数据
-					if(item.type == "FBTFSJ") {
-                        debugger
-						this.bulletinData = item.data
-					}
-				})
-			},
-			deep: true
-		}
+
+        FBnum: {
+           handler:function(v){
+               //debugger
+               this.FBnum = v
+           },
+           deep: true
+        },
+        CTnum:{
+            handler:function(v){
+                this.CTnum = v
+            },
+            deep: true
+        }
     },
+    
     created() {
        this.getDataInfo();
        this.groupNow();
@@ -353,9 +354,9 @@ export default {
         text-align: center;
         height: 52px;
         line-height: 52px;
-        background-color: #1a4283;
+        background: url(../../assets/header/headerNav.png) no-repeat;
+        background-size: 100% 100%;
         padding: 0 20px;
-        opacity: 0.7;
     }
     .cmsNav ul li .icon{
          display: inline-block;
@@ -403,7 +404,7 @@ export default {
         top: 3px;
         margin-right: 5px;  
     }
-    .cms-middle ul li .zhinan{
+    .cms-middle ul li .fubiao{
         background: url(../../assets/header/zhinan.png);
         display: inline-block;
         width: 22px;
