@@ -326,8 +326,8 @@
         {{mouseInfo.lon}}/{{mouseInfo.lat}}
     </div> -->
     <div class="bigTimeDiv">
-        <!-- <div id="visualization" :style="visStyle"></div>
-        <div id='xdsj'></div> -->
+        <div id="visualization" :style="visStyle"></div>
+        <div id='xdsj'></div>
         <div v-show='timeLabelF' :style='timeLabelS' class="time-label">
             <ul v-show="timeLabelType&&buoyDataType == '浮标投放'">
                 <li>浮标编号：<span>{{buoyData['fbbh']}}</span></li>
@@ -409,14 +409,13 @@ export default {
             startT:'',
             endT:''
         },
-				num:0,
-				dataInfo: {},
-                visible: false,
-                info:{},
-                type: "",
-                WebSocketData: {},
-                buoyInfo: {},
-                showInfo: false
+        dataInfo: {},
+        visible: false,
+        info:{},
+        type: "",
+        WebSocketData: {},
+        buoyInfo: {},
+        showInfo: false
       }
   },
 

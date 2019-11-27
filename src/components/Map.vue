@@ -266,7 +266,6 @@ export default {
         startT: "",
         endT: ""
       },
-      num: 0,
       dataInfo: {},
       visible: false,
       info: {},
@@ -582,7 +581,7 @@ export default {
               zjwd: that.fjposData[1]
             });
             window.Map.FlyCompare.ClearPath();
-            this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+            that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
             window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
               new Date(that.allDate.startT)
             );
@@ -827,7 +826,7 @@ export default {
         function(e) {
           that.diffTime(new Cesium.JulianDate.toDate(viewer.clock.currentTime));
           window.Map.FlyCompare.ClearPath();
-          this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+            that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
           $.get(`${globalUrl.host}/find/triggerSocket`, {
             startTime: new Cesium.JulianDate.toDate(viewer.clock.currentTime),
             name: sessionStorage.getItem("groupNum"),
@@ -1492,7 +1491,7 @@ export default {
                   zjwd: that.fjposData[1]
                 });
                 window.Map.FlyCompare.ClearPath();
-                this.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+                that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
                 window[
                   "Map"
                 ].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
