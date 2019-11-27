@@ -31,6 +31,17 @@ export function Init(ele,CONFIG){
             }),
             navigation:false,
             selectionIndicator : false,
+            contextOptions:{
+                webgl:{
+                    alpha: true,
+                    depth:true,
+                    stencil:true,
+                    antialias:true,
+                    premultipliedAlpha:true,
+                    preserveDrawingBuffer:true,
+                    failIfMajorPerformanceCaveat:true
+                }
+            }
         });
     }
 

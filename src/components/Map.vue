@@ -297,6 +297,7 @@ export default {
   },
   mounted() {
     let that = this;
+      //this.init();
     document.onselectstart = function() {
       return false;
     };
