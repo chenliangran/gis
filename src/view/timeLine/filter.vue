@@ -126,11 +126,13 @@ export default {
   mounted() {
 	  $(".event-filter-checkbox[type=checkbox]+span").click((e) => {
 		  if($(e.target).html()){
-			  $(e.target).html('')
-			  delete this.eventData[$(e.target).data('type')]
+				$(e.target).html('')
+				delete this.eventData[$(e.target).data('type')]
+				// this.$emit('cancel')
 		  }else{
-			  this.eventData[$(e.target).data('type')] = ''
-			  $(e.target).html('✔')
+			  	this.eventData[$(e.target).data('type')] = ''
+			 	$(e.target).html('✔')
+				this.$emit('confirm',Object.keys(this.eventData))
 		  }
 	  })
   },

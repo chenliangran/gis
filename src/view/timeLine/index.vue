@@ -153,7 +153,7 @@
     margin: 0px!important;
     width: 36px;
     height: 34px;
-    background: url(../../assets/icon/filter.png) no-repeat!important;
+    background: url(../../assets/icon/Filter.png) no-repeat!important;
     /* border-right: 1px solid #000000!important; */
 }
 
@@ -182,6 +182,26 @@
 }
 .icon-chart{
     background: url(../../assets/icon/图表.png) no-repeat!important;
+}
+.icon-plot{
+    width: 19px;
+    height: 22px;
+    background: url(../../assets/icon/plot.png) no-repeat!important;
+    background-size: 100% 100%!important;
+    border: none;
+}
+.icon-Filter{
+    margin: 0px!important;
+    width: 18px;
+    height: 22px;
+    background: url(../../assets/icon/Filter.png) no-repeat!important;
+    border: none;
+}
+.icon-wq{
+    width: 28px;
+    height: 17px;
+    background: url(../../assets/icon/wq.png) no-repeat!important;
+    border: none;
 }
 .icon-div{
     width: 24px;
@@ -260,16 +280,25 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    bottom:70px;
+    bottom:80px;
     right: 400px;
     z-index: 10000;
     margin: 0 auto;
 }
 .showFilter p{
-    width: 100px;
+    width: 70px;
     color: #83efe6;
 	font-size: 14px;
 }
+/* .bottomicon{
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    bottom:70px;
+    right: 40px;
+    z-index: 10000;
+} */
 </style>
 
 <template>
@@ -283,10 +312,13 @@
             <!-- </div> -->
         <div style="display:flex" class="icon-bigdiv">
             <div class='icon-div'>
-                <button class="icon-button icon-play" @click="sendCommond('pause')"></button>
+                <button class="icon-button icon-play" @click="sendCommond('playFlag')"></button>
             </div>
             <div class='icon-div'>
-                <button class="icon-button icon-Pause" @click="sendCommond('pause')"></button>
+                <button class="icon-button icon-Pause" @click="sendCommond('playPause')"></button>
+            </div>
+            <div class='icon-div'>
+                <button class="icon-button icon-Stop" @click="closeSocket()"></button>
             </div>
             <div class='icon-div'>
                 <button class="icon-button icon-Previous-t" @click="forBackWard('back')"></button>
@@ -295,9 +327,7 @@
                 <button class="icon-button icon-Previous-q" @click="forBackWard('enter')"></button>
             </div>
             
-            <div class='icon-div'>
-                <button class="icon-button icon-Stop" @click="closeSocket()"></button>
-            </div>
+
 			<div class='icon-div'>
                 <button class="icon-button icon-focus" @click="focus(trackMode)"></button>
             </div>
@@ -315,8 +345,12 @@
             </div>
             <div class='showFilter'>
                 <p>事件显隐：</p>
-                <button class="icon-filter"  @click="filters()"></button>
-
+                <!-- <button class="icon-filter"  @click="filters()"></button> -->
+                <el-switch
+                v-model="filtersF"
+                active-color="#13ce66"
+                inactive-color="#83efe6">
+                </el-switch>
             </div>
         </div>
         
@@ -357,6 +391,17 @@
             </ul>
         </div>
     </div>
+    <!-- <div class="bottomicon">
+         <div class='icon-div'>
+            <button class="icon-button icon-plot"></button>
+        </div>
+        <div class='icon-div'>
+            <button class="icon-button icon-Filter"></button>
+        </div>
+        <div class='icon-div'>
+            <button class="icon-button icon-wq"></button>
+        </div>
+    </div> -->
     <filters @cancel='filterCancel' @confirm='filterConfirm' v-show='filtersF'></filters>
   </div>
 </template>
@@ -585,8 +630,8 @@ export default {
           this.$emit('fire')
       },
       sendCommond(type){
- 
-          if(this.playFlag){
+       debugger
+          if(type == 'playFlag'){
               this.$emit('sendCommond',this.playFlag)
               this.playFlag = !this.playFlag
           }else{
