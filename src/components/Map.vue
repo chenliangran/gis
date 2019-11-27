@@ -264,7 +264,6 @@ export default {
         startT: "",
         endT: ""
       },
-      num: 0,
       dataInfo: {},
       visible: false,
       info: {},
@@ -834,6 +833,7 @@ export default {
         function(e) {
           that.diffTime(new Cesium.JulianDate.toDate(viewer.clock.currentTime));
           window.Map.FlyCompare.ClearPath();
+          that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
           that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
           $.get(`${globalUrl.host}/find/triggerSocket`, {
             startTime: new Cesium.JulianDate.toDate(viewer.clock.currentTime),
