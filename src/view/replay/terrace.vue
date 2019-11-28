@@ -125,7 +125,6 @@ export default {
         }
         that.xData=xData
         that.chartData=chartData
-        console.log(that.chartData)
         option = {
 
             tooltip: {

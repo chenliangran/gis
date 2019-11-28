@@ -1127,7 +1127,7 @@ export default {
       };
 
       socketController.onmessage = function(e) {
-        if (_this.wsF) {
+          if (_this.wsF) {
           _this.wsName = e.data;
           sessionStorage.setItem("name", e.data);
           // if (type) {
@@ -1151,7 +1151,6 @@ export default {
         } else {
           //  window.Map.viewer.clock.shouldAnimate = true;
           _this.WebSocketData = JSON.parse(e.data);
-
         //   console.log(JSON.parse(e.data)[0].LKR);
           let data = JSON.parse(e.data)[0].LKR;
           if (data) {
