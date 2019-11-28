@@ -117,8 +117,8 @@ export default {
             imgHeight:"300",
             dialogVisible:false,
             dvShow:false,
-            FBnum:0,
-            CTnum:0,
+            // FBnum:0,
+            // CTnum:0,
             dynamicValidateForm: {
                 domains: [{
                     jd: "",

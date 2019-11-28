@@ -48,9 +48,9 @@
 }
 #visualization {
   /* height: 500px; */
-  /* width: 100%; */
+  width: 80% !important;
   /* top:0; */
-  bottom: 0px;
+  bottom: 48px;
   /* width: 80%; */
   position: absolute;
   z-index: 100000;
@@ -106,23 +106,25 @@ setTime.icon-bigdiv {
   overflow: hidden;
 }
 #xdsj {
-  position: relative;
-  width: calc(100% - 20px);
-  overflow: hidden;
-  margin: 0px;
-  /* position: absolute; */
-  height: 25px;
-  /* left: 5% !important; */
-  top: 20px;
+    position: relative;
+    width: calc(100% - 370px);
+    overflow: hidden;
+    margin: 0 auto;
+    /* position: absolute; */
+    height: 13px;
+    /* left: 5% !important; */
+    top: 15px;
+    background-color: #2c9deab3;
+    border-radius: 3px;
 }
-.bigTimeDiv {
+.time_bg {
   width: calc(100% - 20px);
   position: absolute;
   height: 100px;
-  bottom: 57px;
+  bottom: 10px;
   background: url(../assets/time_bg.png) no-repeat;
   background-size: 100% 100%;
-  z-index: 0;
+  z-index: 3;
   padding: 0 10px 0 11px;
   overflow: hidden;
 }
@@ -131,10 +133,32 @@ setTime.icon-bigdiv {
   z-index: 10000000 !important;
   left: 10px !important;
   right: 10px !important;
+  width: 80%;
+  height: 15px;
+  margin: 0 auto;
+  bottom:58px;
+}
+.cesium-timeline-main{
+  border:none !important;
 }
 .cesium-timeline-bar {
-  background: url(../assets/time_1.png) no-repeat !important;
+  /* background: url(../assets/time_1.png) no-repeat !important; */
   background-size: 100% 100% !important;
+  height: 15px;
+  background: #2c9deab3 !important;
+  border-radius: 3px;
+}
+.cesium-timeline-ticTiny{
+background: none !important;
+}
+.cesium-timeline-ticSub{
+  background: none !important;
+}
+.cesium-timeline-ticMain{
+  background: none !important;
+}
+.cesium-timeline-ticLabel{
+  display: none;
 }
 .line-chart {
   position: fixed !important;
@@ -163,7 +187,12 @@ setTime.icon-bigdiv {
   <div class="MapContainer">
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
     <gis-header @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum" :CTnum="CTnum"></gis-header>
-    <div id="mapElement"></div>
+    <div id="mapElement">
+      <div class="time_bg">
+        <div id="timeDiv"></div>
+        <div id="visualization" :style="visStyle"></div>
+      </div>
+    </div>
     <time-line
       @hingeMsgEvent="hingeMsgEvent"
       @timeDown="timeDown"
@@ -214,6 +243,7 @@ import info from "../view/infoTime/list.vue";
 import gisHeader from "../view/header/header.vue";
 import MapTool from "../view/toolbar/maptool.vue";
 import DisplayController from "../view/toolbar/displayController.vue";
+//import { connect } from 'http2';
 const _ = require("lodash");
 
 const CMap = require("../assets/map/CMap.js");
@@ -341,8 +371,8 @@ export default {
               }, //将js对象转成json对象
               success: function(data) {
                 sessionStorage.setItem("groupType", data);
-                that.num = data.fps;
-                that.$refs["timeLine"].num = that.num;
+                // that.num = data.fps;
+                // that.$refs["timeLine"].num = that.num;
                 if (data.yxzt == 3) {
                   that.$refs.timeLine.playFlag = false;
                   that.playFLAG = false;
@@ -475,8 +505,8 @@ export default {
                 }, //将js对象转成json对象
                 success: function(data) {
                   sessionStorage.setItem("groupType", data);
-                  that.num = data.fps;
-                  that.$refs["timeLine"].num = that.num;
+                  // that.num = data.fps;
+                  // that.$refs["timeLine"].num = that.num;
                   if (data.yxzt == 3) {
                     that.$refs.timeLine.playFlag = false;
                     that.playFLAG = false;
@@ -536,7 +566,7 @@ export default {
           this.num = this.num * 2;
         }
       }
-      this.$refs["timeLine"].num = this.num;
+      // this.$refs["timeLine"].num = this.num;
       $.get(`${globalUrl.host}/find/fastAndSlow`, {
         multiple: this.num,
         name: sessionStorage.getItem("groupNum")
@@ -585,8 +615,8 @@ export default {
               new Date(that.allDate.startT)
             );
             that.action = "暂停";
-            that.num = 0;
-            that.$refs["timeLine"].num = that.num;
+            // that.num = 0;
+            // that.$refs["timeLine"].num = that.num;
           });
         });
       }
@@ -634,6 +664,7 @@ export default {
      * 初始化整个时间轴
      */
     initTimeLine() {
+      //debugger
       let that = this;
       let viewer = window["Map"].viewer;
 
@@ -771,7 +802,6 @@ export default {
           });
 
         }
-        console.log(that.FBnum)
       }
 
       // 处理浮标目标数据
@@ -796,7 +826,6 @@ export default {
           origin: item
         });
       }
-      console.log(that.CTnum)
     },
     /**
      * @param {object} viewer cesium viewer对象
@@ -808,6 +837,10 @@ export default {
       let stopTime = Cesium.JulianDate.fromDate(new Date(this.allDate.endT));
       this.timelineT(viewer);
       viewer.timeline.zoomTo(startTime, stopTime);
+      let nowTime = "00:00:00"
+      let totleTime = that.countDate(this.allDate.startT,this.allDate.endT)
+      this.progress(nowTime,totleTime)
+    
 
       viewer.timeline.addEventListener(
         "setzoom",
@@ -842,13 +875,22 @@ export default {
           }).then(data => {
             that.playFLAG = true;
             that.$refs.timeLine.playFlag = true;
-            that.num = 0;
-            that.$refs["timeLine"].num = that.num;
+            // that.num = 0;
+            // that.$refs["timeLine"].num = that.num;
           });
         },
         false
       );
       this.startXd();
+
+    },
+
+    progress(nowTime,totleTime){
+      let progressTime = "";
+        progressTime += '<span>'+ nowTime +'</span> / <span>'+ totleTime+'</span>'
+        $("#timeDiv")
+        .empty()
+        .append(progressTime);
     },
     /**
      * 开始计算相对时间
@@ -1113,8 +1155,8 @@ export default {
         //   console.log(JSON.parse(e.data)[0].LKR);
           let data = JSON.parse(e.data)[0].LKR;
           if (data) {
-            _this.num = data.fps;
-            _this.$refs["timeLine"].num = _this.num;
+            // _this.num = data.fps;
+            // _this.$refs["timeLine"].num = _this.num;
             if (data.yxzt == 3) {
               _this.$refs.timeLine.playFlag = false;
               _this.playFLAG = false;
@@ -1286,7 +1328,6 @@ export default {
               });
             }
           }
-          console.log(_this.FBnum)
         }
 
         // 处理浮标目标数据
@@ -1320,7 +1361,6 @@ export default {
               origin: item
             });
           }
-          console.log( _this.CTnum )
         }
 
         //console.log(this.dataBH,data)
@@ -1480,8 +1520,8 @@ export default {
         }, //将js对象转成json对象
         success: function(data) {
           sessionStorage.setItem("groupType", data);
-          that.num = data.fps;
-          that.$refs["timeLine"].num = that.num;
+          // that.num = data.fps;
+          // that.$refs["timeLine"].num = that.num;
           if (data.yxzt == 3) {
             that.fjlnglat = true;
             that.playFLAG = true;
@@ -1511,8 +1551,8 @@ export default {
                   new Date(that.allDate.startT)
                 );
                 that.action = "暂停";
-                that.num = 0;
-                that.$refs["timeLine"].num = that.num;
+                // that.num = 0;
+                // that.$refs["timeLine"].num = that.num;
               });
             });
           }

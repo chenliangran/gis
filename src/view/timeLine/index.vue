@@ -48,19 +48,20 @@
   /* height: 500px; */
   /* width: 100%; */
   /* top:0; */
-  bottom: 0px;
   /* width: 80%; */
   position: absolute;
   z-index: 100000;
   /* padding-bottom: 27px; */
   /* background: red; */
+  margin: 0 auto;
+  bottom: 58px !important;
 }
 .bottonContainer{
     position: fixed;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    bottom:70px;
+    bottom:20px;
     left: 40% ;
     z-index: 10000;
     margin: 0 auto;
@@ -107,16 +108,34 @@
 }
 #xdsj{
     position: relative;
-    width: calc(100% - 20px);
+    width: calc(100% - 370px);
     overflow: hidden;
-    margin: 0px;
+    margin: 0 auto;
     /* position: absolute; */
-    height: 25px;
+    height: 13px;
     /* left: 5% !important; */
-    top: 20px;
+    top: 15px;
+    background-color: #2c9deab3;
+    border-radius: 3px;
+}
+#progress{
+    width: 5%;
+    background-color: #1fcbda;
+    height: 13px;
+}
+#timeDiv{
+    position: relative;
+    top: 33px;
+    display: inline;
+    left: 30px;
+    color: #fff;
+    font-size: 14px;
+}
+#timeDiv span {
+    margin: 0 5px;
 }
 .bigTimeDiv{
-    width: calc(100% - 20px);
+    /* width: calc(100% - 20px);
     position: absolute;
     height: 100px;
     bottom:10px;
@@ -124,7 +143,7 @@
     background-size: 100% 100%;
     z-index: 0;
     padding:0 10px 0 11px;
-    overflow: hidden;
+    overflow: hidden; */
 }
 .cesium-viewer-timelineContainer{
     position: fixed !important;
@@ -133,7 +152,7 @@
     right: 10px!important;
 } 
 .cesium-timeline-bar{
-    background: url(../../assets/time_1.png) no-repeat!important;
+    /* background: url(../../assets/time_1.png) no-repeat!important; */
     background-size: 100% 100%!important;
 
 }
@@ -280,7 +299,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    bottom:80px;
+    bottom:28px;
     right: 400px;
     z-index: 10000;
     margin: 0 auto;
@@ -312,10 +331,7 @@
             <!-- </div> -->
         <div style="display:flex" class="icon-bigdiv">
             <div class='icon-div'>
-                <button class="icon-button icon-play" @click="sendCommond('playFlag')"></button>
-            </div>
-            <div class='icon-div'>
-                <button class="icon-button icon-Pause" @click="sendCommond('playPause')"></button>
+                 <button  :class="{'icon-Pause':playFlag,'icon-button':true,'icon-play':!playFlag}"  @click="sendCommond('pause')"></button>
             </div>
             <div class='icon-div'>
                 <button class="icon-button icon-Stop" @click="closeSocket()"></button>
@@ -361,7 +377,11 @@
     </div> -->
     <div class="bigTimeDiv">
         <div id="visualization" :style="visStyle"></div>
-        <div id='xdsj'></div>
+        <!-- <div id="timeDiv"></div> -->
+        <!-- <div id='xdsj'>
+            
+        </div> -->
+        <div id="progress"></div>
         <div v-show='timeLabelF' :style='timeLabelS' class="time-label">
             <ul v-show="timeLabelType&&buoyDataType == '浮标投放'">
                 <li>浮标编号：<span>{{buoyData['fbbh']}}</span></li>
@@ -630,8 +650,8 @@ export default {
           this.$emit('fire')
       },
       sendCommond(type){
-       debugger
-          if(type == 'playFlag'){
+ 
+          if(this.playFlag){
               this.$emit('sendCommond',this.playFlag)
               this.playFlag = !this.playFlag
           }else{
@@ -850,7 +870,8 @@ export default {
             var items = new vis.DataSet(arr);
             var options = {
                 // moveable:false,
-                maxHeight:'80px',
+                maxHeight:'15px',
+                height:'15px'
                 // onMove:(e) => {
                 //     console.log(e)
                 // }
@@ -879,7 +900,7 @@ export default {
                 
                     this.timeLabelS = {
                         'left':item.event.x+'px',
-                        'top':item.event.y-168+'px'
+                        'top':item.event.y-80+'px'
                     }
                     
                     let y = []
@@ -960,7 +981,7 @@ export default {
             
                 this.timeLabelS = {
                     'left':item.event.x+'px',
-                        'top':item.event.y-168+'px'
+                        'top':item.event.y-100+'px'
                 }
             })
             
