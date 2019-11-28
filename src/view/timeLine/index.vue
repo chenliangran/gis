@@ -703,7 +703,6 @@ export default {
             
             $.get(`${globalUrl.host}/find/buoyData`,{}).then(data => {
 
-                
                 this.timeItemArr = [],that = this
                 for(let item of data){
                     
@@ -724,7 +723,6 @@ export default {
             
                 // that.visWidth = viewer.timeline.lastWidth
                 setTimeout(() => {
-                    
                     that.visStyle.width = viewer.timeline._lastWidth+'px'
                     that.visStyle.right = $(".cesium-viewer-timelineContainer").css('right')
                     that.visStyle.left = $(".cesium-viewer-timelineContainer").css('left')
