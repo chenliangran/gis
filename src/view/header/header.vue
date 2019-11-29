@@ -217,7 +217,7 @@ export default {
             this.dvStyle.width = this.imgWidth + "px";
             this.dvStyle.height = this.imgHeight + "px";
             this.dvShow = true;
-            this.$message('双击截屏框完成截屏');
+            this.$message('截屏框自由拖动，双击截屏框完成截屏');
         },
         clipImg(){
             var clientWidth = document.documentElement.clientWidth || document.body.clientWidth
