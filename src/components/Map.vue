@@ -1011,35 +1011,57 @@ export default {
       that.progress(nowTime,totleTime)
       setInterval(()=>{
         var dfTime = (viewer.clock.currentTime.dayNumber - startTime.dayNumber)*86400 + (viewer.clock.currentTime.secondsOfDay - startTime.secondsOfDay)
-        that.progress(that.formatSeconds(dfTime),totleTime)
+        if(viewer.clock.currentTime.dayNumber != viewer.clock.startTime.dayNumber){
+          dfTime =  "00:00:00";
+          that.progress(dfTime,totleTime)
+        } else {
+          that.progress(that.formatSeconds(dfTime),totleTime)
+        }
       },1000)
     },
-    formatSeconds(value) {
-        var secondTime = parseInt(value);// 秒
-        var minuteTime = 0;// 分
-        var hourTime = 0;// 小时
-        if(secondTime > 60) {//如果秒数大于60，将秒数转换成整数
-          //获取分钟，除以60取整数，得到整数分钟
-          minuteTime = parseInt(secondTime / 60);
-          //获取秒数，秒数取佘，得到整数秒数
-          secondTime = parseInt(secondTime % 60);
-          //如果分钟大于60，将分钟转换成小时
-          if(minuteTime > 60) {
-            //获取小时，获取分钟除以60，得到整数小时
-            hourTime = parseInt(minuteTime / 60);
-            //获取小时后取佘的分，获取分钟除以60取佘的分
-            minuteTime = parseInt(minuteTime % 60);
-          }
-        }
-        var result = "" + parseInt(secondTime);
+    formatSeconds(s) {
+        // var secondTime = parseInt(value);// 秒
+        // var minuteTime = 0;// 分
+        // var hourTime = 0;// 小时
+        // if(secondTime > 60) {//如果秒数大于60，将秒数转换成整数
+        //   //获取分钟，除以60取整数，得到整数分钟
+        //   minuteTime = parseInt(secondTime / 60);
+        //   //获取秒数，秒数取佘，得到整数秒数
+        //   secondTime = parseInt(secondTime % 60);
+        //   //如果分钟大于60，将分钟转换成小时
+        //   if(minuteTime > 60) {
+        //     //获取小时，获取分钟除以60，得到整数小时
+        //     hourTime = parseInt(minuteTime / 60);
+        //     //获取小时后取佘的分，获取分钟除以60取佘的分
+        //     minuteTime = parseInt(minuteTime % 60);
+        //   }
+        // }
+        // var result = "" + parseInt(secondTime);
+        //
+        // if(minuteTime > 0) {
+        //   result = "" + parseInt(minuteTime) + ":" + result;
+        // }
+        // if(hourTime > 0) {
+        //   result = "" + parseInt(hourTime) + ":" + result;
+        // }
+        // return result;
+        var t;
+        if(s > -1){
+            var hour = Math.floor(s/3600);
+            var min = Math.floor(s/60) % 60;
+            var sec = s % 60;
+            if(hour < 10) {
+                t = '0'+ hour + ":";
+            } else {
+                t = hour + ":";
+            }
 
-        if(minuteTime > 0) {
-          result = "" + parseInt(minuteTime) + ":" + result;
+            if(min < 10){t += "0";}
+            t += min + ":";
+            if(sec < 10){t += "0";}
+            t += sec.toFixed(0)
         }
-        if(hourTime > 0) {
-          result = "" + parseInt(hourTime) + ":" + result;
-        }
-        return result;
+        return t;
     },
     progress(nowTime,totleTime){
       let progressTime = "";
