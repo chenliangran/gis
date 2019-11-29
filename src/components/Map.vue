@@ -182,9 +182,9 @@ background: none !important;
 }
 .seamless-warp{
   position: fixed !important;
-  top: 180px;
+  top: 280px;
   right: 50px;
-  height: 530px;
+  height: 500px;
   overflow: hidden;
   width: 222px;
 }
@@ -192,13 +192,13 @@ background: none !important;
   background: url(../assets/notify.png) no-repeat;
   background-size: 100% 100%;
   width: 222px;
-  height: 121px;
+  height: 110px;
   position: relative;
 
 }
 .notify div{
     position: relative;
-    top: 25px;
+    top: 20px;
     left: 20px;
 }
 .notify div p{
@@ -209,6 +209,64 @@ background: none !important;
 .notify div p span:first-child{
   margin-right: 20px;
 }
+.MBCS{
+  position: fixed !important;
+  top: 60px;
+  right: 45px;
+  height: 237px;
+  overflow: hidden;
+  width: 300px;
+  background: url(../assets/mbcs.png) no-repeat;
+  background-size: 100% 100%;
+}
+.MBCS .close {
+		position: absolute;
+		top: 10px;
+		right: 20px;
+		padding: 0;
+		width: 40px;
+		height: 40px;
+		text-align: center;
+		line-height: 40px;
+    cursor: pointer;
+    color: #fff;
+  }
+.MBCS .nav {
+  	position: absolute;
+    top: 0;
+    font-size: 14px;
+    font-weight: 500;
+    left: 37%;
+    width: 28%;
+    height: 40px;
+    line-height: 50px;
+    text-align: center;
+    letter-spacing: 2px;
+    color: #fff;
+  }
+  .MBCS .cont{
+	  position: absolute;
+    top: 58px;
+    font-size: 14px;
+    font-weight: 500;
+    left: 15px;
+    width: 70%;
+    color: #fff;
+  }
+  .MBCS .cont ul {
+    margin: 0;
+    padding: 0;
+  }
+  .cont ul li {
+    list-style: none;
+    margin: 5px;
+  }
+  .cont ul li span:first-child{
+    width: 80px;
+    text-align: right;
+    margin-right: 20px;
+    display: inline-block;
+  }
 /* .icons{
     border: none;
 }
@@ -232,7 +290,6 @@ background: none !important;
     </div>
      <vue-seamless-scroll :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
     <div class="notifyDiv">
-       
         <div class="notify" v-for="(item, i) in notifyList " :key="i">
           <div  v-if="notifyType === 'FBSJ'">
             <p>
@@ -270,7 +327,26 @@ background: none !important;
         </div> 
         </div>
       </vue-seamless-scroll>
-    
+    <div class="MBCS">
+        <div class="mbfj">
+          <div style="width: 300px;height: 237px;">
+            <div class="head-hidden"  @mousedown="draggerStart($event)"></div>
+            <div class="close" @click="isShow=false">
+              x
+            </div>
+            <div class="nav">目标参数</div>
+            <div class="cont">
+                 <ul >
+                    <li><span>经度</span><span>{{feijiCout['zjjd']}}</span></li>
+                    <li><span>纬度</span><span> {{feijiCout['zjwd']}}</span></li>
+                    <li><span>高度</span><span>{{feijiCout['gxqyg']}} 米</span></li>
+                    <li><span>速度</span><span>{{feijiCout['ds']}} km/h</span></li>
+                    <li><span>武器清单</span><span></span></li>
+                 </ul>
+            </div>
+          </div>
+        </div>
+    </div>
     <time-line
       @hingeMsgEvent="hingeMsgEvent"
       @timeDown="timeDown"
@@ -385,7 +461,9 @@ export default {
       CTnum:0,
       widthNum:0,
       notifyList:[],
-      notifyType:''
+      notifyType:'',
+      isShow:true,
+      feijiCout:{}
     };
   },
 
@@ -855,30 +933,11 @@ export default {
      */
     upateGis(data) {
       let that = this;
-      // let timeLeft = $('.cesium-timeline-icon16')[0].offsetLeft;
-      // let timeTitol = $('.cesium-timeline-bar')[0].clientWidth;
-      // GetPercent(timeLeft,timeTitol,that)
-
-     /**
-     * 百分比计算
-     */
-    
-    // function GetPercent(num,total,that) { 
-    //    that.widthNum =0;
-    //   num = parseFloat(num-192); 
-    //   if(num < 0){
-    //     num = 0
-    //   }else if( num > total){
-    //     num = total
-    //   }
-    //   total = parseFloat(total);      
-    //   that.widthNum = (Math.round(num / total * 10000) / 100 + "%"); 
-    //   console.log(that.widthNum)
-    // }
       that.FBnum = 0;
       that.CTnum = 0;
       that.notifyList = [];
       that.notifyType = '';
+      debugger
       window["Map"].viewer.entities.removeAll();
       window.Map.AddCompare("feiji", {
         id: "plane_1",
@@ -907,6 +966,11 @@ export default {
         data["FBMBSJ"].map(item => {
           dealFbSJMb(item);
         });
+        // setTimeout(() =>{
+        //   debugger
+        //   that.notifyType = '';
+        //   that.notifyList = [];
+        // },60000)
       }
      
       // 处理浮标数据
@@ -1254,7 +1318,6 @@ export default {
     init() {
       let that = this;
       window["Map"] = CMap.Init("mapElement", {});
-
       this.bindEvents();
 
       let selectName = JSON.parse(sessionStorage.getItem("ptData")).filter(
@@ -1456,27 +1519,7 @@ export default {
             return item;
         });
         //--------------------------
-      //debugger
-      // let timeLeft = $('.cesium-timeline-icon16')[0].offsetLeft;
-      // let timeTitol = $('.cesium-timeline-bar')[0].clientWidth;
-      // GetPercent(timeLeft,timeTitol,_this)
 
-         /**
-     * 百分比计算
-     */
-    
-    // function GetPercent(num,total,_this) { 
-    //    _this.widthNum =0;
-    //   num = parseFloat(num-192); 
-    //   if(num < 0){
-    //     num = 0
-    //   }else if( num > total){
-    //     num = total
-    //   }
-    //   total = parseFloat(total);      
-    //   _this.widthNum = (Math.round(num / total * 10000) / 100 + "%"); 
-    //   console.log(_this.widthNum)
-    // } 
 
         //-----------------------比对浮标信息框状态
         let ztData = {};
@@ -1576,16 +1619,25 @@ export default {
         }
 
         //console.log(this.dataBH,data)
+        //右侧消息框，显示一分钟，清空
+        
+        // setTimeout(() =>{
+        //     _this.notifyType = '';
+        //     _this.notifyList = [];
+        //   },60000)
+
       }
 
       /**------------------------------------------------------------------------------------------- */
 
       _.forEach(data, item => {
+        console.log( item )
         switch (item.type) {
           // 飞机
           case "FJ":
             //   刘川修改
             dealFeiji(item.data);
+            _this.feijiCout = item.data;
             break;
 
           // 挂弹信息
@@ -1718,6 +1770,7 @@ export default {
           window.Map.Detector.LinkOn(FbId, link);
         }
       }
+
     },
     sendCommond(param) {
       console.log(this.fjlnglat);
@@ -1868,8 +1921,8 @@ export default {
                   // direction:2           （左右的）
                   step:1,                //（调整速度的）0
                   // hoverStop:false        (鼠标停留停止 离开继续运行（反之则停止）)
-                  limitMoveNum: 5 ,
-                  singleHeight: 132, 
+                 // limitMoveNum: 1 ,    //这个是修改moveSwitch()之前的使用方法，这里的数值指的是数据条数
+                  singleHeight:115,   //单个停止高度（默认为零无缝）=>方向0/1
                   waitTime: 8000    //（停顿时间）
 
                   }

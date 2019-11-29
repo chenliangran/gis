@@ -1,7 +1,7 @@
 <template>
 	<div class="replay" :style="{ left: left + 'px', top: top + 'px' }">
 		<div class="replay-cont" v-if="isShow">
-			<div style="width: 360px;height: 600px;">
+			<div style="width: 360px;height: 660px;">
 				<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 				<div class="close" @click="isShow=false">
 					x
@@ -179,7 +179,7 @@ export default {
 		cursor: pointer;
 	}
 	.replay .nav {
-		position: absolute;
+	position: absolute;
     top: 0;
     font-size: 14px;
     font-weight: 500;
