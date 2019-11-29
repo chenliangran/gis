@@ -150,7 +150,7 @@
     z-index: 10000000 !important;
     left: 10px!important;
     right: 10px!important;
-    width: 1535px;
+    width: 80%;
 } 
 .cesium-timeline-bar{
     /* background: url(../../assets/time_1.png) no-repeat!important; */

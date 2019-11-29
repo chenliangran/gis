@@ -161,7 +161,7 @@ export default {
 	}
 	.replay-cont {
 		width: 360px;
-		height: 600px;
+		height: 660px;
 		background: url("../../../public/static/image/replay/tree.png");
 		background-size: 100% 100%;
 		background-repeat: no-repeat;

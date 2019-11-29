@@ -16,7 +16,7 @@
 			</div>
 			<div class="list">
 				<div>
-					<span style="min-width: 60px">编号</span>
+					<span style="min-width: 60px">浮标编号</span>
 					<span style="min-width: 60px">经度</span>
 					<span style="min-width: 60px">纬度</span>
 					<span style="min-width: 60px">浮标类型</span>
@@ -35,24 +35,24 @@
 				</ul>
 			</div>
 		</div>
-		<div class="event-item terrace-item">
+		<div class="buoy-item">
 			<div>
 				<span></span>
 				<span>浮标探测目标统计</span>
 			</div>
 			<div class="list">
 				<div>
-					<span style="min-width: 60px">编号</span>
+					<span style="min-width: 60px">浮标编号</span>
 					<span style="min-width: 60px">经度</span>
 					<span style="min-width: 60px">纬度</span>
-					<!-- <span style="min-width: 60px">高度</span> -->
+					<span style="min-width: 100px">探测目标位置偏差</span>
 				</div>
 				<ul>
 					<li v-for="(item, i) in events['mbtcsj']" :key="i">
 						<span style="min-width: 60px">{{item["mbbh"]}}</span>
 						<span style="min-width: 60px">{{item["mbjd"]}}</span>
 						<span style="min-width: 60px">{{item["mbwd"]}}</span>
-						<!-- <span style="min-width: 60px">{{item["fblx"]}}</span> -->
+						<span style="min-width: 100px">{{item["mbwzwc"]}}</span>
 					</li>
 				</ul>
 				<!-- <div class="item-event" @click="uploading(item.mbsj, 'mbtcsj')"  v-for="(item, i) in events['mbtcsj']" :key="i">
@@ -67,7 +67,7 @@
 				</div> -->
 			</div>
 		</div>
-		<div class="buoy-item" v-if="ctData.length > 0">
+		<div class="terrace-item" v-if="ctData.length > 0">
 			<div>
 				<span></span>
 				<span>
@@ -77,14 +77,16 @@
 			<div class="list">
 				<div>
 					<span style="min-width: 150px">发现时间</span>
-					<span>经纬</span>
-					<span>纬度</span>
+					<span style="min-width: 60px">经纬</span>
+					<span style="min-width: 60px">纬度</span>
+					<span style="min-width: 100px">探测目标位置偏差</span>
 				</div>
 				<ul>
 					<li  v-for="(item, i) in ctData"  :key="i">
 						<span style="min-width: 150px" :title="item.mbsj">{{item["mbsj"].split('.')[0]}}</span>
-						<span :title="item.mbjd">{{item["mbjd"]}}</span>
-						<span :title="item.mbwd">{{item["mbwd"]}}</span>
+						<span style="min-width: 60px"  :title="item.mbjd">{{item["mbjd"]}}</span>
+						<span style="min-width: 60px"  :title="item.mbwd">{{item["mbwd"]}}</span>
+						<span style="min-width: 100px" :title="item.mbwzwc">{{item["mbwzwc"]}}</span>
 					</li>
 				</ul>
 			</div>
@@ -247,7 +249,6 @@ export default {
             let id = sessionStorage.getItem("selectEd")
             let _this = this
             $.get(globalUrl.host+'/find/findEventListForRex',{sjid: id}).then(data => {
-				debugger
                 _this.events.fbtfsj = data.FBSJ
                 _this.events.mbtcsj = data.CTMBSJ
                 _this.events.mbtcsj.push(...data.FBMBSJ)

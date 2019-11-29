@@ -207,7 +207,7 @@ export default {
 		},
 		load() {
 			let id = sessionStorage.getItem("selectEd")
-			window.open(globalUrl.host+'/find/loadWordFile?fileName='+this.name)
+			window.open(globalUrl.host+'/find/loadWordFile?fileName='+id)
 		},
         clip(){
             this.dialogVisible = true;

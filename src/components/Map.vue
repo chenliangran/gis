@@ -141,7 +141,7 @@ setTime.icon-bigdiv {
   z-index: 10000000 !important;
   left: 10px !important;
   right: 10px !important;
-  width: 1535px;
+  width: 80%;
   height: 15px;
   margin: 0 auto;
   bottom:58px;
@@ -183,7 +183,7 @@ background: none !important;
 .seamless-warp{
   position: fixed !important;
   top: 180px;
-  right: 0px;
+  right: 50px;
   height: 530px;
   overflow: hidden;
   width: 222px;
@@ -1870,7 +1870,7 @@ export default {
                   step:1,                //（调整速度的）0
                   // hoverStop:false        (鼠标停留停止 离开继续运行（反之则停止）)
                   limitMoveNum: 5 ,
-                  singleHeight: 130, 
+                  singleHeight: 132, 
                   waitTime: 8000    //（停顿时间）
 
                   }
