@@ -254,17 +254,33 @@ export default {
             });
         },
         drawPolygon(){
-            this.jwdVisible = false;
+            const that =this;
+            let flag =true;
             let arr = [];
             this.dynamicValidateForm.domains.map(s=>{
-                arr.push(Number(s.jd),Number(s.wd));
+                if(flag){
+                    if(s.jd=== ''){
+                        that.$message.error('经度不能为空！');
+                        flag =false;
+                        return
+                    }
+                    if(s.wd=== ''){
+                        that.$message.error('纬度不能为空！');
+                        flag =false;
+                        return
+                    }
+                    arr.push(Number(s.jd),Number(s.wd));
+                }
             })
-            var redPolygon = window.Map.viewer.entities.add({
-                 polygon : {
-                     hierarchy : Cesium.Cartesian3.fromDegreesArray(arr),
-                     material : Cesium.Color.BLUE.withAlpha(0.5)
-                 }
-            });
+            if(flag){
+                this.jwdVisible = false;
+                window.Map.viewer.entities.add({
+                    polygon : {
+                        hierarchy : Cesium.Cartesian3.fromDegreesArray(arr),
+                        material : Cesium.Color.BLUE.withAlpha(0.5)
+                    }
+                });
+            }
         },
         showFPS(){ 
             let _this = this
