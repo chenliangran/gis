@@ -180,12 +180,13 @@ background: none !important;
 .rangeSetterContainer input {
   padding: 2px;
 }
-.notifyDiv{
+.seamless-warp{
   position: fixed !important;
   top: 180px;
   right: 0px;
-  height: 540px;
+  height: 530px;
   overflow: hidden;
+  width: 222px;
 }
 .notify{
   background: url(../assets/notify.png) no-repeat;
@@ -229,21 +230,47 @@ background: none !important;
         <div id="visualization" :style="visStyle"></div>
       </div>
     </div>
+     <vue-seamless-scroll :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
     <div class="notifyDiv">
-    <div class="notify" v-for="(item, i) in notifyList " :key="i">
-      <div>
-        <p>
-          <span>事件</span><span>{{item["fblx"]}}</span>
-        </p>
-        <p>
-          <span>时间</span><span>{{item["sb"]}}</span>
-        </p>
-        <p>
-          <span>详情</span><span>{{item["zx"]}}</span>
-        </p>
-      </div>
-    </div> 
-    </div>
+       
+        <div class="notify" v-for="(item, i) in notifyList " :key="i">
+          <div  v-if="notifyType === 'FBSJ'">
+            <p>
+              <span>事件</span><span>{{item["fblx"]}}</span>
+            </p>
+            <p>
+              <span>时间</span><span>{{item["sb"]}}</span>
+            </p>
+            <p>
+              <span>详情</span><span>{{item["zx"]}}</span>
+            </p>
+          </div>
+          <div v-if="notifyType === 'CTMBSJ'">
+            <p>
+              <span>事件</span><span>{{item["mbyxw"]}}</span>
+            </p>
+            <p>
+              <span>时间</span><span>{{item["mbsj"]}}</span>
+            </p>
+            <p>
+              <span>详情</span><span>{{item["yxsz"]}}</span>
+            </p>
+          </div>
+          <div v-if="notifyType === 'SDSJ'">
+            <p>
+              <span>事件</span><span>{{item["sj"]}}</span>
+            </p>
+            <p>
+              <span>时间</span><span>{{item["sjs"]}}</span>
+            </p>
+            <p>
+              <span>详情</span><span>{{item["nr"]}}</span>
+            </p>
+          </div>
+        </div> 
+        </div>
+      </vue-seamless-scroll>
+    
     <time-line
       @hingeMsgEvent="hingeMsgEvent"
       @timeDown="timeDown"
@@ -357,7 +384,8 @@ export default {
       FBnum: 0,
       CTnum:0,
       widthNum:0,
-      notifyList:[]
+      notifyList:[],
+      notifyType:''
     };
   },
 
@@ -718,21 +746,26 @@ export default {
      * 初始化整个时间轴
      */
     initTimeLine() {
-      //debugger
       let that = this;
       let viewer = window["Map"].viewer;
+      let notifyList=[] ;
+      let notifyType='';
 
       $(".cesium-viewer-bottom").hide();
 
       this.initCesiumTime(viewer);
-
+     
       // $.get(`${globalUrl.host}/find/findnewEventList`, {
       //   id: this.selectId
       // }).then(data => {
       //   console.log(data);
       let dataArr = [];
       sessionStorage.setItem("allData", JSON.stringify(this.dataBH));
+
       //-----------------初始化时间轴所需数据
+      that.notifyType = 'FBSJ'
+      that.notifyList = this.dataBH.FBSJ
+
       for (let item of this.dataBH.FBSJ) {
         dataArr.push({
           data: item,
@@ -742,6 +775,8 @@ export default {
           types: "浮标投放"
         });
       }
+      that.notifyType = 'CTMBSJ'
+      that.notifyList =  this.dataBH.CTMBSJ
       for (let item of this.dataBH.CTMBSJ) {
         dataArr.push({
           data: item,
@@ -751,6 +786,8 @@ export default {
           types: "目标探测"
         });
       }
+      that.notifyType = 'FBMBSJ'
+      that.notifyList =  this.dataBH.FBMBSJ
       for (let item of this.dataBH.FBMBSJ) {
         dataArr.push({
           data: item,
@@ -760,6 +797,8 @@ export default {
           types: "目标探测"
         });
       }
+      that.notifyType = 'SDSJ'
+      that.notifyList =  this.dataBH.SDSJ
       for (let item of this.dataBH.SDSJ) {
         // console.log(that.toDate(item["sj"]));
         dataArr.push({
@@ -816,6 +855,7 @@ export default {
      */
     upateGis(data) {
       let that = this;
+      debugger
       // let timeLeft = $('.cesium-timeline-icon16')[0].offsetLeft;
       // let timeTitol = $('.cesium-timeline-bar')[0].clientWidth;
       // GetPercent(timeLeft,timeTitol,that)
@@ -838,6 +878,8 @@ export default {
     // }
       that.FBnum = 0;
       that.CTnum = 0;
+      that.notifyList = [];
+      that.notifyType = '';
       window["Map"].viewer.entities.removeAll();
       window.Map.AddCompare("feiji", {
         id: "plane_1",
@@ -847,17 +889,22 @@ export default {
         zjwd: that.fjposData[1]
       });
       if (data["CTMBSJ"].length > 0) {
+        that.notifyType = 'CTMBSJ';
+        that.notifyList = data["CTMBSJ"]       
         data["CTMBSJ"].map((item, i) => {
           dealCtSJMB(item, i,that);
         });
       }
       if (data["FBSJ"].length > 0) {
+        that.notifyType = 'FBSJ';
         that.notifyList = data["FBSJ"]
         data["FBSJ"].map(item => {
           dealFbSJ(item,that);
         });
       }
       if (data["FBMBSJ"].length > 0) {
+        that.notifyType = 'FBMBSJ';
+        that.notifyList = data["FBMBSJ"]
         data["FBMBSJ"].map(item => {
           dealFbSJMb(item);
         });
@@ -869,7 +916,7 @@ export default {
         // console.log(Number(item['fbsswzjd1']),Number(item['fbsswzwd1']))    
         if (item["jcxxid"] != "0") {
            that.FBnum = ++that.FBnum;
-          window.Map.Detector.Add({
+           window.Map.Detector.Add({
             id: "detector_" + item["fbbh"],
             positions: [Number(item["llcrswzjd"]), Number(item["llcrswzwd"])],
             R: 2000,
@@ -1292,6 +1339,8 @@ export default {
      */
     dealMessage(data) {
       const _this = this;
+      // _this.notifyList = [];
+      // _this.notifyType = '';
       if (data.length == 0) return;
      // debugger
     //   console.log(data)
@@ -1430,16 +1479,22 @@ export default {
         //---------------------------
         this.$refs["myreplay"].updtea({ a, b, c, d });
         if (a.length > 0) {
+           _this.notifyType = 'CTMBSJ';
+           _this.notifyList = a;
           a.map((item, i) => {
             dealCtSJMB(item, i,_this);
           });
         }
         if (b.length > 0) {
+          _this.notifyType = 'FBSJ';
+           _this.notifyList = b;
           b.map(item => {
             dealFbSJ(item,_this);
           });
         }
         if (c.length > 0) {
+          _this.notifyType = 'FBMBSJ';
+          _this.notifyList = c; 
           c.map(item => {
             dealFbSJMb(item);
           });
@@ -1782,7 +1837,23 @@ export default {
         }
       });
     }
-  }
+  },
+   computed: {
+      optionSingleHeight () {
+          return {
+                  //                       （什么都不设置默认的）
+                  //  singleHeight: 40     （带停顿的）  
+                  // direction: 0,          //（从上往下的）
+                  // direction:2           （左右的）
+                  step:1,                //（调整速度的）0
+                  // hoverStop:false        (鼠标停留停止 离开继续运行（反之则停止）)
+                  limitMoveNum: 5 ,
+                  singleHeight: 130, 
+                  waitTime: 8000    //（停顿时间）
+
+                  }
+        }
+      }
 };
 </script>
 

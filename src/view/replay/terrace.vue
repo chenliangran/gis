@@ -19,6 +19,7 @@
 					<span style="min-width: 60px">编号</span>
 					<span style="min-width: 60px">经度</span>
 					<span style="min-width: 60px">纬度</span>
+					<span style="min-width: 60px">浮标类型</span>
 					<span style="min-width: 60px">状态</span>
 					<span style="min-width: 150px">投放时间</span>
 				</div>
@@ -27,19 +28,34 @@
 						<span style="min-width: 60px">{{item["fbbh"]}}</span>
 						<span style="min-width: 60px">{{item["llcrswzjd"]}}</span>
 						<span style="min-width: 60px">{{item["llcrswzwd"]}}</span>
+						<span style="min-width: 60px">{{item["fblx"]}}</span>
 						<span style="min-width: 60px">{{item["fbzt"]}}</span>
 						<span style="min-width: 150px">{{item["sb"].split(".")[0]}}</span>
 					</li>
 				</ul>
 			</div>
 		</div>
-		<div class="event-item">
+		<div class="event-item terrace-item">
 			<div>
 				<span></span>
 				<span>浮标探测目标统计</span>
 			</div>
 			<div class="list">
-				<div class="item-event" @click="uploading(item.mbsj, 'mbtcsj')"  v-for="(item, i) in events['mbtcsj']" :key="i">
+				<div>
+					<span style="min-width: 60px">编号</span>
+					<span style="min-width: 60px">经度</span>
+					<span style="min-width: 60px">纬度</span>
+					<!-- <span style="min-width: 60px">高度</span> -->
+				</div>
+				<ul>
+					<li v-for="(item, i) in events['mbtcsj']" :key="i">
+						<span style="min-width: 60px">{{item["mbbh"]}}</span>
+						<span style="min-width: 60px">{{item["mbjd"]}}</span>
+						<span style="min-width: 60px">{{item["mbwd"]}}</span>
+						<!-- <span style="min-width: 60px">{{item["fblx"]}}</span> -->
+					</li>
+				</ul>
+				<!-- <div class="item-event" @click="uploading(item.mbsj, 'mbtcsj')"  v-for="(item, i) in events['mbtcsj']" :key="i">
 					<p :title="item.mbjd">
 						<span>编号：</span>
 						<span>{{item.mbbh}}</span>
@@ -48,7 +64,7 @@
 						<span>目标发现时间：</span>
 						<span>{{showTime(item.mbsj)}}</span>
 					</p>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<div class="buoy-item" v-if="ctData.length > 0">
@@ -231,6 +247,7 @@ export default {
             let id = sessionStorage.getItem("selectEd")
             let _this = this
             $.get(globalUrl.host+'/find/findEventListForRex',{sjid: id}).then(data => {
+				debugger
                 _this.events.fbtfsj = data.FBSJ
                 _this.events.mbtcsj = data.CTMBSJ
                 _this.events.mbtcsj.push(...data.FBMBSJ)
@@ -339,11 +356,11 @@ export default {
 		display: flex;
 	}
 	.terrace-item .list div span{
-		margin: 0 5px;
+		padding: 0 5px;
 		background: #092254;
 	}
 	.terrace-item .list ul span{
-		margin: 0 5px;
+		padding: 0 5px;
 	}
 	.terrace-item .curFb {
 		background: #0922546b;
