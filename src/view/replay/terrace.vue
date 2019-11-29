@@ -22,6 +22,8 @@
 					<span style="min-width: 60px">浮标类型</span>
 					<span style="min-width: 60px">状态</span>
 					<span style="min-width: 150px">投放时间</span>
+					<span style="min-width: 60px">射频通道号</span>
+					<span style="min-width: 60px">阵型</span>
 				</div>
 				<ul>
 					<li :class="{curFb: curFbBh == item.fbbh}" v-for="(item, i) in detectorData" :key="i">
@@ -31,6 +33,8 @@
 						<span style="min-width: 60px">{{item["fblx"]}}</span>
 						<span style="min-width: 60px">{{item["fbzt"]}}</span>
 						<span style="min-width: 150px">{{item["sb"].split(".")[0]}}</span>
+						<span style="min-width: 60px">{{item["sptdh"]}}</span>
+						<span style="min-width: 60px">{{item["zx"]}}</span>
 					</li>
 				</ul>
 			</div>

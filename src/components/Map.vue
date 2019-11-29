@@ -855,7 +855,6 @@ export default {
      */
     upateGis(data) {
       let that = this;
-      debugger
       // let timeLeft = $('.cesium-timeline-icon16')[0].offsetLeft;
       // let timeTitol = $('.cesium-timeline-bar')[0].clientWidth;
       // GetPercent(timeLeft,timeTitol,that)
