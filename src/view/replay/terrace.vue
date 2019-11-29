@@ -251,7 +251,6 @@ export default {
             let id = sessionStorage.getItem("selectEd")
             let _this = this
             $.get(globalUrl.host+'/find/findEventListForRex',{sjid: id}).then(data => {
-				debugger
                 _this.events.fbtfsj = data.FBSJ
                 _this.events.mbtcsj = data.CTMBSJ
                 _this.events.mbtcsj.push(...data.FBMBSJ)
