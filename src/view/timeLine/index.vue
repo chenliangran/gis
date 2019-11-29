@@ -54,7 +54,7 @@
   /* padding-bottom: 27px; */
   /* background: red; */
   margin: 0 auto;
-  bottom: 58px !important;
+  bottom: 48px !important;
 }
 .bottonContainer{
     position: fixed;
@@ -150,6 +150,7 @@
     z-index: 10000000 !important;
     left: 10px!important;
     right: 10px!important;
+    width: 1535px;
 } 
 .cesium-timeline-bar{
     /* background: url(../../assets/time_1.png) no-repeat!important; */
@@ -356,9 +357,9 @@
             <div class='icon-div'>
                 <button class="icon-button icon-layerHandler" @click="layerHandler()"></button>
             </div> -->
-            <div class='icon-div'>
+            <!-- <div class='icon-div'>
                 <button class="icon-button icon-chart" @click="chart()"></button>
-            </div>
+            </div> -->
             <div class='showFilter'>
                 <p>事件显隐：</p>
                 <!-- <button class="icon-filter"  @click="filters()"></button> -->
@@ -376,7 +377,7 @@
         {{mouseInfo.lon}}/{{mouseInfo.lat}}
     </div> -->
     <div class="bigTimeDiv">
-        <div id="visualization" :style="visStyle"></div>
+        <!-- <div id="visualization" :style="visStyle"></div> -->
         <!-- <div id="timeDiv"></div> -->
         <!-- <div id='xdsj'>
             
@@ -898,10 +899,10 @@ export default {
                     bottoms = 80+10-item.event.y
                     this.timeLabelF = true
                 
-                    this.timeLabelS = {
-                        'left':item.event.x+'px',
-                        'top':item.event.y-80+'px'
-                    }
+                    // this.timeLabelS = {
+                    //     'left':item.event.x+'px',
+                    //     'top':item.event.y-80+'px'
+                    // }
                     
                     let y = []
                     if(this.timeItemArr.length > 0){
@@ -969,6 +970,7 @@ export default {
 
                     })
                     this.clickItem(y)
+                  
                 } else {
                     this.timeLabelF = false
                 }
@@ -979,10 +981,10 @@ export default {
                 
                 this.timeLabelF = true
             
-                this.timeLabelS = {
-                    'left':item.event.x+'px',
-                        'top':item.event.y-100+'px'
-                }
+                // this.timeLabelS = {
+                //     'left':item.event.x+'px',
+                //         'top':item.event.y-100+'px'
+                // }
             })
             
             this.timeline.on('rangechange',(item) => {

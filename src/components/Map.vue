@@ -128,12 +128,20 @@ setTime.icon-bigdiv {
   padding: 0 10px 0 11px;
   overflow: hidden;
 }
+#progress{
+    width: 0%;
+    background-color: #1fcbda;
+    height: 13px;
+    position: fixed;
+    bottom: 59px;
+    left: 192px;
+}
 .cesium-viewer-timelineContainer {
   position: fixed !important;
   z-index: 10000000 !important;
   left: 10px !important;
   right: 10px !important;
-  width: 80%;
+  width: 1535px;
   height: 15px;
   margin: 0 auto;
   bottom:58px;
@@ -172,7 +180,34 @@ background: none !important;
 .rangeSetterContainer input {
   padding: 2px;
 }
+.notifyDiv{
+  position: fixed !important;
+  top: 180px;
+  right: 0px;
+  height: 540px;
+  overflow: hidden;
+}
+.notify{
+  background: url(../assets/notify.png) no-repeat;
+  background-size: 100% 100%;
+  width: 222px;
+  height: 121px;
+  position: relative;
 
+}
+.notify div{
+    position: relative;
+    top: 25px;
+    left: 20px;
+}
+.notify div p{
+  color:#ffffff;
+  font-size:12px;
+  margin: 10px 0;
+}
+.notify div p span:first-child{
+  margin-right: 20px;
+}
 /* .icons{
     border: none;
 }
@@ -190,8 +225,24 @@ background: none !important;
     <div id="mapElement">
       <div class="time_bg">
         <div id="timeDiv"></div>
+         <div id="progress" :style="'width:'+ widthNum +''"></div>
         <div id="visualization" :style="visStyle"></div>
       </div>
+    </div>
+    <div class="notifyDiv">
+    <div class="notify" v-for="(item, i) in notifyList " :key="i">
+      <div>
+        <p>
+          <span>事件</span><span>{{item["fblx"]}}</span>
+        </p>
+        <p>
+          <span>时间</span><span>{{item["sb"]}}</span>
+        </p>
+        <p>
+          <span>详情</span><span>{{item["zx"]}}</span>
+        </p>
+      </div>
+    </div> 
     </div>
     <time-line
       @hingeMsgEvent="hingeMsgEvent"
@@ -305,6 +356,8 @@ export default {
       controllerF:false,
       FBnum: 0,
       CTnum:0,
+      widthNum:0,
+      notifyList:[]
     };
   },
 
@@ -614,6 +667,7 @@ export default {
             window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
               new Date(that.allDate.startT)
             );
+
             that.action = "暂停";
             // that.num = 0;
             // that.$refs["timeLine"].num = that.num;
@@ -740,6 +794,7 @@ export default {
           that.$refs["timeLine"].startXd();
         }, 300);
       };
+
     },
     /**
      * @param {date} date 当前播放时间点
@@ -761,6 +816,26 @@ export default {
      */
     upateGis(data) {
       let that = this;
+      // let timeLeft = $('.cesium-timeline-icon16')[0].offsetLeft;
+      // let timeTitol = $('.cesium-timeline-bar')[0].clientWidth;
+      // GetPercent(timeLeft,timeTitol,that)
+
+     /**
+     * 百分比计算
+     */
+    
+    // function GetPercent(num,total,that) { 
+    //    that.widthNum =0;
+    //   num = parseFloat(num-192); 
+    //   if(num < 0){
+    //     num = 0
+    //   }else if( num > total){
+    //     num = total
+    //   }
+    //   total = parseFloat(total);      
+    //   that.widthNum = (Math.round(num / total * 10000) / 100 + "%"); 
+    //   console.log(that.widthNum)
+    // }
       that.FBnum = 0;
       that.CTnum = 0;
       window["Map"].viewer.entities.removeAll();
@@ -777,6 +852,7 @@ export default {
         });
       }
       if (data["FBSJ"].length > 0) {
+        that.notifyList = data["FBSJ"]
         data["FBSJ"].map(item => {
           dealFbSJ(item,that);
         });
@@ -786,12 +862,11 @@ export default {
           dealFbSJMb(item);
         });
       }
-
+     
       // 处理浮标数据
       function dealFbSJ(item,that) {
         // console.log(item);
-        // console.log(Number(item['fbsswzjd1']),Number(item['fbsswzwd1']))
-
+        // console.log(Number(item['fbsswzjd1']),Number(item['fbsswzwd1']))    
         if (item["jcxxid"] != "0") {
            that.FBnum = ++that.FBnum;
           window.Map.Detector.Add({
@@ -840,8 +915,8 @@ export default {
       let nowTime = "00:00:00"
       let totleTime = that.countDate(this.allDate.startT,this.allDate.endT)
       this.progress(nowTime,totleTime)
-    
-
+      
+      
       viewer.timeline.addEventListener(
         "setzoom",
         function(e) {
@@ -881,6 +956,7 @@ export default {
         },
         false
       );
+    
       this.startXd();
 
     },
@@ -1127,7 +1203,7 @@ export default {
       };
 
       socketController.onmessage = function(e) {
-          if (_this.wsF) {
+        if (_this.wsF) {
           _this.wsName = e.data;
           sessionStorage.setItem("name", e.data);
           // if (type) {
@@ -1151,6 +1227,7 @@ export default {
         } else {
           //  window.Map.viewer.clock.shouldAnimate = true;
           _this.WebSocketData = JSON.parse(e.data);
+
         //   console.log(JSON.parse(e.data)[0].LKR);
           let data = JSON.parse(e.data)[0].LKR;
           if (data) {
@@ -1176,13 +1253,14 @@ export default {
         }
       };
     },
+
     /**
      * ws数据处理事件
      */
     dealMessage(data) {
       const _this = this;
       if (data.length == 0) return;
-
+     // debugger
     //   console.log(data)
 
       //--------------比对出当前播放时间
@@ -1270,6 +1348,27 @@ export default {
             return item;
         });
         //--------------------------
+      //debugger
+      // let timeLeft = $('.cesium-timeline-icon16')[0].offsetLeft;
+      // let timeTitol = $('.cesium-timeline-bar')[0].clientWidth;
+      // GetPercent(timeLeft,timeTitol,_this)
+
+         /**
+     * 百分比计算
+     */
+    
+    // function GetPercent(num,total,_this) { 
+    //    _this.widthNum =0;
+    //   num = parseFloat(num-192); 
+    //   if(num < 0){
+    //     num = 0
+    //   }else if( num > total){
+    //     num = total
+    //   }
+    //   total = parseFloat(total);      
+    //   _this.widthNum = (Math.round(num / total * 10000) / 100 + "%"); 
+    //   console.log(_this.widthNum)
+    // } 
 
         //-----------------------比对浮标信息框状态
         let ztData = {};
