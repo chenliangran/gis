@@ -607,7 +607,13 @@ export default {
 
                     that.timeItemArr = dataArr;  
                      console.log(that.timeItemArr)
-                    that.timeline.setItems(that.timeItemArr)    
+                    that.timeline.setItems(that.timeItemArr)   
+                    setTimeout(() => {
+                        $('.vis-box').each((i,v) => {
+                            // v.style.top = '22px !important'
+                            $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+                        })
+                    },1000) 
 
                 })
             }
@@ -630,6 +636,12 @@ export default {
               })
           })
           this.timeline.setItems(arrData)
+          setTimeout(() => {
+                $('.vis-box').each((i,v) => {
+                    // v.style.top = '22px !important'
+                    $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+                })
+            },1000)
 
       },
       filterCancel(){
@@ -703,7 +715,7 @@ export default {
             
             
             $.get(`${globalUrl.host}/find/buoyData`,{}).then(data => {
-
+                
                 this.timeItemArr = [],that = this
                 for(let item of data){
                     
@@ -729,6 +741,12 @@ export default {
                     that.visStyle.left = $(".cesium-viewer-timelineContainer").css('left')
                     that.timeline.redraw()
                     that.startXd()
+                    setTimeout(() => {
+                        $('.vis-box').each((i,v) => {
+                            // v.style.top = '22px !important'
+                            $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+                        })
+                    },1000)
                 },300)
                 
             
@@ -870,7 +888,8 @@ export default {
             var options = {
                 // moveable:false,
                 maxHeight:'15px',
-                height:'15px'
+                height:'15px',
+                stack:false
                 // onMove:(e) => {
                 //     console.log(e)
                 // }
@@ -878,11 +897,18 @@ export default {
                 // orientation:'top',
             
             };
+            console.log(arr)
             var container = document.getElementById('visualization');
             this.timeline = new vis.Timeline(container, items, options);
             let i = $("#visualization .vis-bottom").length - 1
-        
-            
+            setTimeout(() => {
+                $('.vis-box').each((i,v) => {
+
+                    // v.style.top = '22px !important'
+                    $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+                })
+            },1000)
+           
             // this.timeline.setOptions({
 			// 	start:a,
 			// 	end:b,

@@ -1,6 +1,6 @@
 <template>
 	<div class="replay" :style="{ left: left + 'px', top: top + 'px' }">
-		<div class="replay-cont" v-if="isShow">
+		<div class="replay-cont" v-show="isShow">
 			<div style="width: 360px;height: 660px;">
 				<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 				<div class="close" @click="isShow=false">

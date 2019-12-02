@@ -560,4 +560,7 @@ export default {
         margin:0;
 
     }
+    .cmsNav li{
+        cursor: pointer;
+    }
 </style>

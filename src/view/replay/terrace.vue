@@ -49,14 +49,14 @@
 					<span style="min-width: 60px">浮标编号</span>
 					<span style="min-width: 60px">经度</span>
 					<span style="min-width: 60px">纬度</span>
-					<span style="min-width: 100px">探测目标位置偏差</span>
+					<span style="min-width: 100px">距离</span>
 				</div>
 				<ul>
 					<li v-for="(item, i) in events['mbtcsj']" :key="i">
 						<span style="min-width: 60px">{{item["mbbh"]}}</span>
-						<span style="min-width: 60px">{{item["mbjd"]}}</span>
-						<span style="min-width: 60px">{{item["mbwd"]}}</span>
-						<span style="min-width: 100px">{{item["mbwzwc"]}}</span>
+						<span style="min-width: 60px">{{item["mbwzjd"]}}</span>
+						<span style="min-width: 60px">{{item["mbwzwd"]}}</span>
+						<span style="min-width: 100px">{{item["jl"]}}</span>
 					</li>
 				</ul>
 				<!-- <div class="item-event" @click="uploading(item.mbsj, 'mbtcsj')"  v-for="(item, i) in events['mbtcsj']" :key="i">
@@ -195,9 +195,12 @@ export default {
 	methods: {
 		updtea(data){
 			this.detectorData = data.b;
+			this.ctData =  data.a;
+			this.events['mbtcsj'] =  data.c;
 		},
         setLineOption(data) {
-            let that = this;
+			let that = this;
+			// console.log(data)
             if(!data){
                 let xData = [],chartData = []
                 for(let i = 0;i<600;i++){
@@ -254,7 +257,7 @@ export default {
             let _this = this
             $.get(globalUrl.host+'/find/findEventListForRex',{sjid: id}).then(data => {
                 _this.events.fbtfsj = data.FBSJ
-                _this.events.mbtcsj = data.CTMBSJ
+                _this.events.mbtcsj = data.FBMBSJ
                 _this.events.mbtcsj.push(...data.FBMBSJ)
                 _this.events.sdsj = data.SDSJ
             })
@@ -267,7 +270,7 @@ export default {
 			$.get(globalUrl.host+'/find/findEventListForRex',{sjid: id,time: v}).then(data => {
 				this.detectorData = data.FBSJ;
                 _this.events.fbtfsj = data.FBSJ
-                _this.events.mbtcsj = data.CTMBSJ
+                _this.events.mbtcsj = data.FBMBSJ
                 _this.events.mbtcsj.push(...data.FBMBSJ)
                 _this.events.sdsj = data.SDSJ
                 _this.ctData =data.CTMBSJ
