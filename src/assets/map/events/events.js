@@ -1,6 +1,7 @@
 import Tools from '../tools/tools.js';
 import { DrawEntity } from '../drawer/Draw.js'; 
 import Calculater from '../tools/calculater.js';
+import de from "element-ui/src/locale/lang/de";
 
 
 const _ = require('lodash');
@@ -99,7 +100,7 @@ export class Events{
                 if(MarkConfig.shape.indexOf('line') != -1){
 
                     if(linePositions.length){
-                        debugger
+
                         let path = [];
 
                         let lastP = _.last(linePositions);
@@ -145,7 +146,7 @@ export class Events{
                     }else{
 
                         let startPoint = [_gps.lon, _gps.lat, _gps.lon+0.01, _gps.lat+0.01]
-
+                         debugger
                         currentLine = Drawer.Draw({
                             parent : MarkParent,
                             polyline : {

@@ -361,7 +361,7 @@ background: none !important;
     
     
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
-    <gis-header @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum"></gis-header>
+    <gis-header :timeNow="timeNow" @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum"></gis-header>
     <div id="mapElement">
       <div class="time_bg">
         <div id="timeDiv"></div>
@@ -544,7 +544,7 @@ export default {
       selectId: "",
       selectF: false,
       loginF: true,
-      num: 0,
+      num: 1,
       action: "暂停",
       timeItemArr: [],
       newDate: "",
@@ -573,8 +573,8 @@ export default {
       WebSocketData: {},
       buoyInfo: {},
       showInfo: false,
-      toolF:false,
-      controllerF:false,
+      toolF:true,
+      controllerF:true,
       FBnum: 0,
       widthNum:0,
       notifyList:[],
@@ -584,6 +584,7 @@ export default {
       timeras:null,
       timerNew:null,
       timerFlag:true,
+      timeNow:'',
       eventType:false,
       newEventDate:'',
       eventVal:'',
@@ -653,18 +654,6 @@ export default {
         $(".myMsgList").eq(1).fadeOut();
       }, 60000);
     });
-    // $(".time_bg").on('mouseenter',()=>{
-    //    $(".time_bg").css("opacity","1");
-    // })
-    // $(".time_bg").on('mouseleave',()=>{
-    //     $(".time_bg").css("opacity","0.4");
-    // })
-    // $(".cesium-viewer-timelineContainer").on('mouseenter',()=>{
-    //    $(".time_bg").mouseenter();
-    // })
-    // $(".cesium-viewer-timelineContainer").on('mouseleave',()=>{
-    //    $(".time_bg").mouseleave();
-    // })
     let that = this;
  
     document.onselectstart = function() {
@@ -712,8 +701,8 @@ export default {
               success: function(data) {
                 
                 sessionStorage.setItem("groupType", data);
-                // that.num = data.fps;
-                // that.$refs["timeLine"].num = that.num;
+                that.num = data.fps;
+                that.$refs["timeLine"].num = that.num;
                 if (data.yxzt == 3) {
                   that.gdFlag = false
                   that.num = data.fps
@@ -821,10 +810,6 @@ export default {
                 }
 
                 that.timeItemArr = dataArr;  
-                // that.$refs["timeLine"].initVis(
-                //   viewer,
-                //   that.$refs["timeLine"].timeItemArr
-                // );
 
                 window.onresize = function() {
                   // that.visWidth = viewer.timeline.lastWidth
@@ -972,8 +957,8 @@ export default {
                 }, //将js对象转成json对象
                 success: function(data) {
                   sessionStorage.setItem("groupType", data);
-                  // that.num = data.fps;
-                  // that.$refs["timeLine"].num = that.num;
+                  that.num = data.fps;
+                  that.$refs["timeLine"].num = that.num;
                   if (data.yxzt == 3) {
                     that.gdFlag = false
                     that.num = data.fps
@@ -1018,23 +1003,24 @@ export default {
      * @param { String } type 事件类型
      */
     forBackWard(type) {
+      debugger
       
       if (type == "enter") {
-        if (this.num == 0) {
+        if (this.num == 1) {
           this.num = 2;
         } else if (this.num == -2) {
-          this.num = 0;
-        } else if (this.num < 0) {
+          this.num = 1;
+        } else if (this.num < 1) {
           this.num = this.num / 2;
         } else {
           this.num = this.num * 2;
         }
       } else {
-        if (this.num == 0) {
-          this.num = -2;
+        if (this.num == 1) {
+          this.num = 1/2;
         } else if (this.num == 2) {
-          this.num = 0;
-        } else if (this.num > 0) {
+          this.num = 1;
+        } else if (this.num > 1) {
           this.num = this.num / 2;
         } else {
           this.num = this.num * 2;
@@ -1050,7 +1036,7 @@ export default {
         return
       }
       console.log(this.num)
-      // this.$refs["timeLine"].num = this.num;
+      this.$refs["timeLine"].num = this.num;
       $.get(`${globalUrl.host}/find/fastAndSlow`, {
         multiple: this.num,
         name: sessionStorage.getItem("groupNum")
@@ -1101,8 +1087,8 @@ export default {
             that.setZZTime()
 
             that.action = "暂停";
-            // that.num = 0;
-            // that.$refs["timeLine"].num = that.num;
+            that.num = 1;
+            that.$refs["timeLine"].num = that.num;
           });
         });
       }
@@ -1411,6 +1397,7 @@ export default {
     initCesiumTime(viewer) {
       let that = this;
       let startTime = Cesium.JulianDate.fromDate(new Date(this.allDate.startT));
+      this.timeNow = new Date(this.allDate.startT).getTime();
       let stopTime = Cesium.JulianDate.fromDate(new Date(this.allDate.endT));
       this.timelineT(viewer);
       viewer.timeline.zoomTo(startTime, stopTime);
@@ -1486,6 +1473,7 @@ export default {
           that.progress(dfTime,totleTime)
           
         } else {
+          that.timeNow = (new Date(that.allDate.startT).getTime()/1000 + Number(dfTime.toFixed(0)))*1000;
           that.progress(that.formatSeconds(dfTime),totleTime)
           
         }
@@ -1813,7 +1801,7 @@ export default {
           let data = JSON.parse(e.data)[0].LKR;
           if (data) {
             _this.num = data.fps;
-            // _this.$refs["timeLine"].num = _this.num;
+            _this.$refs["timeLine"].num = _this.num;
             if (data.yxzt == 3) {
               _this.$refs.timeLine.playFlag = false;
               _this.playFLAG = false;
@@ -2237,8 +2225,8 @@ export default {
         }, //将js对象转成json对象
         success: function(data) {
           sessionStorage.setItem("groupType", data);
-          // that.num = data.fps;
-          // that.$refs["timeLine"].num = that.num;
+          that.num = data.fps;
+          that.$refs["timeLine"].num = that.num;
           if (data.yxzt == 3) {
             that.gdFlag = false
             that.num = data.fps
@@ -2271,8 +2259,8 @@ export default {
                 );
                 that.setZZTime()
                 that.action = "暂停";
-                // that.num = 0;
-                // that.$refs["timeLine"].num = that.num;
+                that.num = 1;
+                that.$refs["timeLine"].num = that.num;
               });
             });
           }

@@ -28,7 +28,7 @@
              <ul>
                 <li @click="controller(flag1)"><i class="icon icon4"></i><span>图层控制</span></li>
                 <li @click="tool(flag)"><i class="icon icon5"></i><span>绘图工具</span></li>
-                <li @click="clip"><i class="icon icon6"></i><span>截屏</span></li>
+                <!-- <li @click="clip"><i class="icon icon6"></i><span>截屏</span></li> -->
                 <li style="margin-right: 30px;"><i class="icon icon7"></i><span>FPS信息：{{FPS}}</span></li>
             </ul>
         </div>
@@ -66,7 +66,8 @@
                 width="30%"
                 append-to-body
         >
-            <el-button type="primary" @click="addDomain">新增点</el-button>
+            <el-button type="primary" @click="addDomain" style="margin-bottom: 10px">新增点</el-button>
+            <el-button type="danger" @click="clearLine">清除连线</el-button>
             <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
                 <el-col>
                     <el-form-item
@@ -95,14 +96,14 @@
 
 <script>
 export default {
-    props: ["WebSocketData","FBnum"],
+    props: ["WebSocketData","FBnum","timeNow"],
 	data() {
 		return {
 			dataInfo: {},
             name: '',
             FPS:0,
-            flag:false,
-            flag1:false,
+            flag:true,
+            flag1:true,
             groupNum:'',
             NowTime:'',
             jwdVisible:false,
@@ -118,14 +119,14 @@ export default {
             dialogVisible:false,
             dvShow:false,
             // FBnum:0,
-            // CTnum:0,
             dynamicValidateForm: {
                 domains: [{
                     jd: "",
                     wd:"",
                     key: ""
                 }],
-            }
+            },
+            lineId:[]
 		}
 	},
 	methods: {
@@ -163,8 +164,8 @@ export default {
 
 
         },
-        CurentTime(){ 
-            var now = new Date();
+        CurentTime(time){
+            var now = new Date(time);
             
             var year = now.getFullYear();       //年
             var month = now.getMonth() + 1;     //月
@@ -274,13 +275,31 @@ export default {
             })
             if(flag){
                 this.jwdVisible = false;
+                // window.Map.viewer.entities.add({
+                //     polygon : {
+                //         hierarchy : Cesium.Cartesian3.fromDegreesArray(arr),
+                //         material : ""
+                //     }
+                // });
+                let id = Math.random().toFixed(10);
                 window.Map.viewer.entities.add({
-                    polygon : {
-                        hierarchy : Cesium.Cartesian3.fromDegreesArray(arr),
-                        material : Cesium.Color.BLUE.withAlpha(0.5)
-                    }
+                    polyline : {
+                        positions : new Cesium.CallbackProperty(function(){
+                            return Cesium.Cartesian3.fromDegreesArray(arr)
+                        },false),
+                        width : 5,
+                        material : Cesium.Color.AQUAMARINE,
+                    },
+                    id:id
                 });
+                this.lineId.push(id)
             }
+        },
+        clearLine(){
+            this.lineId.map(s=>{
+                window.Map.viewer.entities.removeById(s)
+            })
+            this.lineId=[]
         },
         showFPS(){ 
             let _this = this
@@ -333,7 +352,7 @@ export default {
         this.showFPS().go();
         let that = this
         setInterval(function(){
-                that.NowTime  = that.CurentTime();
+            that.NowTime  = that.CurentTime(that.timeNow);
         },1000);
              var dv = document.getElementById('dv');
          var x = 0;
@@ -520,7 +539,7 @@ export default {
         margin-right: 5px;  
     }
     .cms-middle ul li .fubiao{
-        background: url(../../assets/header/zhinan.png);
+        background: url(../../assets/header/fubiao1.png);
         display: inline-block;
         width: 22px;
         height: 18px;
@@ -531,7 +550,7 @@ export default {
         margin-right: 5px;      
     }
     .cms-middle ul li .group{
-        background: url(../../assets/header/group.png);   
+        background: url(../../assets/header/qianting.png);   
         display: inline-block;
         width: 7px;
         height: 17px;

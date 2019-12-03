@@ -43,7 +43,6 @@ export default class Detect{
 
             // this.Update(target)
         }else{
-
             sourceData.push({
                 target,
                 entity : DrawEntity.Draw({
@@ -51,22 +50,29 @@ export default class Detect{
                     name:'浮标',
                     position:Ce.ToPoint(target.positions),
                     type:'detector',
-                    group:'detector',
+                    group:'detector',                  
+                    label:{
+                        text:target.origin.fbbh.slice(-3)+'/S',
+                        font:'15px',
+                        fillColor:Cesium.Color.BLUE,
+                        verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
+                        pixelOffset:Ce.XY2D(0,-20)
+                    },
                     billboard:{
-                        image:'/static/image/junbiao/fubiao.png',
+                        image:'/static/image/junbiao/fubiao1.png',
                         width:30,
                         height:30,
                         scaleByDistance:Ce.ScaleNF(2000,2,50000,1)
                     },
-                    cylinder:{
-                        length:1,
-                        topRadius:target.R || 2000,
-                        bottomRadius:target.R || 2000,
-                        fill:false,
-                        outline:true,
-                        outlineWidth:2,
-                        outlineColor:Ce.CssColor('aqua')
-                    },
+                    // cylinder:{
+                    //     length:1,
+                    //     topRadius:target.R || 2000,
+                    //     bottomRadius:target.R || 2000,
+                    //     fill:false,
+                    //     outline:true,
+                    //     outlineWidth:2,
+                    //     outlineColor:Ce.CssColor('aqua')
+                    // },
                     origin:target
                 })
             });
@@ -120,6 +126,7 @@ export default class Detect{
                 label:{
                     text:'浮标目标',
                     font:'15px',
+                    fillColor:Cesium.Color.BLUE,
                     verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                     pixelOffset:Ce.XY2D(0,-10)
                 },
