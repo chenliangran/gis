@@ -281,7 +281,7 @@ background: none !important;
 <template>
   <div class="MapContainer">
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
-    <gis-header @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum" :CTnum="CTnum"></gis-header>
+    <gis-header :timeNow="timeNow" @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum" :CTnum="CTnum"></gis-header>
     <div id="mapElement">
       <div class="time_bg">
         <div id="timeDiv"></div>
@@ -481,7 +481,8 @@ export default {
       feijiCout:{},
       timeras:null,
       timerNew:null,
-      timerFlag:true
+      timerFlag:true,
+      timeNow:''
     };
   },
 
@@ -1148,6 +1149,7 @@ export default {
     initCesiumTime(viewer) {
       let that = this;
       let startTime = Cesium.JulianDate.fromDate(new Date(this.allDate.startT));
+      this.timeNow = new Date(this.allDate.startT).getTime();
       let stopTime = Cesium.JulianDate.fromDate(new Date(this.allDate.endT));
       this.timelineT(viewer);
       viewer.timeline.zoomTo(startTime, stopTime);
@@ -1221,6 +1223,7 @@ export default {
             new Date(this.dqsjd)
           );
         } else {
+          that.timeNow = (new Date(that.allDate.startT).getTime()/1000 + Number(dfTime.toFixed(0)))*1000;
           that.progress(that.formatSeconds(dfTime),totleTime)
           window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
             new Date(this.dqsjd)
