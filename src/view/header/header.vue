@@ -21,7 +21,7 @@
                 <li><i class="feiji"></i><span>1</span></li>
                 <li><i class="fubiao"></i><span>{{FBnum}}</span></li>
                 <li><span class="time">{{NowTime}}</span></li>
-                <li><i class="group"></i><span>{{CTnum}}</span></li>
+                <li><i class="group"></i><span>1</span></li>
             </ul>
         </div>
         <div class="cmsNav cms-right">
@@ -405,12 +405,6 @@ export default {
                this.FBnum = v
            },
            deep: true
-        },
-        CTnum:{
-            handler:function(v){
-                this.CTnum = v
-            },
-            deep: true
         }
     
         //   this.getAllDate()

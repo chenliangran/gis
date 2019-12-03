@@ -17,8 +17,8 @@
 			<div class="list">
 				<div>
 					<span style="min-width: 60px">浮标编号</span>
-					<span style="min-width: 60px">经度</span>
-					<span style="min-width: 60px">纬度</span>
+					<span style="min-width: 80px">经度</span>
+					<span style="min-width: 80px">纬度</span>
 					<span style="min-width: 60px">浮标类型</span>
 					<span style="min-width: 60px">状态</span>
 					<!-- <span style="min-width: 150px">投放时间</span> -->
@@ -28,8 +28,8 @@
 				<ul>
 					<li :class="{curFb: curFbBh == item.fbbh}" v-for="(item, i) in detectorData" :key="i">
 						<span style="min-width: 60px">{{item["fbbh"]}}</span>
-						<span style="min-width: 60px">{{item["llcrswzjd"]}}</span>
-						<span style="min-width: 60px">{{item["llcrswzwd"]}}</span>
+						<span style="min-width: 80px">{{item["llcrswzjd"]}}</span>
+						<span style="min-width: 80px">{{item["llcrswzwd"]}}</span>
 						<span style="min-width: 60px">{{item["fblx"]}}</span>
 						<span style="min-width: 60px">{{item["fbzt"]}}</span>
 						<!-- <span style="min-width: 150px">{{item["sb"].split(".")[0]}}</span> -->

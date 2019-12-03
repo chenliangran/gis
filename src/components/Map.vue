@@ -264,8 +264,8 @@ background: none !important;
   }
   .cont ul li span:first-child{
     width: 80px;
-    text-align: right;
-    margin-right: 20px;
+    /* text-align: right; */
+    /* margin-right: 20px; */
     display: inline-block;
   }
 /* .icons{
@@ -276,6 +276,72 @@ background: none !important;
     width: 12px;
     height: 12px;
 } */
+.time-label{
+    width: 346px;
+    height:168px;
+    background: red;
+    position: fixed;
+    z-index: 100000000;
+    background: url(../assets/icon/小标牌.png) no-repeat!important;
+    pointer-events: none;
+    display: flex;
+    justify-content: flex-end;
+}
+.time-label ul{
+    font-size:14px; 
+    color: #37bdff;
+    list-style: none;
+    margin-top: 10px
+}
+.time-label ul span{
+    font-size:12px; 
+    color: #ffffff
+}
+.time-label ul li {
+    margin: 5px
+}
+.events-btn{
+    display: flex;
+    justify-content: space-around;
+}
+.events-btn div{
+  width: 70px;
+	height: 35px;
+	background: url(../assets/icon/按钮.png) no-repeat!important;
+	background-size: 100% 100%!important;
+	display: flex;
+	font-size: 14px;
+	justify-content: center;
+	align-items: center;
+	color:#8efffb;
+	margin: 0 10px;
+	cursor: pointer;
+    pointer-events: all;
+}
+.time-label input{
+    width: 125px;
+    pointer-events: all;
+    background: url(../assets/icon/login.png) no-repeat!important;
+	  background-size: 100% 100%!important;
+    padding: 2px;
+    color: #8efffb;
+    border: none;
+    height: 24px;
+    
+}
+.time-label .el-date-editor.el-input, .el-date-editor.el-input__inner{
+   width: 130px !important;
+}
+.time-label .el-input--prefix .el-input__inner{
+   padding: 0 !important;
+}
+.time-label .el-input--suffix .el-input__inner{
+   padding-left: 22px !important;
+}
+.time-label .el-input__prefix{
+  top: -8px !important;
+  left:0 !important;
+}
 </style>
 
 <template>
@@ -291,56 +357,71 @@ background: none !important;
       </div>
     </div>
      <vue-seamless-scroll id='mySeamless'  style="background: rgba(8, 38, 93, 0.5)"  :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
-    <div class="notifyDiv myMsgList" > 
-        <div :style="{'height':item.typeall === 'FBSJ'?'160px':'130px'}" class="notify" v-for="(item, i) in notifyList " :key="i">
-          <div  v-if="item.typeall === 'FBSJ'" >
-            <p>
-              <span>事件</span><span style="color:#ffd400">浮标投放</span>
-            </p>
-            <p>
-              <span>时间</span><span>{{item["sb"]?item["sb"].split('.')[0]:item["sb"]}}</span>
-            </p>
-            <p>
-              <span>编号</span><span>{{item["fbbh"]}}</span>
-            </p>
-             <p>
-              <span>经度</span><span>{{item["llcrswzjd"]}}</span>
-            </p>
-             <p>
-              <span>纬度</span><span>{{item["llcrswzwd"]}}</span>
-            </p>
-          </div>
-          <div v-if="item.typeall === 'CTMBSJ'">
-            <p>
-              <span>事件</span><span style="color:#ffd400">磁探发现目标</span>
-            </p>
-            <p>
-              <span>时间</span><span>{{item["mbsj"]?item["mbsj"].split('.')[0]:item["mbsj"]}}</span>
-            </p>
-            <p>
-              <span>经度</span><span>{{item["mbjd"]}}</span>
-            </p>
-             <p>
-              <span>纬度</span><span>{{item["mbwd"]}}</span>
-            </p>
-          </div>
-          <div v-if="item.typeall === 'FBMBSJ'">
-            <p>
-              <span>事件</span><span style="color:#ffd400">浮标发现目标</span>
-            </p>
-            <p>
-              <span>时间</span><span>{{item["mbsj"]?item["mbsj"].split('.')[0]:item["mbsj"]}}</span>
-            </p>
-            <p>
-              <span>经度</span><span>{{item["mbwzjd"]}}</span>
-            </p>
-             <p>
-              <span>纬度</span><span>{{item["mbwzwd"]}}</span>
-            </p>
-          </div>
-        </div> 
+        <div class="notifyDiv myMsgList" > 
+          <div :style="{'height':item.typeall === 'FBSJ'?'160px':'130px'}" class="notify" v-for="(item, i) in notifyList " :key="i">
+            <div  v-if="item.typeall === 'FBSJ'" >
+              <p>
+                <span>事件</span><span style="color:#ffd400">浮标投放</span>
+              </p>
+              <p>
+                <span>时间</span><span>{{item["sb"]?item["sb"].split('.')[0]:item["sb"]}}</span>
+              </p>
+              <p>
+                <span>编号</span><span>{{item["fbbh"]}}</span>
+              </p>
+              <p>
+                <span>经度</span><span>{{item["llcrswzjd"]}}</span>
+              </p>
+              <p>
+                <span>纬度</span><span>{{item["llcrswzwd"]}}</span>
+              </p>
+            </div>
+            <div v-if="item.typeall === 'CTMBSJ'">
+              <p>
+                <span>事件</span><span style="color:#ffd400">磁探发现目标</span>
+              </p>
+              <p>
+                <span>时间</span><span>{{item["mbsj"]?item["mbsj"].split('.')[0]:item["mbsj"]}}</span>
+              </p>
+              <p>
+                <span>经度</span><span>{{item["mbjd"]}}</span>
+              </p>
+              <p>
+                <span>纬度</span><span>{{item["mbwd"]}}</span>
+              </p>
+            </div>
+            <div v-if="item.typeall === 'FBMBSJ'">
+              <p>
+                <span>事件</span><span style="color:#ffd400">浮标发现目标</span>
+              </p>
+              <p>
+                <span>时间</span><span>{{item["mbsj"]?item["mbsj"].split('.')[0]:item["mbsj"]}}</span>
+              </p>
+              <p>
+                <span>经度</span><span>{{item["mbwzjd"]}}</span>
+              </p>
+              <p>
+                <span>纬度</span><span>{{item["mbwzwd"]}}</span>
+              </p>
+            </div>
+          </div> 
         </div>
       </vue-seamless-scroll>
+      <div v-show='eventType' class="time-label"  :style="{top: topNum + 'px', left: leftNum + 'px'}">
+         <ul>
+            <li style="color:#ffffff">事件时间：<el-date-picker
+              v-model="newEventDate"
+              type="datetime"
+              placeholder="选择日期时间"
+              align="right">
+            </el-date-picker> </li>
+            <li style="color:#ffffff">事件内容：<input type='text' v-model="eventVal"/></li>
+            <li class="events-btn">
+                <div @click='eventConfirm'>确定</div>
+                <div @click='eventCancel'>取消</div>
+            </li>
+         </ul>
+      </div>
     <!-- <div class="MBCS" v-show='isShow'>
         <div class="mbfj">
           <div style="width: 300px;height: 237px;">
@@ -473,7 +554,6 @@ export default {
       toolF:false,
       controllerF:false,
       FBnum: 0,
-      CTnum:0,
       widthNum:0,
       notifyList:[],
       notifyType:'',
@@ -482,7 +562,12 @@ export default {
       timeras:null,
       timerNew:null,
       timerFlag:true,
-      timeNow:''
+      timeNow:'',
+      eventType:false,
+      newEventDate:'',
+      eventVal:'',
+      topNum:0,
+      leftNum:0
     };
   },
 
@@ -514,6 +599,7 @@ export default {
            
         
         if(this.timeras){
+  
           console.log(this.timeras)
         }
         this.timeras = setTimeout(() => {
@@ -545,7 +631,18 @@ export default {
         $(".myMsgList").eq(1).fadeOut();
       }, 60000);
     });
-    
+    // $(".time_bg").on('mouseenter',()=>{
+    //    $(".time_bg").css("opacity","1");
+    // })
+    // $(".time_bg").on('mouseleave',()=>{
+    //     $(".time_bg").css("opacity","0.4");
+    // })
+    // $(".cesium-viewer-timelineContainer").on('mouseenter',()=>{
+    //    $(".time_bg").mouseenter();
+    // })
+    // $(".cesium-viewer-timelineContainer").on('mouseleave',()=>{
+    //    $(".time_bg").mouseleave();
+    // })
     let that = this;
  
     document.onselectstart = function() {
@@ -621,6 +718,95 @@ export default {
   },
 
   methods: {
+    eventConfirm(){
+      debugger
+        let that = this
+        let params = {
+            nr:that.eventVal,
+            sj:new Date(that.newEventDate),
+            sjid:sessionStorage.getItem('selectEd')
+        }
+        $.ajax({
+        type: "post",
+        dataType: "json",
+        url: `${globalUrl.host}/find/addSDSJ`,
+        contentType: "application/json;charset=UTF-8",//指定消息请求类型
+        data: JSON.stringify(params),//将js对象转成json对象
+        success: function (data) {
+            that.timeLabelF = false
+                $.get(`${globalUrl.host}/find/findEventListForRex`, {
+                sjid: sessionStorage.getItem('selectEd')
+            }).then(data => {
+                sessionStorage.setItem('allData',JSON.stringify(data))
+                let dataArr = [];
+                let viewer = window["Map"].viewer;
+                for (let item of data.FBSJ) {
+                    dataArr.push({
+                        data: item,
+                        // id: item["jcxxid"],
+                        content: "<span class='icon1'></span>",
+                        start: item["sb"].split(".")[0],
+                        types: "浮标投放"
+                    });
+                }
+                for (let item of data.CTMBSJ) {
+                    dataArr.push({
+                        data: item,
+                        // id: item["mbsj"],
+                        content: "<span class='icon2'></span>",
+                        start: item["mbsj"].split(".")[0],
+                        types: "目标探测"
+                    });
+                }
+                for (let item of data.FBMBSJ) {
+                    dataArr.push({
+                        data: item,
+                        // id: item["mbsj"],
+                        content: "<span class='icon2'></span>",
+                        start: item["mbsj"].split(".")[0],
+                        types: "目标探测"
+                    });
+                }
+                for (let item of data.SDSJ) {
+                    // console.log(that.toDate(item["sj"]));
+                    dataArr.push({
+                        data: item,
+                        // id: item["mbsj"],
+                        content: "<span class='icon3'></span>",
+                        start: that.toDate(item["sjs"]),
+                        types: "手动事件"
+                    });
+                }
+
+                that.timeItemArr = dataArr;  
+                // that.$refs["timeLine"].initVis(
+                //   viewer,
+                //   that.$refs["timeLine"].timeItemArr
+                // );
+
+                window.onresize = function() {
+                  // that.visWidth = viewer.timeline.lastWidth
+                  setTimeout(() => {
+                    that.$refs["timeLine"].timeline.redraw();
+                    that.$refs["timeLine"].startXd();
+                    setTimeout(() => {
+                          $('.vis-box').each((i,v) => {
+                              // v.style.top = '22px !important'
+                              $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+                          })
+                      },1000)
+                  }, 300);
+                 
+                };
+                that.eventType =false;
+
+            })
+        }
+    });
+    },
+    eventCancel(){
+       this.eventType =false;
+    },
     maptool(flag){
       this.toolF = flag;
     },
@@ -878,6 +1064,10 @@ export default {
 
       this.playFLAG = true;
     },
+   doubleClick(){
+     debugger
+     alert("1111")
+   },
     toDate(str) {
       var date = new Date(str).toJSON();
 
@@ -999,7 +1189,6 @@ export default {
       this.$refs["timeLine"].timeItemArr = dataArr;
       this.$refs["timeLine"].initVis(
         viewer,
-        // []
         this.$refs["timeLine"].timeItemArr
       );
       // });
@@ -1026,6 +1215,16 @@ export default {
         }, 300);
       };
 
+     $(".cesium-viewer-timelineContainer").dblclick(function(){
+        that.eventType = true;
+        that.getMousePos(event,that);
+     })
+    },
+
+    getMousePos(event,that) {
+        let e =  window.event;
+        that.leftNum = e.clientX;
+        that.topNum= e.clientY-163;
     },
     /**
      * @param {date} date 当前播放时间点
@@ -1048,7 +1247,6 @@ export default {
     upateGis(data) {
       let that = this;
       that.FBnum = 0;
-      that.CTnum = 0;
       let notifyList = [];
       that.notifyType = '';
       // debugger
@@ -1134,7 +1332,6 @@ export default {
 
       // 处理磁探数据
       function dealCtSJMB(item, i,that) {
-        that.CTnum = ++that.CTnum;
         window.Map.AddCtTarget({
           id: "citan_" + item["mbbh"],
           positions: [Number(item["mbjd"]), Number(item["mbwd"])],
@@ -1680,7 +1877,6 @@ export default {
         //-----------------------比对浮标信息框状态
         let ztData = {};
          _this.FBnum = 0;
-      _this.CTnum = 0;
         data.map(item => {
           if (item.type.indexOf("FBTFSJ") != -1) {
             for (let key in item.data) {
@@ -1704,7 +1900,6 @@ export default {
            _this.notifyType = 'CTMBSJ';
            
           a.map((item, i) => {
-            _this.CTnum = ++_this.CTnum
             item.typeall = 'CTMBSJ'
             dealCtSJMB(item, i,_this);
           });
@@ -1781,7 +1976,6 @@ export default {
           if (window.Map.viewer.entities.getById("citan_" + item["mbbh"]))
             return;
           if (Number(item["mbjd"]) && Number(item["mbwd"])) {
-            _this.CTnum = ++_this.CTnum;
             window.Map.AddCtTarget({
               id: "citan_" + item["mbbh"],
               positions: [Number(item["mbjd"]), Number(item["mbwd"])],
@@ -1789,14 +1983,6 @@ export default {
             });
           }
         }
-
-        //console.log(this.dataBH,data)
-        //右侧消息框，显示一分钟，清空
-        
-        // setTimeout(() =>{
-        //     _this.notifyType = '';
-        //     _this.notifyList = [];
-        //   },60000)
 
       }
 
@@ -1942,7 +2128,6 @@ export default {
           window.Map.Detector.LinkOn(FbId, link);
         }
       }
-
     },
     sendCommond(param) {
       console.log(this.fjlnglat);
@@ -2098,7 +2283,7 @@ export default {
                   step:1,                //（调整速度的）0
                   // hoverStop:false        (鼠标停留停止 离开继续运行（反之则停止）)
                  // limitMoveNum: 1 ,    //这个是修改moveSwitch()之前的使用方法，这里的数值指的是数据条数
-                  singleHeight:115,   //单个停止高度（默认为零无缝）=>方向0/1
+                  singleHeight:160,   //单个停止高度（默认为零无缝）=>方向0/1
                   waitTime: 8000    //（停顿时间）
 
                   }

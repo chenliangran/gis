@@ -382,7 +382,6 @@
         <!-- <div id='xdsj'>
             
         </div> -->
-        <div id="progress"></div>
         <div v-show='timeLabelF' :style='timeLabelS' class="time-label">
             <ul v-show="timeLabelType&&buoyDataType == '浮标投放'">
                 <li>浮标编号：<span>{{buoyData['fbbh']}}</span></li>
@@ -406,8 +405,10 @@
             <ul v-show='!timeLabelType'>
                 <li style="color:#ffffff">事件时间：<input type='text' v-model="newEventDate" /> </li>
                 <li style="color:#ffffff">事件内容：<input type='text' v-model="eventVal"/></li>
-                <li class="events-btn"><div @click='eventConfirm'>确定</div>
-			        <div @click='eventCancel'>取消</div></li>
+                <li class="events-btn">
+                    <div @click='eventConfirm'>确定</div>
+			        <div @click='eventCancel'>取消</div>
+                </li>
                 
             </ul>
         </div>
@@ -504,7 +505,7 @@ export default {
        * 时间线  
        */
       //---------------------------------------------分割线---------------------------------------------------//
-      showFPS(){ 
+    showFPS(){ 
           let _this = this
         var requestAnimationFrame =  
             window.requestAnimationFrame || //Chromium  
@@ -544,83 +545,82 @@ export default {
             go          :  function(){step();} 
         } 
     },
-      eventConfirm(){
-          let that = this
-          let params = {
-            // sdtjsj:{
-                nr:this.eventVal,
-                sj:new Date(this.newEventDate),
-                sjid:sessionStorage.getItem('selectEd')
-            // }
+    eventConfirm(){
+        let that = this
+        let params = {
+        // sdtjsj:{
+            nr:this.eventVal,
+            sj:new Date(this.newEventDate),
+            sjid:sessionStorage.getItem('selectEd')
+        // }
+    }
+    $.ajax({
+        type: "post",
+        dataType: "json",
+        url: `${globalUrl.host}/find/addSDSJ`,
+        contentType: "application/json;charset=UTF-8",//指定消息请求类型
+        data: JSON.stringify(params),//将js对象转成json对象
+        success: function (data) {
+            that.timeLabelF = false
+                $.get(`${globalUrl.host}/find/findEventListForRex`, {
+                sjid: sessionStorage.getItem('selectEd')
+            }).then(data => {
+                sessionStorage.setItem('allData',JSON.stringify(data))
+                let dataArr = [];
+                
+                for (let item of data.FBSJ) {
+                    dataArr.push({
+                        data: item,
+                        // id: item["jcxxid"],
+                        content: "<span class='icon1'></span>",
+                        start: item["sb"].split(".")[0],
+                        types: "浮标投放"
+                    });
+                }
+                for (let item of data.CTMBSJ) {
+                    dataArr.push({
+                        data: item,
+                        // id: item["mbsj"],
+                        content: "<span class='icon2'></span>",
+                        start: item["mbsj"].split(".")[0],
+                        types: "目标探测"
+                    });
+                }
+                for (let item of data.FBMBSJ) {
+                    dataArr.push({
+                        data: item,
+                        // id: item["mbsj"],
+                        content: "<span class='icon2'></span>",
+                        start: item["mbsj"].split(".")[0],
+                        types: "目标探测"
+                    });
+                }
+                for (let item of data.SDSJ) {
+                    // console.log(that.toDate(item["sj"]));
+                    dataArr.push({
+                        data: item,
+                        // id: item["mbsj"],
+                        content: "<span class='icon3'></span>",
+                        start: that.toDate(item["sjs"]),
+                        types: "手动事件"
+                    });
+                }
+                that.timeItemArr = dataArr;  
+                console.log(that.timeItemArr)
+                that.timeline.setItems(that.timeItemArr)   
+                setTimeout(() => {
+                    $('.vis-box').each((i,v) => {
+                        // v.style.top = '22px !important'
+                        $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+                    })
+                },1000) 
+
+            })
         }
-        $.ajax({
-            type: "post",
-            dataType: "json",
-            url: `${globalUrl.host}/find/addSDSJ`,
-            contentType: "application/json;charset=UTF-8",//指定消息请求类型
-            data: JSON.stringify(params),//将js对象转成json对象
-            success: function (data) {
-                that.timeLabelF = false
-                 $.get(`${globalUrl.host}/find/findEventListForRex`, {
-                    sjid: sessionStorage.getItem('selectEd')
-                }).then(data => {
-                    sessionStorage.setItem('allData',JSON.stringify(data))
-                    let dataArr = [];
-                    
-                    for (let item of data.FBSJ) {
-                        dataArr.push({
-                            data: item,
-                            // id: item["jcxxid"],
-                            content: "<span class='icon1'></span>",
-                            start: item["sb"].split(".")[0],
-                            types: "浮标投放"
-                        });
-                    }
-                    for (let item of data.CTMBSJ) {
-                        dataArr.push({
-                            data: item,
-                            // id: item["mbsj"],
-                            content: "<span class='icon2'></span>",
-                            start: item["mbsj"].split(".")[0],
-                            types: "目标探测"
-                        });
-                    }
-                    for (let item of data.FBMBSJ) {
-                        dataArr.push({
-                            data: item,
-                            // id: item["mbsj"],
-                            content: "<span class='icon2'></span>",
-                            start: item["mbsj"].split(".")[0],
-                            types: "目标探测"
-                        });
-                    }
-                    for (let item of data.SDSJ) {
-                        // console.log(that.toDate(item["sj"]));
-                        dataArr.push({
-                            data: item,
-                            // id: item["mbsj"],
-                            content: "<span class='icon3'></span>",
-                            start: that.toDate(item["sjs"]),
-                            types: "手动事件"
-                        });
-                    }
+    });
 
-                    that.timeItemArr = dataArr;  
-                     console.log(that.timeItemArr)
-                    that.timeline.setItems(that.timeItemArr)   
-                    setTimeout(() => {
-                        $('.vis-box').each((i,v) => {
-                            // v.style.top = '22px !important'
-                            $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
-                        })
-                    },1000) 
-
-                })
-            }
-        });
-
-        
-      },
+    
+    },
       eventCancel(){
           this.timeLabelF = false
       },
@@ -874,7 +874,6 @@ export default {
          * 初始化时间轴
          */
         initVis(viewer,arr){
-            
             let a = Cesium.JulianDate.toDate(viewer.clock.startTime)
             let b = Cesium.JulianDate.toDate(viewer.clock.stopTime)
 
@@ -1000,6 +999,7 @@ export default {
                 }
             })
             this.timeline.on('doubleClick',(item) => {
+                debugger
                 this.newEventDate = this.toDate(item.time)
                 this.timeLabelType = false
                 
