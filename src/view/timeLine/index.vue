@@ -605,9 +605,8 @@ export default {
                         types: "手动事件"
                     });
                 }
-
                 that.timeItemArr = dataArr;  
-                    console.log(that.timeItemArr)
+                console.log(that.timeItemArr)
                 that.timeline.setItems(that.timeItemArr)   
                 setTimeout(() => {
                     $('.vis-box').each((i,v) => {

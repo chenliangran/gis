@@ -589,6 +589,7 @@ export default {
   },
   watch:{
     notifyList(data){
+      console.log(data)
       clearTimeout(this.timeras)
       $(".myMsgList").eq(0).fadeIn();
       $(".myMsgList").eq(1).fadeIn();
@@ -598,6 +599,7 @@ export default {
         
         if(this.timeras){
   
+          console.log(this.timeras)
         }
         this.timeras = setTimeout(() => {
           // console.log($("#myMsgList"))
