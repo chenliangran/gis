@@ -123,7 +123,7 @@
 
 <script>
 export default {
-	props: ["dataInfo", "WebSocketData", "setTime"],
+	props: ["dataInfo", "WebSocketData", "setTime",'gdFlag'],
 	data() {
 		return {
 			name: "",
@@ -293,6 +293,9 @@ export default {
         }
 	},
 	watch: {
+		gdFlag(val){
+			console.log(val)
+		},
 		setTime(v) {
 			let id = sessionStorage.getItem("selectEd")
 			let _this = this

@@ -49,13 +49,16 @@
 #visualization {
   /* height: 500px; */
   width: 80% !important;
-  /* top:0; */
+  top:20px;
   bottom: 48px;
   /* width: 80%; */
   position: absolute;
   z-index: 100000;
   /* padding-bottom: 27px; */
   /* background: red; */
+}
+#visualization .vis-timeline,#visualization .vis-vertical{
+  border: none
 }
 /* .bottonContainer {
   position: fixed;
@@ -342,24 +345,36 @@ background: none !important;
   top: -8px !important;
   left:0 !important;
 }
+.timeLineZZ{
+  position: fixed;
+  background: #8fcdf7b3;
+  height: 15px;
+  z-index: 10000001;
+  bottom: 58px;
+  width: 80%;
+
+}
 </style>
 
 <template>
   <div class="MapContainer">
+    
+    
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
     <gis-header :timeNow="timeNow" @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum"></gis-header>
     <div id="mapElement">
       <div class="time_bg">
         <div id="timeDiv"></div>
          <div id="progress" :style="'width:'+ widthNum +''"></div>
+         <div :style="setZZStyle" class="timeLineZZ"></div>
         <div id="visualization" :style="visStyle"></div>
-        <p style="margin:35px 0 0 35px;color:#ffffff">当前播放倍数：{{num}}</p>
+        <p style="margin:35px 0 0 35px;color:#ffffff">当前播放倍数：{{getNum()}}</p>
       </div>
     </div>
-     <vue-seamless-scroll id='mySeamless'  style="background: rgba(8, 38, 93, 0.5)"  :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
+     <vue-seamless-scroll   id='mySeamless'  style="background: rgba(8, 38, 93, 0.5)"  :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
         <div class="notifyDiv myMsgList" > 
-          <div :style="{'height':item.typeall === 'FBSJ'?'160px':'130px'}" class="notify" v-for="(item, i) in notifyList " :key="i">
-            <div  v-if="item.typeall === 'FBSJ'" >
+          <div v-show='gdFlag' :style="{'height':item.typeall === 'FBSJ'?'160px':'130px'}" class="notify" v-for="(item, i) in notifyList " :key="i">
+            <div v-show='gdFlag'  v-if="item.typeall === 'FBSJ'" >
               <p>
                 <span>事件</span><span style="color:#ffd400">浮标投放</span>
               </p>
@@ -376,7 +391,7 @@ background: none !important;
                 <span>纬度</span><span>{{item["llcrswzwd"]}}</span>
               </p>
             </div>
-            <div v-if="item.typeall === 'CTMBSJ'">
+            <div v-show='gdFlag' v-if="item.typeall === 'CTMBSJ'">
               <p>
                 <span>事件</span><span style="color:#ffd400">磁探发现目标</span>
               </p>
@@ -390,7 +405,7 @@ background: none !important;
                 <span>纬度</span><span>{{item["mbwd"]}}</span>
               </p>
             </div>
-            <div v-if="item.typeall === 'FBMBSJ'">
+            <div v-show='gdFlag' v-if="item.typeall === 'FBMBSJ'">
               <p>
                 <span>事件</span><span style="color:#ffd400">浮标发现目标</span>
               </p>
@@ -462,6 +477,7 @@ background: none !important;
     <div id="hinge-msg">{{hingeMsg}}</div>
     <muen :dataInfo="dataInfo" :visible="visible" :type="type" @close="visible=false"></muen>
     <replay
+      :gdFlag='gdFlag'
       ref="myreplay"
       :setTime="setTime"
       :dataInfo="dataInfo"
@@ -480,6 +496,7 @@ background: none !important;
 </template>
 
 <script>
+let arrTime = []
 // import { setInterval, setTimeout } from "timers";
 import muen from "../view/rightMouse/muen.vue";
 import timeLine from "../view/timeLine/index.vue";
@@ -510,6 +527,11 @@ export default {
 
   data: function() {
     return {
+      setZZStyle:{
+        left:0,
+        width:0
+      },
+      gdFlag:false,
       fjlnglat: false,
       playFLAG: false,
       hingeMsg: "",
@@ -591,6 +613,7 @@ export default {
   watch:{
     notifyList(data){
       console.log(data)
+      
       clearTimeout(this.timeras)
       $(".myMsgList").eq(0).fadeIn();
       $(".myMsgList").eq(1).fadeIn();
@@ -681,6 +704,7 @@ export default {
                 that.num = data.fps;
                 that.$refs["timeLine"].num = that.num;
                 if (data.yxzt == 3) {
+                  that.gdFlag = false
                   that.num = data.fps
                   that.$refs.timeLine.playFlag = false;
                   that.playFLAG = false;
@@ -688,11 +712,13 @@ export default {
                   that.closeSocket();
                 }
                 if (data.yxzt == 2) {
+                  that.gdFlag = true
                   that.num = data.fps
                   that.$refs.timeLine.playFlag = false;
                   that.playFLAG = false;
                 }
                 if (data.yxzt == 1) {
+                  that.gdFlag = true
                   that.num = data.fps
                   that.$refs.timeLine.playFlag = true;
                   that.playFLAG = true;
@@ -706,6 +732,23 @@ export default {
   },
 
   methods: {
+    getNum(){
+      // console.log(this.num)
+      if(this.num == 0)return 1
+      if(this.num == -2)return "1/2"
+      if(this.num == -4)return "1/4"
+      if(this.num == -8)return "1/8"
+      if(this.num == -16)return "1/16"
+      return this.num
+    },
+    setZZ(){
+      this.setZZStyle.left=Number($('.cesium-viewer-timelineContainer').css('margin-left').split('px')[0])+10+'px'
+      
+    },
+    setZZTime(){
+      this.setZZStyle.width=Math.ceil($(".cesium-timeline-icon16").css('left').split('px')[0])+10+'px'
+
+    },
     eventConfirm(){
       debugger
         let that = this
@@ -771,6 +814,7 @@ export default {
                 window.onresize = function() {
                   // that.visWidth = viewer.timeline.lastWidth
                   setTimeout(() => {
+                    that.setZZ()
                     that.$refs["timeLine"].timeline.redraw();
                     that.$refs["timeLine"].startXd();
                     setTimeout(() => {
@@ -838,11 +882,11 @@ export default {
       }
 
       if (y.length > 0) {
-        window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
-          new Date(y[0].start)
-        );
-        that.$refs["timeLine"].timeline.focus(y[0].id);
-        that.$refs["timeLine"].timeline.setSelection(y[0].id);
+        // window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
+        //   new Date(y[0].start)
+        // );
+        // that.$refs["timeLine"].timeline.focus(y[0].id);
+        // that.$refs["timeLine"].timeline.setSelection(y[0].id);
         window.Map.FlyCompare.ClearPath();
         that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
         this.newDate = "00:00:00";
@@ -916,6 +960,7 @@ export default {
                   that.num = data.fps;
                   that.$refs["timeLine"].num = that.num;
                   if (data.yxzt == 3) {
+                    that.gdFlag = false
                     that.num = data.fps
                     that.$refs.timeLine.playFlag = false;
                     that.playFLAG = false;
@@ -923,11 +968,13 @@ export default {
                     that.closeSocket();
                   }
                   if (data.yxzt == 2) {
+                    that.gdFlag = true
                     that.num = data.fps
                     that.$refs.timeLine.playFlag = false;
                     that.playFLAG = false;
                   }
                   if (data.yxzt == 1) {
+                    that.gdFlag = true
                     that.num = data.fps
                     that.$refs.timeLine.playFlag = true;
                     that.playFLAG = true;
@@ -980,7 +1027,10 @@ export default {
         }
       }
       this.num = this.num
-
+      if(this.num < -16){
+        this.num = -16
+        return
+      }
       if(this.num > 64){
         this.num = 64
         return
@@ -1034,6 +1084,7 @@ export default {
             window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
               new Date(that.allDate.startT)
             );
+            that.setZZTime()
 
             that.action = "暂停";
             that.num = 1;
@@ -1152,6 +1203,15 @@ export default {
       notifyList = [...notifyList,...this.dataBH.FBMBSJ] 
 
       if(notifyList.length != that.notifyList.length){
+          // that.notifyList = notifyList
+          // let arr = notifyList
+          for (var i = notifyList.length - 1; i > 0; i--) {
+            for (var j = 0; j < i; j++) {
+              if (notifyList[j].sb?notifyList[j].sb:notifyList[j].mbsj > notifyList[j+1].sb?notifyList[j+1].sb:notifyList[j+1].mbsj) {
+                [notifyList[j], notifyList[j + 1]] = [notifyList[j + 1], notifyList[j]];
+              }
+            }
+          }
           that.notifyList = notifyList
       }
 
@@ -1187,6 +1247,7 @@ export default {
             ".cesium-viewer-timelineContainer"
           ).css("left");
           that.$refs["timeLine"].timeline.redraw();
+          that.setZZ()
           that.$refs["timeLine"].startXd();
           setTimeout(() => {
                 $('.vis-box').each((i,v) => {
@@ -1280,7 +1341,15 @@ export default {
         // },60000)
       }
       if(notifyList.length != that.notifyList.length){
-        that.notifyList = notifyList
+        // that.notifyList = notifyList
+        for (var i = notifyList.length - 1; i > 0; i--) {
+            for (var j = 0; j < i; j++) {
+              if (notifyList[j].sb?notifyList[j].sb:notifyList[j].mbsj > notifyList[j+1].sb?notifyList[j+1].sb:notifyList[j+1].mbsj) {
+                [notifyList[j], notifyList[j + 1]] = [notifyList[j + 1], notifyList[j]];
+              }
+            }
+          }
+          that.notifyList = notifyList
       }
      
       // 处理浮标数据
@@ -1361,6 +1430,9 @@ export default {
       viewer.clock.startTime = startTime;
       viewer.clock.stopTime = stopTime;
 
+      that.setZZ()
+      
+
       viewer.timeline.addEventListener(
         "mouseup",
         function(e) {
@@ -1382,8 +1454,9 @@ export default {
           }).then(data => {
             that.playFLAG = true;
             that.$refs.timeLine.playFlag = true;
-            that.num = 1;
-            that.$refs["timeLine"].num = that.num;
+            that.setZZTime()
+            // that.num = 0;
+            // that.$refs["timeLine"].num = that.num;
           });
         },
         false
@@ -1398,15 +1471,11 @@ export default {
         if(viewer.clock.currentTime.dayNumber != viewer.clock.startTime.dayNumber){
           dfTime =  "00:00:00";
           that.progress(dfTime,totleTime)
-          window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
-            new Date(this.dqsjd)
-          );
+          
         } else {
           that.timeNow = (new Date(that.allDate.startT).getTime()/1000 + Number(dfTime.toFixed(0)))*1000;
           that.progress(that.formatSeconds(dfTime),totleTime)
-          window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
-            new Date(this.dqsjd)
-          );
+          
         }
       },1000)
     },
@@ -1604,6 +1673,7 @@ export default {
       let that = this;
       that.fjlnglat = true;
       
+      
       $.get(`${globalUrl.host}/find/stopScoket`, {
         name: sessionStorage.getItem("groupNum")
       }).then(data => {
@@ -1621,10 +1691,12 @@ export default {
           zjwd: that.fjposData[1]
         });
         this.dqsjd = this.allDate.startT
+        that.gdFlag = false
         //  window.Map.viewer.clock.shouldAnimate = false;
         window.Map.viewer.clock.currentTime = Cesium.JulianDate.fromDate(
           new Date(this.allDate.startT)
         );
+        that.setZZTime()
       });
     },
     /**
@@ -1737,10 +1809,12 @@ export default {
               _this.closeSocket();
             }
             if (data.yxzt == 2) {
+              _this.gdFlag = true
               _this.$refs.timeLine.playFlag = false;
               _this.playFLAG = false;
             }
             if (data.yxzt == 1) {
+              _this.gdFlag = true
               _this.$refs.timeLine.playFlag = true;
               _this.playFLAG = true;
             }
@@ -1795,9 +1869,28 @@ export default {
         this.fjlnglat = false;
       }
       let newDate = date;
-
+      
+      arrTime.push(1)
+      // console.log(arrTime)
+       if(arrTime.length == 12){
+          // console.log(arrTime)
+          arrTime = []
+          window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
+            new Date(date)
+          );
+          this.setZZTime()
+          
+        }
       if (this.newDate != newDate) {
+        
         this.dqsjd = newDate
+        // console.log(arr)
+       
+        // setTimeout(_ => {
+        //   window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
+        //     new Date(this.dqsjd)
+        //   );
+        // },500)
         // console.log(this.newDate,newDate)
         
         try {
@@ -1910,6 +2003,14 @@ export default {
          notifyList =  [...notifyList,...c]
         }
         if(notifyList.length != _this.notifyList.length){
+          // _this.notifyList = notifyList
+          for (var i = notifyList.length - 1; i > 0; i--) {
+            for (var j = 0; j < i; j++) {
+              if (notifyList[j].sb?notifyList[j].sb:notifyList[j].mbsj > notifyList[j+1].sb?notifyList[j+1].sb:notifyList[j+1].mbsj) {
+                [notifyList[j], notifyList[j + 1]] = [notifyList[j + 1], notifyList[j]];
+              }
+            }
+          }
           _this.notifyList = notifyList
         }
         
@@ -2127,6 +2228,7 @@ export default {
           that.num = data.fps;
           that.$refs["timeLine"].num = that.num;
           if (data.yxzt == 3) {
+            that.gdFlag = false
             that.num = data.fps
             that.fjlnglat = true;
             that.playFLAG = true;
@@ -2155,6 +2257,7 @@ export default {
                 ].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
                   new Date(that.allDate.startT)
                 );
+                that.setZZTime()
                 that.action = "暂停";
                 that.num = 1;
                 that.$refs["timeLine"].num = that.num;
@@ -2162,6 +2265,7 @@ export default {
             });
           }
           if (data.yxzt == 2) {
+            that.gdFlag = true
             that.num = data.fps
             that.fjlnglat = false;
             $.get(`${globalUrl.host}/find/pauseAndStart`, {
@@ -2171,6 +2275,7 @@ export default {
             });
           }
           if (data.yxzt == 1) {
+            that.gdFlag = true
             that.num = data.fps
             that.fjlnglat = false;
             $.get(`${globalUrl.host}/find/pauseAndStart`, {

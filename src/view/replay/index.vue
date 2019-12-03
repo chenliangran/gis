@@ -13,7 +13,7 @@ import event from "./event.vue";
 import terrace from "./terrace.vue"
 import buoy from "./buoy.vue"
 export default {
-	props: ["dataInfo", "WebSocketData", "setTime"],
+	props: ["dataInfo", "WebSocketData", "setTime",'gdFlag'],
 	data() {
 		return {
 			nav: ["平台信息","目标","简报"],

@@ -41,7 +41,7 @@ export default class Player{
     }
 
     Update( id, position, origin, callback ){
-
+        // console.log(window.Map.Tool.GetId(id))    
         let target = sourceData[id];
         if( target ){
 
