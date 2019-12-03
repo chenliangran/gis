@@ -37,6 +37,10 @@ export default class Player{
 
     Add( target ){
 
+        if(!target.id){
+            return;
+        }
+
         sourceData[target.id] = target
     }
 

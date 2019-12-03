@@ -1,14 +1,14 @@
 <template>
 	<div class="terrace">
-		<div class="replay" :style="{ left: '5px', top: '45px' }">
+		<div class="replay" :style="{ left: '5px', top: '50px' }">
 			<div class="replay-cont" style="height: 250px;" v-show="isShow">
 				<div style="width: 360px;height: 250px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
-					<div class="close" @click="isShow=false">
+					<!-- <div class="close" @click="isShow=false" style="position:absolute ;z-index:10">
 						x
-					</div>
+					</div> -->
 					<div class="nav">飞行曲线</div>
-					<div class="terrace-item">
+					<div class="terrace-item" v-show="gdFlag">
 						<div id="airChart" style="width:370px;height:250px;margin-left: 10px;top:-8px"></div>
 					</div>
 					<div style="text-align: center;position: relative; top: -10px;">
@@ -21,20 +21,20 @@
 				</div>
 			</div>
 		</div>
-		<div class="replay" :style="{ left:'5px', top: '285px' }">
-			<div class="replay-cont" v-show="isShow" style="width: 360px;height: 185px;">
+		<div class="replay" :style="{ left:'5px', top: '290px' }">
+			<div class="replay-cont" v-show="isShow" style="width: 360px;height: 190px;">
 				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
-					<div class="close" @click="isShow=false">
+					<!-- <div class="close" @click="isShow=false">
 						x
-					</div>
+					</div> -->
 					<div class="nav">浮标投放信息</div>
 					<div class="terrace-item" v-if="detectorData.length > 0">
 						<!-- <div>
 							<span></span>
 							<span>浮标目标</span>
 						</div> -->
-						<div class="list">
+						<div class="list" v-show="gdFlag">
 							<div>
 								<span style="min-width: 60px">浮标编号</span>
 								<span style="min-width: 50px">经度</span>
@@ -60,16 +60,16 @@
 				</div>
 			</div>
 		</div>
-		<div class="replay" :style="{ left:'5px', top:'465px' }">
+		<div class="replay" :style="{ left:'5px', top:'470px' }">
 			<div class="replay-cont" v-show="isShow">
 				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
-					<div class="close" @click="isShow=false">
+					<!-- <div class="close" @click="isShow=false">
 						x
-					</div>
+					</div> -->
 					<div class="nav">磁探探测目标</div>
 					<div class="terrace-item" v-if="ctData.length > 0">
-						<div class="list">
+						<div class="list" v-show="gdFlag">
 							<div>
 								<span style="min-width: 150px">发现时间</span>
 								<span style="min-width: 50px">经纬</span>
@@ -93,12 +93,12 @@
 			<div class="replay-cont" v-show="isShow">
 				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
-					<div class="close" @click="isShow=false">
+					<!-- <div class="close" @click="isShow=false">
 						x
-					</div>
+					</div> -->
 					<div class="nav">浮标探测目标</div>
 					<div class="terrace-item">
-						<div class="list">
+						<div class="list" v-show="gdFlag">
 							<div>
 								<span style="min-width: 60px">浮标编号</span>
 								<span style="min-width: 60px">经度</span>
@@ -355,7 +355,7 @@ export default {
 				}
 			}
 			if(!bool) {
-				_this.isShow = true
+				// _this.isShow = true
 			}
 		})
     }

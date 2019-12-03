@@ -310,6 +310,9 @@
     color: #83efe6;
 	font-size: 14px;
 }
+.vis-time-axis .vis-grid.vis-minor{
+    border: none;
+}
 /* .bottomicon{
     position: fixed;
     display: flex;
@@ -455,7 +458,7 @@ export default {
               'left':0,
               'bottom':'50px'
           },
-        num:0,
+        num:1,
         action:'暂停',
         timeItemArr:[],
         newDate:'',
@@ -888,7 +891,8 @@ export default {
                 // moveable:false,
                 maxHeight:'15px',
                 height:'15px',
-                stack:false
+                stack:false,
+                zoomable:false
                 // onMove:(e) => {
                 //     console.log(e)
                 // }
@@ -917,7 +921,6 @@ export default {
             this.timeline.on('mouseOver',(item) => {
 
                 if(item.item){
-                    console.log(item.item,item)
                     this.timeLabelType = true
                     let lefts = item.event.x+5,
                     bottoms = 80+10-item.event.y

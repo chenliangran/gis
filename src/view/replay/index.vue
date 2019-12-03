@@ -1,7 +1,7 @@
 <template>
 	<div class="cont">
 		<!-- <bulletin v-show="curNav=='简报'" :dataInfo="dataInfo" :WebSocketData="WebSocketData"></bulletin> -->
-		<terrace ref='myterrace' v-show="curNav=='平台信息'" :setTime="setTime" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
+		<terrace :gdFlag='gdFlag' ref='myterrace' v-show="curNav=='平台信息'" :setTime="setTime" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
 		<event v-show="curNav=='事件列表'" :setTime="setTime" @uploading="uploading" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
 		<buoy ref='mybuoy'  v-show="curNav=='目标'" :setTime="setTime" :WebSocketData="WebSocketData"/>
 	</div>

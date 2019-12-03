@@ -234,7 +234,7 @@ export default {
                 this.dvShow = false
         },
         dataShow(flag){
-                      
+           this.$emit("dataShow")             
         },	
         tool(flag){
             this.flag = !flag;

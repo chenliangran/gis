@@ -185,7 +185,7 @@ background: none !important;
 }
 .seamless-warp{
   position: fixed !important;
-  bottom: 100px;
+  bottom: 20%;
   right: 50px;
   height: 500px;
   overflow-y: auto;
@@ -361,7 +361,7 @@ background: none !important;
     
     
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
-    <gis-header :timeNow="timeNow" @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum"></gis-header>
+    <gis-header @dataShow='dataShow' :timeNow="timeNow" @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum"></gis-header>
     <div id="mapElement">
       <div class="time_bg">
         <div id="timeDiv"></div>
@@ -371,10 +371,10 @@ background: none !important;
         <p style="margin:35px 0 0 35px;color:#ffffff">当前播放倍数：{{getNum()}}</p>
       </div>
     </div>
-     <vue-seamless-scroll   id='mySeamless'  style="background: rgba(8, 38, 93, 0.5)"  :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
-        <div class="notifyDiv myMsgList" > 
-          <div v-show='gdFlag' :style="{'height':item.typeall === 'FBSJ'?'160px':'130px'}" class="notify" v-for="(item, i) in notifyList " :key="i">
-            <div v-show='gdFlag'  v-if="item.typeall === 'FBSJ'" >
+     <vue-seamless-scroll  id='mySeamless'  style="background: rgba(8, 38, 93, 0.5)"  :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
+        <div  class="notifyDiv myMsgList" > 
+          <div  :style="{'height':item.typeall === 'FBSJ'?'160px':'130px'}" class="notify" v-for="(item, i) in notifyList " :key="i">
+            <div   v-if="item.typeall === 'FBSJ'" >
               <p>
                 <span>事件</span><span style="color:#ffd400">浮标投放</span>
               </p>
@@ -391,7 +391,7 @@ background: none !important;
                 <span>纬度</span><span>{{item["llcrswzwd"]}}</span>
               </p>
             </div>
-            <div v-show='gdFlag' v-if="item.typeall === 'CTMBSJ'">
+            <div  v-if="item.typeall === 'CTMBSJ'">
               <p>
                 <span>事件</span><span style="color:#ffd400">磁探发现目标</span>
               </p>
@@ -405,7 +405,7 @@ background: none !important;
                 <span>纬度</span><span>{{item["mbwd"]}}</span>
               </p>
             </div>
-            <div v-show='gdFlag' v-if="item.typeall === 'FBMBSJ'">
+            <div  v-if="item.typeall === 'FBMBSJ'">
               <p>
                 <span>事件</span><span style="color:#ffd400">浮标发现目标</span>
               </p>
@@ -470,7 +470,7 @@ background: none !important;
       @chart="chart"
       @closeplay="closeplay"
       ref="timeLine"
-    ></time-line>forBackWard
+    ></time-line>
     <map-tool v-show='toolF'></map-tool>
     <display-controller v-show='controllerF'></display-controller>
 
@@ -612,7 +612,7 @@ export default {
   },
   watch:{
     notifyList(data){
-      console.log(data)
+      // console.log(data)
       
       clearTimeout(this.timeras)
       $(".myMsgList").eq(0).fadeIn();
@@ -704,6 +704,7 @@ export default {
                 that.num = data.fps;
                 that.$refs["timeLine"].num = that.num;
                 if (data.yxzt == 3) {
+                  that.notifyList = []
                   that.gdFlag = false
                   that.num = data.fps
                   that.$refs.timeLine.playFlag = false;
@@ -732,6 +733,9 @@ export default {
   },
 
   methods: {
+    dataShow(){
+      this.$refs["myreplay"].$refs['myterrace'].isShow = !this.$refs["myreplay"].$refs['myterrace'].isShow;
+    },
     getNum(){
       // console.log(this.num)
       if(this.num == 0)return 1
@@ -867,6 +871,21 @@ export default {
       }, 2000);
     },
 
+     bSort(arr) {
+      var len = arr.length;
+      for (var i = 0; i < len-1; i++) {
+        for (var j = 0; j < len - 1 - i; j++) {
+            // 相邻元素两两对比，元素交换，大的元素交换到后面
+            if (new Date(arr[j].sb?arr[j].sb:arr[j].mbsj).getTime() > new Date(arr[j+1].sb?arr[j+1].sb:arr[j+1].mbsj).getTime()) {
+                 var temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+              }
+        }
+      }
+      return arr;
+    },
+
     setVisItem(time) {
       let that = this;
       let y = [];
@@ -960,6 +979,7 @@ export default {
                   that.num = data.fps;
                   that.$refs["timeLine"].num = that.num;
                   if (data.yxzt == 3) {
+                    that.notifyList = []
                     that.gdFlag = false
                     that.num = data.fps
                     that.$refs.timeLine.playFlag = false;
@@ -1003,9 +1023,9 @@ export default {
      * @param { String } type 事件类型
      */
     forBackWard(type) {
-      debugger
-      
+      console.log(this.num)
       if (type == "enter") {
+        
         if (this.num == 1) {
           this.num = 2;
         } else if (this.num == -2) {
@@ -1016,10 +1036,11 @@ export default {
           this.num = this.num * 2;
         }
       } else {
+        console.log(this.num)
         if (this.num == 1) {
-          this.num = 1/2;
+          this.num = -2;
         } else if (this.num == 2) {
-          this.num = 1;
+          this.num = 0;
         } else if (this.num > 1) {
           this.num = this.num / 2;
         } else {
@@ -1205,14 +1226,8 @@ export default {
       if(notifyList.length != that.notifyList.length){
           // that.notifyList = notifyList
           // let arr = notifyList
-          for (var i = notifyList.length - 1; i > 0; i--) {
-            for (var j = 0; j < i; j++) {
-              if (notifyList[j].sb?notifyList[j].sb:notifyList[j].mbsj > notifyList[j+1].sb?notifyList[j+1].sb:notifyList[j+1].mbsj) {
-                [notifyList[j], notifyList[j + 1]] = [notifyList[j + 1], notifyList[j]];
-              }
-            }
-          }
-          that.notifyList = notifyList
+          
+          that.notifyList = that.bSort(notifyList)
       }
 
       // that.notifyType = 'SDSJ'
@@ -1342,14 +1357,15 @@ export default {
       }
       if(notifyList.length != that.notifyList.length){
         // that.notifyList = notifyList
-        for (var i = notifyList.length - 1; i > 0; i--) {
-            for (var j = 0; j < i; j++) {
-              if (notifyList[j].sb?notifyList[j].sb:notifyList[j].mbsj > notifyList[j+1].sb?notifyList[j+1].sb:notifyList[j+1].mbsj) {
-                [notifyList[j], notifyList[j + 1]] = [notifyList[j + 1], notifyList[j]];
-              }
-            }
-          }
-          that.notifyList = notifyList
+        // for (var i = notifyList.length - 1; i > 0; i--) {
+        //     for (var j = 0; j < i; j++) {
+        //       if (notifyList[j].sb?notifyList[j].sb:notifyList[j].mbsj > notifyList[j+1].sb?notifyList[j+1].sb:notifyList[j+1].mbsj) {
+        //         [notifyList[j], notifyList[j + 1]] = [notifyList[j + 1], notifyList[j]];
+        //       }
+        //     }
+        //   }
+        // console.log(that.bSort(notifyList))
+          that.notifyList = that.bSort(notifyList)
       }
      
       // 处理浮标数据
@@ -1383,6 +1399,7 @@ export default {
 
       // 处理磁探数据
       function dealCtSJMB(item, i,that) {
+        console.log(item)
         window.Map.AddCtTarget({
           id: "citan_" + item["mbbh"],
           positions: [Number(item["mbjd"]), Number(item["mbwd"])],
@@ -1404,29 +1421,26 @@ export default {
       let nowTime = "00:00:00"
       let totleTime = that.countDate(this.allDate.startT,this.allDate.endT)
       this.progress(nowTime,totleTime)
-      
+      console.log(viewer.timeline)
       
       viewer.timeline.addEventListener(
         "setzoom",
         function(e) {
-          let a = new Cesium.JulianDate.toDate(e.startJulian);
-          let b = new Cesium.JulianDate.toDate(e.endJulian);
-          setTimeout(() => {
-              $('.vis-box').each((i,v) => {
-                  // v.style.top = '22px !important'
-                  $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
-              })
-          },1000) 
-          that.$refs["timeLine"].timeline.setOptions({
-            start: a,
-            end: b
-          });
+          let a = new Cesium.JulianDate.toDate(viewer.clock.startTime).getTime(),
+              b = new Cesium.JulianDate.toDate(viewer.timeline._endJulian).getTime(),
+              c = new Cesium.JulianDate.toDate(viewer.clock.stopTime).getTime(),
+              d = new Cesium.JulianDate.toDate(viewer.timeline._startJulian).getTime()
+              if(a != d||b != c){
+                viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime);
+              }
+          
+              
 
-          that.startXd();
         },
         false
       );
       // viewer.clock.shouldAnimate = true;
+      console.log(startTime,stopTime)
       viewer.clock.startTime = startTime;
       viewer.clock.stopTime = stopTime;
 
@@ -1466,7 +1480,7 @@ export default {
 
       that.progress(nowTime,totleTime)
       this.dqsjd = this.allDate.startT
-      setInterval(()=>{
+      // setInterval(()=>{
         var dfTime = (viewer.clock.currentTime.dayNumber - startTime.dayNumber)*86400 + (viewer.clock.currentTime.secondsOfDay - startTime.secondsOfDay)
         if(viewer.clock.currentTime.dayNumber != viewer.clock.startTime.dayNumber){
           dfTime =  "00:00:00";
@@ -1477,7 +1491,7 @@ export default {
           that.progress(that.formatSeconds(dfTime),totleTime)
           
         }
-      },1000)
+      // },1000)
     },
     formatSeconds(s) {
         // var secondTime = parseInt(value);// 秒
@@ -1690,7 +1704,11 @@ export default {
           zjjd: that.fjposData[0],
           zjwd: that.fjposData[1]
         });
+        let nowTime = "00:00:00"
+        let totleTime = that.countDate(this.allDate.startT,this.allDate.endT)
+        this.progress(nowTime,totleTime)
         this.dqsjd = this.allDate.startT
+        that.notifyList = []
         that.gdFlag = false
         //  window.Map.viewer.clock.shouldAnimate = false;
         window.Map.viewer.clock.currentTime = Cesium.JulianDate.fromDate(
@@ -1801,8 +1819,9 @@ export default {
           let data = JSON.parse(e.data)[0].LKR;
           if (data) {
             _this.num = data.fps;
-            _this.$refs["timeLine"].num = _this.num;
+            // _this.$refs["timeLine"].num = _this.num;
             if (data.yxzt == 3) {
+              
               _this.$refs.timeLine.playFlag = false;
               _this.playFLAG = false;
               _this.fjlnglat = true;
@@ -1878,6 +1897,18 @@ export default {
           window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
             new Date(date)
           );
+          let totleTime = _this.countDate(_this.allDate.startT,_this.allDate.endT)
+          let startTime = Cesium.JulianDate.fromDate(new Date(_this.allDate.startT));
+          var dfTime = (window["Map"].viewer.clock.currentTime.dayNumber - startTime.dayNumber)*86400 + (window["Map"].viewer.clock.currentTime.secondsOfDay - startTime.secondsOfDay)
+          if(window["Map"].viewer.clock.currentTime.dayNumber != window["Map"].viewer.clock.startTime.dayNumber){
+            dfTime =  "00:00:00";
+            _this.progress(dfTime,totleTime)
+            
+          } else {
+            _this.timeNow = (new Date(_this.allDate.startT).getTime()/1000 + Number(dfTime.toFixed(0)))*1000;
+            _this.progress(_this.formatSeconds(dfTime),totleTime)
+            
+          }
           this.setZZTime()
           
         }
@@ -2004,14 +2035,14 @@ export default {
         }
         if(notifyList.length != _this.notifyList.length){
           // _this.notifyList = notifyList
-          for (var i = notifyList.length - 1; i > 0; i--) {
-            for (var j = 0; j < i; j++) {
-              if (notifyList[j].sb?notifyList[j].sb:notifyList[j].mbsj > notifyList[j+1].sb?notifyList[j+1].sb:notifyList[j+1].mbsj) {
-                [notifyList[j], notifyList[j + 1]] = [notifyList[j + 1], notifyList[j]];
-              }
-            }
-          }
-          _this.notifyList = notifyList
+          // for (var i = notifyList.length - 1; i > 0; i--) {
+          //   for (var j = 0; j < i; j++) {
+          //     if (notifyList[j].sb?notifyList[j].sb:notifyList[j].mbsj > notifyList[j+1].sb?notifyList[j+1].sb:notifyList[j+1].mbsj) {
+          //       [notifyList[j], notifyList[j + 1]] = [notifyList[j + 1], notifyList[j]];
+          //     }
+          //   }
+          // }
+          _this.notifyList = _this.bSort(notifyList)
         }
         
         // 处理浮标数据
@@ -2029,7 +2060,8 @@ export default {
                   Number(item["llcrswzwd"])
                 ],
                 R: 2000,
-                origin: item
+                origin: item,
+                blink:true
               });
             }
           }
@@ -2070,7 +2102,7 @@ export default {
       }
 
       /**------------------------------------------------------------------------------------------- */
-
+         let Fbtfs = [];//浮标发布数据缓存 12-4
       _.forEach(data, item => {
         // console.log( item )
         switch (item.type) {
@@ -2099,8 +2131,40 @@ export default {
           case "FBMBSJ":
             dealFbSJMb(item.data);
             break;
+            // 处理浮标投放数据 12-4
+          case "FBTFSJ":
+                dealFbtfsj(item.data)
+            break;
+          case "FBTFSJ2":
+                dealFbtfsj(item.data)
+            break;
+          case "FBTFSJ3":
+                dealFbtfsj(item.data)
+            break;
+          case "FBTFSJ4":
+                dealFbtfsj(item.data)
+            break;  
         }
       });
+
+        // 处理浮标投放数据 12-4
+      function dealFbtfsj(item){
+          if(item){
+
+              _.forEach(item, (v,k)=>{
+                  if((k.indexOf('fbxh') != -1) && (v !== '0')){
+                      
+                      Fbtfs.push(v)
+                  }
+              })
+          }
+      }
+
+      Fbtfs = _.map(Fbtfs,(id)=>{
+          return "detector_" + id
+      })
+
+        window.Map.Detector.Lights(Fbtfs)
 
       //   刘川修改
       //   处理飞机
@@ -2228,6 +2292,7 @@ export default {
           that.num = data.fps;
           that.$refs["timeLine"].num = that.num;
           if (data.yxzt == 3) {
+            that.notifyList = []
             that.gdFlag = false
             that.num = data.fps
             that.fjlnglat = true;

@@ -35,6 +35,10 @@ export default class Detect{
 
     Add( target ){
 
+        if(!target.id){
+            return;
+        }
+
         target.positions = _.map(target.positions, (item) => {
             return (item).toFixed(2)
         })
@@ -62,7 +66,8 @@ export default class Detect{
                         image:'/static/image/junbiao/fubiao1.png',
                         width:30,
                         height:30,
-                        scaleByDistance:Ce.ScaleNF(2000,2,50000,1)
+                        scaleByDistance:Ce.ScaleNF(2000,2,50000,1),
+                        color:Ce.CssColor('grey')
                     },
                     // cylinder:{
                     //     length:1,
@@ -77,13 +82,46 @@ export default class Detect{
                 })
             });
 
-            Tool.Blink( target.id )
+            if(target.blink){
+
+                Tool.Blink( target.id )
+            }
         }
 
     }
 
     Update( ups ){
 
+    }
+
+    Lights( detectorIds ){
+
+        if(!detectorIds.length){
+            return
+        }
+
+
+        _.forEach(sourceData, (single) => {
+
+            let id = single.target.id;
+
+            let onShow = _.filter(detectorIds, (tarId) => {
+                return tarId == id
+            })
+
+            let detector = Tool.GetId(id);
+
+            if(!detector){
+                return;
+            }
+
+            if(onShow.length){
+                detector.billboard.color = Ce.CssColor('white')
+            }else{
+                detector.billboard.color = Ce.CssColor('grey')
+            }
+        })
+        
     }
 
     LinkOn( detectorId, link ){
