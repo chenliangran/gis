@@ -182,10 +182,11 @@ background: none !important;
 }
 .seamless-warp{
   position: fixed !important;
-  top: 280px;
+  bottom: 100px;
   right: 50px;
   height: 500px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   width: 222px;
 }
 .notify{
@@ -263,8 +264,8 @@ background: none !important;
   }
   .cont ul li span:first-child{
     width: 80px;
-    text-align: right;
-    margin-right: 20px;
+    /* text-align: right; */
+    /* margin-right: 20px; */
     display: inline-block;
   }
 /* .icons{
@@ -275,62 +276,156 @@ background: none !important;
     width: 12px;
     height: 12px;
 } */
+.time-label{
+    width: 346px;
+    height:168px;
+    background: red;
+    position: fixed;
+    z-index: 100000000;
+    background: url(../assets/icon/小标牌.png) no-repeat!important;
+    pointer-events: none;
+    display: flex;
+    justify-content: flex-end;
+}
+.time-label ul{
+    font-size:14px; 
+    color: #37bdff;
+    list-style: none;
+    margin-top: 10px
+}
+.time-label ul span{
+    font-size:12px; 
+    color: #ffffff
+}
+.time-label ul li {
+    margin: 5px
+}
+.events-btn{
+    display: flex;
+    justify-content: space-around;
+}
+.events-btn div{
+  width: 70px;
+	height: 35px;
+	background: url(../assets/icon/按钮.png) no-repeat!important;
+	background-size: 100% 100%!important;
+	display: flex;
+	font-size: 14px;
+	justify-content: center;
+	align-items: center;
+	color:#8efffb;
+	margin: 0 10px;
+	cursor: pointer;
+    pointer-events: all;
+}
+.time-label input{
+    width: 125px;
+    pointer-events: all;
+    background: url(../assets/icon/login.png) no-repeat!important;
+	  background-size: 100% 100%!important;
+    padding: 2px;
+    color: #8efffb;
+    border: none;
+    height: 24px;
+    
+}
+.time-label .el-date-editor.el-input, .el-date-editor.el-input__inner{
+   width: 130px !important;
+}
+.time-label .el-input--prefix .el-input__inner{
+   padding: 0 !important;
+}
+.time-label .el-input--suffix .el-input__inner{
+   padding-left: 22px !important;
+}
+.time-label .el-input__prefix{
+  top: -8px !important;
+  left:0 !important;
+}
 </style>
 
 <template>
   <div class="MapContainer">
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
-    <gis-header @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum" :CTnum="CTnum"></gis-header>
+    <gis-header @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum"></gis-header>
     <div id="mapElement">
       <div class="time_bg">
         <div id="timeDiv"></div>
          <div id="progress" :style="'width:'+ widthNum +''"></div>
         <div id="visualization" :style="visStyle"></div>
+        <p style="margin:35px 0 0 35px;color:#ffffff">当前播放倍数：{{num}}</p>
       </div>
     </div>
-     <vue-seamless-scroll :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
-    <div class="notifyDiv">
-        <div class="notify" v-for="(item, i) in notifyList " :key="i">
-          <div  v-if="notifyType === 'FBSJ'">
-            <p>
-              <span>事件</span><span>{{item["fblx"]}}</span>
-            </p>
-            <p>
-              <span>时间</span><span>{{item["sb"]}}</span>
-            </p>
-            <p>
-              <span>详情</span><span>{{item["zx"]}}</span>
-            </p>
-          </div>
-          <div v-if="notifyType === 'CTMBSJ'">
-            <p>
-              <span>事件</span><span>{{item["mbyxw"]}}</span>
-            </p>
-            <p>
-              <span>时间</span><span>{{item["mbsj"]}}</span>
-            </p>
-            <p>
-              <span>详情</span><span>{{item["yxsz"]}}</span>
-            </p>
-          </div>
-          <div v-if="notifyType === 'SDSJ'">
-            <p>
-              <span>事件</span><span>{{item["sj"]}}</span>
-            </p>
-            <p>
-              <span>时间</span><span>{{item["sjs"]}}</span>
-            </p>
-            <p>
-              <span>详情</span><span>{{item["nr"]}}</span>
-            </p>
-          </div>
-        </div> 
+     <vue-seamless-scroll id='mySeamless'  style="background: rgba(8, 38, 93, 0.5)"  :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
+        <div class="notifyDiv myMsgList" > 
+          <div :style="{'height':item.typeall === 'FBSJ'?'160px':'130px'}" class="notify" v-for="(item, i) in notifyList " :key="i">
+            <div  v-if="item.typeall === 'FBSJ'" >
+              <p>
+                <span>事件</span><span style="color:#ffd400">浮标投放</span>
+              </p>
+              <p>
+                <span>时间</span><span>{{item["sb"]?item["sb"].split('.')[0]:item["sb"]}}</span>
+              </p>
+              <p>
+                <span>编号</span><span>{{item["fbbh"]}}</span>
+              </p>
+              <p>
+                <span>经度</span><span>{{item["llcrswzjd"]}}</span>
+              </p>
+              <p>
+                <span>纬度</span><span>{{item["llcrswzwd"]}}</span>
+              </p>
+            </div>
+            <div v-if="item.typeall === 'CTMBSJ'">
+              <p>
+                <span>事件</span><span style="color:#ffd400">磁探发现目标</span>
+              </p>
+              <p>
+                <span>时间</span><span>{{item["mbsj"]?item["mbsj"].split('.')[0]:item["mbsj"]}}</span>
+              </p>
+              <p>
+                <span>经度</span><span>{{item["mbjd"]}}</span>
+              </p>
+              <p>
+                <span>纬度</span><span>{{item["mbwd"]}}</span>
+              </p>
+            </div>
+            <div v-if="item.typeall === 'FBMBSJ'">
+              <p>
+                <span>事件</span><span style="color:#ffd400">浮标发现目标</span>
+              </p>
+              <p>
+                <span>时间</span><span>{{item["mbsj"]?item["mbsj"].split('.')[0]:item["mbsj"]}}</span>
+              </p>
+              <p>
+                <span>经度</span><span>{{item["mbwzjd"]}}</span>
+              </p>
+              <p>
+                <span>纬度</span><span>{{item["mbwzwd"]}}</span>
+              </p>
+            </div>
+          </div> 
         </div>
       </vue-seamless-scroll>
-    <div class="MBCS">
+      <div v-show='eventType' class="time-label"  :style="{top: topNum + 'px', left: leftNum + 'px'}">
+         <ul>
+            <li style="color:#ffffff">事件时间：<el-date-picker
+              v-model="newEventDate"
+              type="datetime"
+              placeholder="选择日期时间"
+              align="right">
+            </el-date-picker> </li>
+            <li style="color:#ffffff">事件内容：<input type='text' v-model="eventVal"/></li>
+            <li class="events-btn">
+                <div @click='eventConfirm'>确定</div>
+                <div @click='eventCancel'>取消</div>
+            </li>
+         </ul>
+      </div>
+    <!-- <div class="MBCS" v-show='isShow'>
         <div class="mbfj">
           <div style="width: 300px;height: 237px;">
-            <div class="head-hidden"  @mousedown="draggerStart($event)"></div>
+            <div class="head-hidden"  @mousedown="draggerStart($event)"></div> 
             <div class="close" @click="isShow=false">
               x
             </div>
@@ -346,7 +441,7 @@ background: none !important;
             </div>
           </div>
         </div>
-    </div>
+    </div> -->
     <time-line
       @hingeMsgEvent="hingeMsgEvent"
       @timeDown="timeDown"
@@ -360,7 +455,7 @@ background: none !important;
       @chart="chart"
       @closeplay="closeplay"
       ref="timeLine"
-    ></time-line>
+    ></time-line>forBackWard
     <map-tool v-show='toolF'></map-tool>
     <display-controller v-show='controllerF'></display-controller>
 
@@ -369,7 +464,7 @@ background: none !important;
     <replay
       ref="myreplay"
       :setTime="setTime"
-      :dataInfo="info"
+      :dataInfo="dataInfo"
       :WebSocketData="WebSocketData"
       @uploading="uploading"
     ></replay>
@@ -385,7 +480,7 @@ background: none !important;
 </template>
 
 <script>
-import { setInterval, setTimeout } from "timers";
+// import { setInterval, setTimeout } from "timers";
 import muen from "../view/rightMouse/muen.vue";
 import timeLine from "../view/timeLine/index.vue";
 import lineChart from "../view/lineChart/lineChart.vue";
@@ -397,6 +492,7 @@ import info from "../view/infoTime/list.vue";
 import gisHeader from "../view/header/header.vue";
 import MapTool from "../view/toolbar/maptool.vue";
 import DisplayController from "../view/toolbar/displayController.vue";
+import { setInterval } from 'timers';
 //import { connect } from 'http2';
 const _ = require("lodash");
 
@@ -458,12 +554,19 @@ export default {
       toolF:false,
       controllerF:false,
       FBnum: 0,
-      CTnum:0,
       widthNum:0,
       notifyList:[],
       notifyType:'',
       isShow:true,
-      feijiCout:{}
+      feijiCout:{},
+      timeras:null,
+      timerNew:null,
+      timerFlag:true,
+      eventType:false,
+      newEventDate:'',
+      eventVal:'',
+      topNum:0,
+      leftNum:0
     };
   },
 
@@ -482,10 +585,63 @@ export default {
     timeLine,
     DisplayController,
     gisHeader,
+    
+  },
+  watch:{
+    notifyList(data){
+      clearTimeout(this.timeras)
+      $(".myMsgList").eq(0).fadeIn();
+      $(".myMsgList").eq(1).fadeIn();
+      
+      if(this.timerFlag){
+           
+        
+        if(this.timeras){
+  
+        }
+        this.timeras = setTimeout(() => {
+          // console.log($("#myMsgList"))
+          $(".myMsgList").eq(0).fadeOut();
+          $(".myMsgList").eq(1).fadeOut();
+        }, 60000);
+      
+      }
+    }
   },
   mounted() {
+    $('#mySeamless').on('mouseenter',() => {
+      this.timerFlag = false
+      if(this.timeras){
+        clearTimeout(this.timeras)
+        this.timeras = null
+      }
+      console.log(this.timeras)
+     
+      $(".myMsgList").eq(0).fadeIn();
+      $(".myMsgList").eq(1).fadeIn();
+    });
+    $('#mySeamless').on('mouseleave',() => {
+      this.timerFlag = true
+      this.timeras = setTimeout(() => {
+        // console.log($("#myMsgList"))
+        $(".myMsgList").eq(0).fadeOut();
+        $(".myMsgList").eq(1).fadeOut();
+      }, 60000);
+    });
+    // $(".time_bg").on('mouseenter',()=>{
+    //    $(".time_bg").css("opacity","1");
+    // })
+    // $(".time_bg").on('mouseleave',()=>{
+    //     $(".time_bg").css("opacity","0.4");
+    // })
+    // $(".cesium-viewer-timelineContainer").on('mouseenter',()=>{
+    //    $(".time_bg").mouseenter();
+    // })
+    // $(".cesium-viewer-timelineContainer").on('mouseleave',()=>{
+    //    $(".time_bg").mouseleave();
+    // })
     let that = this;
-      //this.init();
+ 
     document.onselectstart = function() {
       return false;
     };
@@ -529,20 +685,24 @@ export default {
                 groupNum: sessionStorage.getItem("groupNum")
               }, //将js对象转成json对象
               success: function(data) {
+                
                 sessionStorage.setItem("groupType", data);
                 // that.num = data.fps;
                 // that.$refs["timeLine"].num = that.num;
                 if (data.yxzt == 3) {
+                  that.num = data.fps
                   that.$refs.timeLine.playFlag = false;
                   that.playFLAG = false;
                   that.fjlnglat = true;
                   that.closeSocket();
                 }
                 if (data.yxzt == 2) {
+                  that.num = data.fps
                   that.$refs.timeLine.playFlag = false;
                   that.playFLAG = false;
                 }
                 if (data.yxzt == 1) {
+                  that.num = data.fps
                   that.$refs.timeLine.playFlag = true;
                   that.playFLAG = true;
                 }
@@ -550,11 +710,100 @@ export default {
             });
           }
         });
-      }, 300);
+      }, 700);
     }
   },
 
   methods: {
+    eventConfirm(){
+      debugger
+        let that = this
+        let params = {
+            nr:that.eventVal,
+            sj:new Date(that.newEventDate),
+            sjid:sessionStorage.getItem('selectEd')
+        }
+        $.ajax({
+        type: "post",
+        dataType: "json",
+        url: `${globalUrl.host}/find/addSDSJ`,
+        contentType: "application/json;charset=UTF-8",//指定消息请求类型
+        data: JSON.stringify(params),//将js对象转成json对象
+        success: function (data) {
+            that.timeLabelF = false
+                $.get(`${globalUrl.host}/find/findEventListForRex`, {
+                sjid: sessionStorage.getItem('selectEd')
+            }).then(data => {
+                sessionStorage.setItem('allData',JSON.stringify(data))
+                let dataArr = [];
+                let viewer = window["Map"].viewer;
+                for (let item of data.FBSJ) {
+                    dataArr.push({
+                        data: item,
+                        // id: item["jcxxid"],
+                        content: "<span class='icon1'></span>",
+                        start: item["sb"].split(".")[0],
+                        types: "浮标投放"
+                    });
+                }
+                for (let item of data.CTMBSJ) {
+                    dataArr.push({
+                        data: item,
+                        // id: item["mbsj"],
+                        content: "<span class='icon2'></span>",
+                        start: item["mbsj"].split(".")[0],
+                        types: "目标探测"
+                    });
+                }
+                for (let item of data.FBMBSJ) {
+                    dataArr.push({
+                        data: item,
+                        // id: item["mbsj"],
+                        content: "<span class='icon2'></span>",
+                        start: item["mbsj"].split(".")[0],
+                        types: "目标探测"
+                    });
+                }
+                for (let item of data.SDSJ) {
+                    // console.log(that.toDate(item["sj"]));
+                    dataArr.push({
+                        data: item,
+                        // id: item["mbsj"],
+                        content: "<span class='icon3'></span>",
+                        start: that.toDate(item["sjs"]),
+                        types: "手动事件"
+                    });
+                }
+
+                that.timeItemArr = dataArr;  
+                // that.$refs["timeLine"].initVis(
+                //   viewer,
+                //   that.$refs["timeLine"].timeItemArr
+                // );
+
+                window.onresize = function() {
+                  // that.visWidth = viewer.timeline.lastWidth
+                  setTimeout(() => {
+                    that.$refs["timeLine"].timeline.redraw();
+                    that.$refs["timeLine"].startXd();
+                    setTimeout(() => {
+                          $('.vis-box').each((i,v) => {
+                              // v.style.top = '22px !important'
+                              $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+                          })
+                      },1000)
+                  }, 300);
+                 
+                };
+                that.eventType =false;
+
+            })
+        }
+    });
+    },
+    eventCancel(){
+       this.eventType =false;
+    },
     maptool(flag){
       this.toolF = flag;
     },
@@ -610,6 +859,12 @@ export default {
         window.Map.FlyCompare.ClearPath();
         that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
         this.newDate = "00:00:00";
+        setTimeout(() => {
+            $('.vis-box').each((i,v) => {
+                // v.style.top = '22px !important'
+                $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+            })
+        },1000) 
         $.get(`${globalUrl.host}/find/triggerSocket`, {
           startTime: new Date(y[0].start),
           name: sessionStorage.getItem("groupNum"),
@@ -654,6 +909,13 @@ export default {
               groupNum: sessionStorage.getItem("groupNum")
             }, //将js对象转成json对象
             success: function(data) {
+              $.get(`${globalUrl.host}/find/findFJloclan`, {
+                //time:null,
+                sjid: this.selectId
+              }).then(data => {
+                window.Map.Tool.FlyTo([Number(data.zjjd), Number(data.zjwd), 2000000]);
+              
+              });
               $.ajax({
                 type: "get",
                 // dataType: "json",
@@ -667,16 +929,19 @@ export default {
                   // that.num = data.fps;
                   // that.$refs["timeLine"].num = that.num;
                   if (data.yxzt == 3) {
+                    that.num = data.fps
                     that.$refs.timeLine.playFlag = false;
                     that.playFLAG = false;
                     that.fjlnglat = true;
                     that.closeSocket();
                   }
                   if (data.yxzt == 2) {
+                    that.num = data.fps
                     that.$refs.timeLine.playFlag = false;
                     that.playFLAG = false;
                   }
                   if (data.yxzt == 1) {
+                    that.num = data.fps
                     that.$refs.timeLine.playFlag = true;
                     that.playFLAG = true;
                   }
@@ -704,6 +969,7 @@ export default {
      * @param { String } type 事件类型
      */
     forBackWard(type) {
+      
       if (type == "enter") {
         if (this.num == 0) {
           this.num = 2;
@@ -725,6 +991,16 @@ export default {
           this.num = this.num * 2;
         }
       }
+      this.num = this.num
+      if(this.num < -4){
+        this.num = -4
+        return
+      }
+      if(this.num > 64){
+        this.num = 64
+        return
+      }
+      console.log(this.num)
       // this.$refs["timeLine"].num = this.num;
       $.get(`${globalUrl.host}/find/fastAndSlow`, {
         multiple: this.num,
@@ -782,8 +1058,13 @@ export default {
       }
     },
     closeplay() {
+
       this.playFLAG = true;
     },
+   doubleClick(){
+     debugger
+     alert("1111")
+   },
     toDate(str) {
       var date = new Date(str).toJSON();
 
@@ -841,10 +1122,11 @@ export default {
       sessionStorage.setItem("allData", JSON.stringify(this.dataBH));
 
       //-----------------初始化时间轴所需数据
-      that.notifyType = 'FBSJ'
-      that.notifyList = this.dataBH.FBSJ
+      // that.notifyType = 'FBSJ'
+      // that.notifyList = this.dataBH.FBSJ
 
       for (let item of this.dataBH.FBSJ) {
+        item.typeall = 'FBSJ'
         dataArr.push({
           data: item,
           // id: item["jcxxid"],
@@ -853,9 +1135,13 @@ export default {
           types: "浮标投放"
         });
       }
-      that.notifyType = 'CTMBSJ'
-      that.notifyList =  this.dataBH.CTMBSJ
+      // that.notifyType = 'FBSJ'
+      notifyList = [...notifyList,...this.dataBH.FBSJ] 
+      
+      // that.notifyType = 'CTMBSJ'
+      // that.notifyList =  this.dataBH.CTMBSJ
       for (let item of this.dataBH.CTMBSJ) {
+        item.typeall = 'CTMBSJ'
         dataArr.push({
           data: item,
           // id: item["mbsj"],
@@ -864,9 +1150,12 @@ export default {
           types: "目标探测"
         });
       }
-      that.notifyType = 'FBMBSJ'
+      notifyList =  [...notifyList,...this.dataBH.CTMBSJ] 
+      // 
+      // that.notifyType = 'FBMBSJ'
       that.notifyList =  this.dataBH.FBMBSJ
       for (let item of this.dataBH.FBMBSJ) {
+        item.typeall = 'FBMBSJ'
         dataArr.push({
           data: item,
           // id: item["mbsj"],
@@ -875,8 +1164,14 @@ export default {
           types: "目标探测"
         });
       }
-      that.notifyType = 'SDSJ'
-      that.notifyList =  this.dataBH.SDSJ
+      notifyList = [...notifyList,...this.dataBH.FBMBSJ] 
+
+      if(notifyList.length != that.notifyList.length){
+          that.notifyList = notifyList
+      }
+
+      // that.notifyType = 'SDSJ'
+      // that.notifyList =  this.dataBH.SDSJ
       for (let item of this.dataBH.SDSJ) {
         // console.log(that.toDate(item["sj"]));
         dataArr.push({
@@ -891,7 +1186,6 @@ export default {
       this.$refs["timeLine"].timeItemArr = dataArr;
       this.$refs["timeLine"].initVis(
         viewer,
-        // []
         this.$refs["timeLine"].timeItemArr
       );
       // });
@@ -909,9 +1203,25 @@ export default {
           ).css("left");
           that.$refs["timeLine"].timeline.redraw();
           that.$refs["timeLine"].startXd();
+          setTimeout(() => {
+                $('.vis-box').each((i,v) => {
+                    // v.style.top = '22px !important'
+                    $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+                })
+            },1000)
         }, 300);
       };
 
+     $(".cesium-viewer-timelineContainer").dblclick(function(){
+        that.eventType = true;
+        that.getMousePos(event,that);
+     })
+    },
+
+    getMousePos(event,that) {
+        let e =  window.event;
+        that.leftNum = e.clientX;
+        that.topNum= e.clientY-163;
     },
     /**
      * @param {date} date 当前播放时间点
@@ -934,10 +1244,10 @@ export default {
     upateGis(data) {
       let that = this;
       that.FBnum = 0;
-      that.CTnum = 0;
-      that.notifyList = [];
+      let notifyList = [];
       that.notifyType = '';
-      debugger
+      // debugger
+      console.log(data)
       window["Map"].viewer.entities.removeAll();
       window.Map.AddCompare("feiji", {
         id: "plane_1",
@@ -948,29 +1258,44 @@ export default {
       });
       if (data["CTMBSJ"].length > 0) {
         that.notifyType = 'CTMBSJ';
-        that.notifyList = data["CTMBSJ"]       
+               
         data["CTMBSJ"].map((item, i) => {
+          item.typeall = 'CTMBSJ'
           dealCtSJMB(item, i,that);
         });
+        console.log(that.notifyList )
+        notifyList = [...notifyList,...data["CTMBSJ"]]
+
+        
       }
+
+      console.log(that.notifyList)
       if (data["FBSJ"].length > 0) {
         that.notifyType = 'FBSJ';
-        that.notifyList = data["FBSJ"]
+        
         data["FBSJ"].map(item => {
+          item.typeall = 'FBSJ'
           dealFbSJ(item,that);
         });
+       notifyList = [...notifyList,...data["FBSJ"]]
       }
       if (data["FBMBSJ"].length > 0) {
         that.notifyType = 'FBMBSJ';
-        that.notifyList = data["FBMBSJ"]
+        
         data["FBMBSJ"].map(item => {
+          item.typeall = 'FBMBSJ'
           dealFbSJMb(item);
         });
+        notifyList = [...notifyList,...data["FBMBSJ"]]
+
         // setTimeout(() =>{
         //   debugger
         //   that.notifyType = '';
         //   that.notifyList = [];
         // },60000)
+      }
+      if(notifyList.length != that.notifyList.length){
+        that.notifyList = notifyList
       }
      
       // 处理浮标数据
@@ -1004,7 +1329,6 @@ export default {
 
       // 处理磁探数据
       function dealCtSJMB(item, i,that) {
-        that.CTnum = ++that.CTnum;
         window.Map.AddCtTarget({
           id: "citan_" + item["mbbh"],
           positions: [Number(item["mbjd"]), Number(item["mbwd"])],
@@ -1032,7 +1356,12 @@ export default {
         function(e) {
           let a = new Cesium.JulianDate.toDate(e.startJulian);
           let b = new Cesium.JulianDate.toDate(e.endJulian);
-
+          setTimeout(() => {
+              $('.vis-box').each((i,v) => {
+                  // v.style.top = '22px !important'
+                  $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+              })
+          },1000) 
           that.$refs["timeLine"].timeline.setOptions({
             start: a,
             end: b
@@ -1050,8 +1379,13 @@ export default {
         "mouseup",
         function(e) {
           var dfTime = (viewer.clock.currentTime.dayNumber - startTime.dayNumber)*86400 + (viewer.clock.currentTime.secondsOfDay - startTime.secondsOfDay)
-          that.progress(that.formatSeconds(dfTime),totleTime)
-          that.diffTime(new Cesium.JulianDate.toDate(viewer.clock.currentTime));
+          
+            console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime))
+            that.progress(that.formatSeconds(dfTime),totleTime)
+            // console.log(viewer.clock)
+            that.diffTime(new Cesium.JulianDate.toDate(viewer.clock.currentTime));
+
+          
           window.Map.FlyCompare.ClearPath();
           that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
           that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
@@ -1072,13 +1406,20 @@ export default {
       this.startXd();
 
       that.progress(nowTime,totleTime)
+      this.dqsjd = this.allDate.startT
       setInterval(()=>{
         var dfTime = (viewer.clock.currentTime.dayNumber - startTime.dayNumber)*86400 + (viewer.clock.currentTime.secondsOfDay - startTime.secondsOfDay)
         if(viewer.clock.currentTime.dayNumber != viewer.clock.startTime.dayNumber){
           dfTime =  "00:00:00";
           that.progress(dfTime,totleTime)
+          window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
+            new Date(this.dqsjd)
+          );
         } else {
           that.progress(that.formatSeconds(dfTime),totleTime)
+          window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
+            new Date(this.dqsjd)
+          );
         }
       },1000)
     },
@@ -1275,11 +1616,13 @@ export default {
     closeSocket() {
       let that = this;
       that.fjlnglat = true;
+      
       $.get(`${globalUrl.host}/find/stopScoket`, {
         name: sessionStorage.getItem("groupNum")
       }).then(data => {
         this.playFLAG = false;
         this.$refs.timeLine.playFlag = false;
+        window.Map.viewer.clock.shouldAnimate = false;
         // socketController = null;
         // this.wsF = true;
         window["Map"].viewer.entities.removeAll();
@@ -1290,6 +1633,7 @@ export default {
           zjjd: that.fjposData[0],
           zjwd: that.fjposData[1]
         });
+        this.dqsjd = this.allDate.startT
         //  window.Map.viewer.clock.shouldAnimate = false;
         window.Map.viewer.clock.currentTime = Cesium.JulianDate.fromDate(
           new Date(this.allDate.startT)
@@ -1319,6 +1663,7 @@ export default {
       let that = this;
       window["Map"] = CMap.Init("mapElement", {});
       this.bindEvents();
+      
 
       let selectName = JSON.parse(sessionStorage.getItem("ptData")).filter(
         item => {
@@ -1331,6 +1676,7 @@ export default {
         sjid: this.selectId
       }).then(data => {
         this.fjposData = [Number(data.zjjd), Number(data.zjwd), 5000];
+        
         console.log(data);
         window.Map.AddCompare("feiji", {
           id: "plane_1",
@@ -1353,7 +1699,7 @@ export default {
      */
     buildSocket(type) {
       const _this = this;
-
+      console.log('打开ws')
       // window.Map.viewer.clock.shouldAnimate = true;
 
       // if (socketController) this.closeSocket();
@@ -1395,7 +1741,7 @@ export default {
         //   console.log(JSON.parse(e.data)[0].LKR);
           let data = JSON.parse(e.data)[0].LKR;
           if (data) {
-            // _this.num = data.fps;
+            _this.num = data.fps;
             // _this.$refs["timeLine"].num = _this.num;
             if (data.yxzt == 3) {
               _this.$refs.timeLine.playFlag = false;
@@ -1423,11 +1769,13 @@ export default {
      */
     dealMessage(data) {
       const _this = this;
-      // _this.notifyList = [];
+      let notifyList = [];
+
       // _this.notifyType = '';
       if (data.length == 0) return;
      // debugger
     //   console.log(data)
+    // console.log(data)
 
       //--------------比对出当前播放时间
       let date = "";
@@ -1448,7 +1796,7 @@ export default {
           Number(data[0].data.zjwd),
           5000
         ];
-        // console.log(_this.FeijiName)
+
         window.Map.Tool.FlyTo([datas[0], datas[1], 2000000]);
         // window.Map.AddCompare("feiji", {
         // 	id: "plane_1",
@@ -1462,9 +1810,9 @@ export default {
       let newDate = date;
 
       if (this.newDate != newDate) {
-        window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
-          new Date(newDate)
-        );
+        this.dqsjd = newDate
+        // console.log(this.newDate,newDate)
+        
         try {
             _this.$refs["myreplay"].$refs['myterrace'].setLineOption(data[0].data);
         } catch (e){
@@ -1474,20 +1822,20 @@ export default {
         let y = [];
 
         //--------------------------比对当前播放时间是否到达标绘时间点
-        if (_this.$refs["timeLine"].timeItemArr.length > 0) {
-          y = _this.$refs["timeLine"].timeItemArr.filter(item => {
-            return (
-              new Date(item.start).getTime() == new Date(newDate).getTime()
-            );
-          });
-        }
+        // if (_this.$refs["timeLine"].timeItemArr.length > 0) {
+        //   y = _this.$refs["timeLine"].timeItemArr.filter(item => {
+        //     return (
+        //       new Date(item.start).getTime() == new Date(newDate).getTime()
+        //     );
+        //   });
+        // }
         //--------------------------
 
-        if (y.length > 0) {
-          this.hingeMsgEvent(y[0].data.nr);
-          _this.$refs["timeLine"].timeline.focus(y[0].id);
-          _this.$refs["timeLine"].timeline.setSelection(y[0].id);
-        }
+        // if (y.length > 0) {
+        //   this.hingeMsgEvent(y[0].data.nr);
+        //   _this.$refs["timeLine"].timeline.focus(y[0].id);
+        //   _this.$refs["timeLine"].timeline.setSelection(y[0].id);
+        // }
         this.newDate = newDate;
         //--------------------------比对当前播放时间之前所有数据
         let a = this.dataBH.CTMBSJ.filter(item => {
@@ -1523,6 +1871,7 @@ export default {
 
         //-----------------------比对浮标信息框状态
         let ztData = {};
+         _this.FBnum = 0;
         data.map(item => {
           if (item.type.indexOf("FBTFSJ") != -1) {
             for (let key in item.data) {
@@ -1544,26 +1893,39 @@ export default {
         this.$refs["myreplay"].updtea({ a, b, c, d });
         if (a.length > 0) {
            _this.notifyType = 'CTMBSJ';
-           _this.notifyList = a;
+           
           a.map((item, i) => {
+            item.typeall = 'CTMBSJ'
             dealCtSJMB(item, i,_this);
           });
+          notifyList = [...notifyList,...a]
+          
         }
         if (b.length > 0) {
           _this.notifyType = 'FBSJ';
-           _this.notifyList = b;
+           
           b.map(item => {
+            _this.FBnum = ++_this.FBnum
+            item.typeall = 'FBSJ'
             dealFbSJ(item,_this);
           });
+          notifyList =  [...notifyList,...b]
+
         }
         if (c.length > 0) {
           _this.notifyType = 'FBMBSJ';
-          _this.notifyList = c; 
+          
           c.map(item => {
+            
+            item.typeall = 'FBMBSJ'
             dealFbSJMb(item);
           });
+         notifyList =  [...notifyList,...c]
         }
-
+        if(notifyList.length != _this.notifyList.length){
+          _this.notifyList = notifyList
+        }
+        
         // 处理浮标数据
         function dealFbSJ(item,_this) {
           //debugger
@@ -1609,7 +1971,6 @@ export default {
           if (window.Map.viewer.entities.getById("citan_" + item["mbbh"]))
             return;
           if (Number(item["mbjd"]) && Number(item["mbwd"])) {
-            _this.CTnum = ++_this.CTnum;
             window.Map.AddCtTarget({
               id: "citan_" + item["mbbh"],
               positions: [Number(item["mbjd"]), Number(item["mbwd"])],
@@ -1618,20 +1979,12 @@ export default {
           }
         }
 
-        //console.log(this.dataBH,data)
-        //右侧消息框，显示一分钟，清空
-        
-        // setTimeout(() =>{
-        //     _this.notifyType = '';
-        //     _this.notifyList = [];
-        //   },60000)
-
       }
 
       /**------------------------------------------------------------------------------------------- */
 
       _.forEach(data, item => {
-        console.log( item )
+        // console.log( item )
         switch (item.type) {
           // 飞机
           case "FJ":
@@ -1770,7 +2123,6 @@ export default {
           window.Map.Detector.LinkOn(FbId, link);
         }
       }
-
     },
     sendCommond(param) {
       console.log(this.fjlnglat);
@@ -1788,6 +2140,7 @@ export default {
           // that.num = data.fps;
           // that.$refs["timeLine"].num = that.num;
           if (data.yxzt == 3) {
+            that.num = data.fps
             that.fjlnglat = true;
             that.playFLAG = true;
             $.get(`${globalUrl.host}/find/triggerSocket`, {
@@ -1822,6 +2175,7 @@ export default {
             });
           }
           if (data.yxzt == 2) {
+            that.num = data.fps
             that.fjlnglat = false;
             $.get(`${globalUrl.host}/find/pauseAndStart`, {
               name: sessionStorage.getItem("groupNum")
@@ -1830,6 +2184,7 @@ export default {
             });
           }
           if (data.yxzt == 1) {
+            that.num = data.fps
             that.fjlnglat = false;
             $.get(`${globalUrl.host}/find/pauseAndStart`, {
               name: sessionStorage.getItem("groupNum")
@@ -1871,6 +2226,7 @@ export default {
       window.Map.Event.Listen("EntityClick", function(e) {
         _this.dataInfo = e;
         setTimeout(() => {
+          console.log(e)
           switch (e.type) {
             case "detector":
               //浮标探测器
@@ -1882,7 +2238,7 @@ export default {
               _this.visible = true;
               _this.type = "飞机";
               break;
-            case "submarine":
+            case "qianting":
               //潜艇
               _this.visible = true;
               _this.type = "潜艇";
@@ -1922,7 +2278,7 @@ export default {
                   step:1,                //（调整速度的）0
                   // hoverStop:false        (鼠标停留停止 离开继续运行（反之则停止）)
                  // limitMoveNum: 1 ,    //这个是修改moveSwitch()之前的使用方法，这里的数值指的是数据条数
-                  singleHeight:115,   //单个停止高度（默认为零无缝）=>方向0/1
+                  singleHeight:160,   //单个停止高度（默认为零无缝）=>方向0/1
                   waitTime: 8000    //（停顿时间）
 
                   }

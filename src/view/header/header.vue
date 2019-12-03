@@ -21,7 +21,7 @@
                 <li><i class="feiji"></i><span>1</span></li>
                 <li><i class="fubiao"></i><span>{{FBnum}}</span></li>
                 <li><span class="time">{{NowTime}}</span></li>
-                <li><i class="group"></i><span>{{CTnum}}</span></li>
+                <li><i class="group"></i><span>1</span></li>
             </ul>
         </div>
         <div class="cmsNav cms-right">
@@ -95,7 +95,7 @@
 
 <script>
 export default {
-    props: ["WebSocketData","FBnum","CTnum"],
+    props: ["WebSocketData","FBnum"],
 	data() {
 		return {
 			dataInfo: {},
@@ -385,12 +385,6 @@ export default {
                this.FBnum = v
            },
            deep: true
-        },
-        CTnum:{
-            handler:function(v){
-                this.CTnum = v
-            },
-            deep: true
         }
     
         //   this.getAllDate()
@@ -559,5 +553,8 @@ export default {
         color: white;
         margin:0;
 
+    }
+    .cmsNav li{
+        cursor: pointer;
     }
 </style>

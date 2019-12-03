@@ -9,7 +9,7 @@ Vue.use(scroll);
 
 
 const hostMap = {
-  development:'http://127.0.0.1:10000',
+  development:'http://127.0.0.1',
   production:window.location.origin
 }
 

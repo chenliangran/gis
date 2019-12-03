@@ -15,7 +15,7 @@
 .event-filter-big{
 	width: 300px;
 	margin: auto;
-	margin-top: 90px;
+	/* margin-top: 90px; */
 }
 .event-filter-checkbox-div{
 	display: flex;
@@ -129,6 +129,7 @@ export default {
 				$(e.target).html('')
 				delete this.eventData[$(e.target).data('type')]
 				// this.$emit('cancel')
+				this.$emit('confirm',Object.keys(this.eventData))
 		  }else{
 			  	this.eventData[$(e.target).data('type')] = ''
 			 	$(e.target).html('✔')
@@ -140,9 +141,10 @@ export default {
   methods: {
 	  confirm(){
 		  this.$emit('confirm',Object.keys(this.eventData))
+		  
 	  },
 	  cancel(){
-		  this.$emit('cancel')
+		  this.$emit('cancel',Object.keys(this.eventData))
 	  }
 
 
