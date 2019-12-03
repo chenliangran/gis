@@ -520,7 +520,7 @@ export default {
         margin-right: 5px;  
     }
     .cms-middle ul li .fubiao{
-        background: url(../../assets/header/zhinan.png);
+        background: url(../../assets/header/fubiao1.png);
         display: inline-block;
         width: 22px;
         height: 18px;
@@ -531,7 +531,7 @@ export default {
         margin-right: 5px;      
     }
     .cms-middle ul li .group{
-        background: url(../../assets/header/group.png);   
+        background: url(../../assets/header/qianting.png);   
         display: inline-block;
         width: 7px;
         height: 17px;

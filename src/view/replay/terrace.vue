@@ -1,98 +1,121 @@
 <template>
 	<div class="terrace">
-		<div class="terrace-item">
-			<div>
-				<span></span>
-				<span>
-					飞行曲线
-				</span>
-			</div>
-			<div id="airChart" style="width: 370px;height:250px;margin-left: 5px;top:-40px"></div>
-		</div>
-        <div class="terrace-item" v-if="detectorData.length > 0">
-			<div>
-				<span></span>
-				<span>浮标目标</span>
-			</div>
-			<div class="list">
-				<div>
-					<span style="min-width: 60px">浮标编号</span>
-					<span style="min-width: 80px">经度</span>
-					<span style="min-width: 80px">纬度</span>
-					<span style="min-width: 60px">浮标类型</span>
-					<span style="min-width: 60px">状态</span>
-					<!-- <span style="min-width: 150px">投放时间</span> -->
-					<span style="min-width: 60px">射频通道号</span>
-					<span style="min-width: 60px">阵型</span>
+		<div class="replay" :style="{ left: '5px', top: '45px' }">
+			<div class="replay-cont" style="height: 250px;" v-show="isShow">
+				<div style="width: 360px;height: 250px;">
+					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
+					<div class="close" @click="isShow=false">
+						x
+					</div>
+					<div class="nav">飞行曲线</div>
+					<div class="terrace-item">
+						<div id="airChart" style="width:370px;height:250px;margin-left: 10px;top:-8px"></div>
+					</div>
+					<div style="text-align: center;position: relative; top: -10px;">
+						<p>
+							<span>经度：</span><span style="margin-right: 15px;">{{Math.floor(jingdu*100)/100}}</span> 
+							<span>纬度：</span> <span style="margin-right: 15px;">{{Math.floor(weidu*100)/100}}</span>
+							 <span>方向：</span> <span>{{Math.floor(fangxiang*100)/100}}</span>
+						</p>
+					</div>
 				</div>
-				<ul>
-					<li :class="{curFb: curFbBh == item.fbbh}" v-for="(item, i) in detectorData" :key="i">
-						<span style="min-width: 60px">{{item["fbbh"]}}</span>
-						<span style="min-width: 80px">{{item["llcrswzjd"]}}</span>
-						<span style="min-width: 80px">{{item["llcrswzwd"]}}</span>
-						<span style="min-width: 60px">{{item["fblx"]}}</span>
-						<span style="min-width: 60px">{{item["fbzt"]}}</span>
-						<!-- <span style="min-width: 150px">{{item["sb"].split(".")[0]}}</span> -->
-						<span style="min-width: 60px">{{item["sptdh"]}}</span>
-						<span style="min-width: 60px">{{item["zx"]}}</span>
-					</li>
-				</ul>
 			</div>
 		</div>
-		<div class="buoy-item">
-			<div>
-				<span></span>
-				<span>浮标探测目标统计</span>
-			</div>
-			<div class="list">
-				<div>
-					<span style="min-width: 60px">浮标编号</span>
-					<span style="min-width: 60px">经度</span>
-					<span style="min-width: 60px">纬度</span>
-					<span style="min-width: 100px">距离</span>
+		<div class="replay" :style="{ left:'5px', top: '285px' }">
+			<div class="replay-cont" v-show="isShow" style="width: 360px;height: 190px;">
+				<div style="width: 360px;height: 190px;">
+					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
+					<div class="close" @click="isShow=false">
+						x
+					</div>
+					<div class="nav">浮标投放信息</div>
+					<div class="terrace-item" v-if="detectorData.length > 0">
+						<!-- <div>
+							<span></span>
+							<span>浮标目标</span>
+						</div> -->
+						<div class="list">
+							<div>
+								<span style="min-width: 60px">浮标编号</span>
+								<span style="min-width: 50px">经度</span>
+								<span style="min-width: 50px">纬度</span>
+								<span style="min-width: 60px">浮标类型</span>
+								<span style="min-width: 60px">状态</span>
+								<span style="min-width: 60px">射频通道号</span>
+								<span style="min-width: 60px">阵型</span>
+							</div>
+							<ul>
+								<li :class="{curFb: curFbBh == item.fbbh}" v-for="(item, i) in detectorData" :key="i">
+									<span style="min-width: 60px">{{item["fbbh"]}}</span>
+									<span style="min-width: 50px">{{Math.floor(item["llcrswzjd"]*100)/100}}</span>
+									<span style="min-width: 50px">{{Math.floor(item["llcrswzwd"]*100)/100}}</span>
+									<span style="min-width: 60px">{{item["fblx"]}}</span>
+									<span style="min-width: 60px">{{item["fbzt"]}}</span>
+									<span style="min-width: 60px">{{item["sptdh"]}}</span>
+									<span style="min-width: 60px">{{item["zx"]}}</span>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
-				<ul>
-					<li v-for="(item, i) in events['mbtcsj']" :key="i">
-						<span style="min-width: 60px">{{item["mbbh"]}}</span>
-						<span style="min-width: 60px">{{item["mbwzjd"]}}</span>
-						<span style="min-width: 60px">{{item["mbwzwd"]}}</span>
-						<span style="min-width: 100px">{{item["jl"]}}</span>
-					</li>
-				</ul>
-				<!-- <div class="item-event" @click="uploading(item.mbsj, 'mbtcsj')"  v-for="(item, i) in events['mbtcsj']" :key="i">
-					<p :title="item.mbjd">
-						<span>编号：</span>
-						<span>{{item.mbbh}}</span>
-					</p>
-					<p :title="item.mbsj">
-						<span>目标发现时间：</span>
-						<span>{{showTime(item.mbsj)}}</span>
-					</p>
-				</div> -->
 			</div>
 		</div>
-		<div class="terrace-item" v-if="ctData.length > 0">
-			<div>
-				<span></span>
-				<span>
-					磁探目标
-				</span>
-			</div>
-			<div class="list">
-				<div>
-					<span style="min-width: 150px">发现时间</span>
-					<span style="min-width: 60px">经纬</span>
-					<span style="min-width: 60px">纬度</span>
-					<span style="min-width: 100px">探测目标位置偏差</span>
+		<div class="replay" :style="{ left:'5px', top:'470px' }">
+			<div class="replay-cont" v-show="isShow">
+				<div style="width: 360px;height: 190px;">
+					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
+					<div class="close" @click="isShow=false">
+						x
+					</div>
+					<div class="nav">磁探探测目标</div>
+					<div class="terrace-item" v-if="ctData.length > 0">
+						<div class="list">
+							<div>
+								<span style="min-width: 150px">发现时间</span>
+								<span style="min-width: 50px">经纬</span>
+								<span style="min-width: 50px">纬度</span>
+								<span style="min-width: 100px">探测目标位置偏差</span>
+							</div>
+							<ul>
+								<li  v-for="(item, i) in ctData"  :key="i">
+									<span style="min-width: 150px" :title="item.mbsj">{{item["mbsj"].split('.')[0]}}</span>
+									<span style="min-width: 50px"  :title="item.mbjd">{{Math.floor(item["mbjd"]*100)/100}}</span>
+									<span style="min-width: 50px"  :title="item.mbwd">{{Math.floor(item["mbwd"]*100)/100}}</span>
+									<span style="min-width: 100px" :title="item.mbwzwc">{{item["mbwzwc"]}}</span>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
-				<ul>
-					<li  v-for="(item, i) in ctData"  :key="i">
-						<span style="min-width: 150px" :title="item.mbsj">{{item["mbsj"].split('.')[0]}}</span>
-						<span style="min-width: 60px"  :title="item.mbjd">{{item["mbjd"]}}</span>
-						<span style="min-width: 60px"  :title="item.mbwd">{{item["mbwd"]}}</span>
-						<span style="min-width: 100px" :title="item.mbwzwc">{{item["mbwzwc"]}}</span>
-					</li>
-				</ul>
+			</div>
+		</div>
+		<div class="replay" :style="{ left:'5px', bottom:'75px' ,top:'inherit'}">
+			<div class="replay-cont" v-show="isShow">
+				<div style="width: 360px;height: 190px;">
+					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
+					<div class="close" @click="isShow=false">
+						x
+					</div>
+					<div class="nav">浮标探测目标</div>
+					<div class="terrace-item">
+						<div class="list">
+							<div>
+								<span style="min-width: 60px">浮标编号</span>
+								<span style="min-width: 60px">经度</span>
+								<span style="min-width: 60px">纬度</span>
+								<span style="min-width: 100px">距离</span>
+							</div>
+							<ul>
+								<li v-for="(item, i) in events['mbtcsj']" :key="i">
+									<span style="min-width: 60px">{{item["mbbh"]}}</span>
+									<span style="min-width: 60px">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+									<span style="min-width: 60px">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+									<span style="min-width: 100px">{{item["jl"]}}</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -115,7 +138,13 @@ export default {
                 mbtcsj: [],
                 sdsj: []
             },
-            ctData: [],
+			ctData: [],
+			left: 5,
+			top: 55,
+			isShow: true,
+			jingdu:0,
+			weidu:0,
+			fangxiang:0
 		}
 	},
     mounted() {
@@ -288,8 +317,10 @@ export default {
 				v.map(item => {
 					//飞机
 					if(item.type == "FJ") {
-
 						this.planeData = item.data
+						this.jingdu = item.data.zjjd
+						this.weidu = item.data.zjwd
+						this.fangxiang = item.data.fx
 					}
 				})
 			},
@@ -312,12 +343,24 @@ export default {
 			this.detectorData = data.FBSJ;
             _this.ctData = data.CTMBSJ
 		})
+
+		document.addEventListener("click", (e)=> {
+			let bool = false
+			for(var i = 0; i < e.path.length; i++) {
+				if(e.path[i].className == "replay"){
+					bool = true
+				}
+			}
+			if(!bool) {
+				_this.isShow = true
+			}
+		})
     }
 }
 </script>
 
 <style>
-	.terrace-item >div:first-child{
+	/* .terrace-item >div:first-child{
 		height: 30px;
 		background: url("../../../public/static/image/replay/标题背景.png");
 		background-size: 110% 110%;
@@ -333,18 +376,20 @@ export default {
 		background: url("../../../public/static/image/replay/icon.png");
 		background-repeat: no-repeat;
 		background-position: center center;
-	}
+	} */
 	.terrace-item p {
 		height: 30px;
 		line-height: 30px;
 		padding: 0 24px;
 	}
 	.terrace-item .list {
+		position: relative;
+		top:50px;
 		border: 1px solid #104284;
-		margin:5px 10px;
-		width: 335px;
+		/* margin:5px 10px; */
+		width: 100%;
 		overflow: auto;
-		max-height: 100px;
+		max-height: 110px;
 	}
 	.terrace-item .list >div:first-child{
 		height: 30px;

@@ -1,23 +1,9 @@
 <template>
-	<div class="replay" :style="{ left: left + 'px', top: top + 'px' }">
-		<div class="replay-cont" v-show="isShow">
-			<div style="width: 360px;height: 660px;">
-				<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
-				<div class="close" @click="isShow=false">
-					x
-				</div>
-				<div class="nav">数据统计分析</div>
-				<!--<div class="header">-->
-					<!--<span @click="curNav=item" :class="{curnav: item == curNav}" v-for="item in nav" :key="item">{{item}}</span>-->
-				<!--</div>-->
-				<div class="cont">
-					<bulletin v-show="curNav=='简报'" :dataInfo="dataInfo" :WebSocketData="WebSocketData"></bulletin>
-					<terrace ref='myterrace' v-show="curNav=='平台信息'" :setTime="setTime" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
-					<event v-show="curNav=='事件列表'" :setTime="setTime" @uploading="uploading" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
-					<buoy ref='mybuoy'  v-show="curNav=='目标'" :setTime="setTime" :WebSocketData="WebSocketData"/>
-				</div>
-			</div>
-		</div>
+	<div class="cont">
+		<!-- <bulletin v-show="curNav=='简报'" :dataInfo="dataInfo" :WebSocketData="WebSocketData"></bulletin> -->
+		<terrace ref='myterrace' v-show="curNav=='平台信息'" :setTime="setTime" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
+		<event v-show="curNav=='事件列表'" :setTime="setTime" @uploading="uploading" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
+		<buoy ref='mybuoy'  v-show="curNav=='目标'" :setTime="setTime" :WebSocketData="WebSocketData"/>
 	</div>
 </template>
 
@@ -113,7 +99,7 @@ export default {
 		background: -webkit-gradient(linear,left);
 	}
 	.replay {
-		position: absolute;
+	position: absolute;
     top: 10px;
     left: 40px;
 		font-size: 12px;
@@ -134,12 +120,12 @@ export default {
 	}
 	.replay .head-hidden {
 		position: absolute;
-    top: 0;
-    left: 0;
-    width: calc(100% - 80px);
-    height: 60px;
+		top: 0;
+		left: 0;
+		width: calc(100% - 80px);
+		height: 60px;
 	}
-	.replay .header {
+	/* .replay .header {
 		display: flex;
 		padding: 0 10px;
 		padding-top: 5px;
@@ -147,7 +133,7 @@ export default {
 		background:  url("../../../public/static/image/replay/time_1.png");
 		background-size: 100% 40px;
 		background-repeat: no-repeat; 
-	}
+	} */
 	.replay .header .curnav {
 		background: rgb(128, 193, 237);
 		color: #333;
@@ -161,11 +147,10 @@ export default {
 	}
 	.replay-cont {
 		width: 360px;
-		height: 660px;
-		background: url("../../../public/static/image/replay/tree.png");
+		background: url("../../../public/static/image/replay/notify.png");
 		background-size: 100% 100%;
 		background-repeat: no-repeat;
-		padding: 50px 40px 40px;
+		padding: 10px 30px;
 	}
 	.replay .close {
 		position: absolute;
@@ -180,7 +165,7 @@ export default {
 	}
 	.replay .nav {
 	position: absolute;
-    top: 0;
+    top: 15px;
     font-size: 14px;
     font-weight: 500;
     left: 37%;

@@ -455,7 +455,7 @@ export default {
               'left':0,
               'bottom':'50px'
           },
-        num:0,
+        num:1,
         action:'暂停',
         timeItemArr:[],
         newDate:'',
@@ -888,7 +888,8 @@ export default {
                 // moveable:false,
                 maxHeight:'15px',
                 height:'15px',
-                stack:false
+                stack:false,
+                zoomable:false
                 // onMove:(e) => {
                 //     console.log(e)
                 // }

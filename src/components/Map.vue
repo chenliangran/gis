@@ -522,7 +522,7 @@ export default {
       selectId: "",
       selectF: false,
       loginF: true,
-      num: 0,
+      num: 1,
       action: "暂停",
       timeItemArr: [],
       newDate: "",
@@ -551,8 +551,8 @@ export default {
       WebSocketData: {},
       buoyInfo: {},
       showInfo: false,
-      toolF:false,
-      controllerF:false,
+      toolF:true,
+      controllerF:true,
       FBnum: 0,
       widthNum:0,
       notifyList:[],
@@ -630,18 +630,6 @@ export default {
         $(".myMsgList").eq(1).fadeOut();
       }, 60000);
     });
-    // $(".time_bg").on('mouseenter',()=>{
-    //    $(".time_bg").css("opacity","1");
-    // })
-    // $(".time_bg").on('mouseleave',()=>{
-    //     $(".time_bg").css("opacity","0.4");
-    // })
-    // $(".cesium-viewer-timelineContainer").on('mouseenter',()=>{
-    //    $(".time_bg").mouseenter();
-    // })
-    // $(".cesium-viewer-timelineContainer").on('mouseleave',()=>{
-    //    $(".time_bg").mouseleave();
-    // })
     let that = this;
  
     document.onselectstart = function() {
@@ -689,8 +677,8 @@ export default {
               success: function(data) {
                 
                 sessionStorage.setItem("groupType", data);
-                // that.num = data.fps;
-                // that.$refs["timeLine"].num = that.num;
+                that.num = data.fps;
+                that.$refs["timeLine"].num = that.num;
                 if (data.yxzt == 3) {
                   that.num = data.fps
                   that.$refs.timeLine.playFlag = false;
@@ -778,10 +766,6 @@ export default {
                 }
 
                 that.timeItemArr = dataArr;  
-                // that.$refs["timeLine"].initVis(
-                //   viewer,
-                //   that.$refs["timeLine"].timeItemArr
-                // );
 
                 window.onresize = function() {
                   // that.visWidth = viewer.timeline.lastWidth
@@ -928,8 +912,8 @@ export default {
                 }, //将js对象转成json对象
                 success: function(data) {
                   sessionStorage.setItem("groupType", data);
-                  // that.num = data.fps;
-                  // that.$refs["timeLine"].num = that.num;
+                  that.num = data.fps;
+                  that.$refs["timeLine"].num = that.num;
                   if (data.yxzt == 3) {
                     that.num = data.fps
                     that.$refs.timeLine.playFlag = false;
@@ -971,39 +955,37 @@ export default {
      * @param { String } type 事件类型
      */
     forBackWard(type) {
+      debugger
       
       if (type == "enter") {
-        if (this.num == 0) {
+        if (this.num == 1) {
           this.num = 2;
         } else if (this.num == -2) {
-          this.num = 0;
-        } else if (this.num < 0) {
+          this.num = 1;
+        } else if (this.num < 1) {
           this.num = this.num / 2;
         } else {
           this.num = this.num * 2;
         }
       } else {
-        if (this.num == 0) {
-          this.num = -2;
+        if (this.num == 1) {
+          this.num = 1/2;
         } else if (this.num == 2) {
-          this.num = 0;
-        } else if (this.num > 0) {
+          this.num = 1;
+        } else if (this.num > 1) {
           this.num = this.num / 2;
         } else {
           this.num = this.num * 2;
         }
       }
       this.num = this.num
-      if(this.num < -4){
-        this.num = -4
-        return
-      }
+
       if(this.num > 64){
         this.num = 64
         return
       }
       console.log(this.num)
-      // this.$refs["timeLine"].num = this.num;
+      this.$refs["timeLine"].num = this.num;
       $.get(`${globalUrl.host}/find/fastAndSlow`, {
         multiple: this.num,
         name: sessionStorage.getItem("groupNum")
@@ -1053,8 +1035,8 @@ export default {
             );
 
             that.action = "暂停";
-            // that.num = 0;
-            // that.$refs["timeLine"].num = that.num;
+            that.num = 1;
+            that.$refs["timeLine"].num = that.num;
           });
         });
       }
@@ -1398,8 +1380,8 @@ export default {
           }).then(data => {
             that.playFLAG = true;
             that.$refs.timeLine.playFlag = true;
-            // that.num = 0;
-            // that.$refs["timeLine"].num = that.num;
+            that.num = 1;
+            that.$refs["timeLine"].num = that.num;
           });
         },
         false
@@ -1744,7 +1726,7 @@ export default {
           let data = JSON.parse(e.data)[0].LKR;
           if (data) {
             _this.num = data.fps;
-            // _this.$refs["timeLine"].num = _this.num;
+            _this.$refs["timeLine"].num = _this.num;
             if (data.yxzt == 3) {
               _this.$refs.timeLine.playFlag = false;
               _this.playFLAG = false;
@@ -2139,8 +2121,8 @@ export default {
         }, //将js对象转成json对象
         success: function(data) {
           sessionStorage.setItem("groupType", data);
-          // that.num = data.fps;
-          // that.$refs["timeLine"].num = that.num;
+          that.num = data.fps;
+          that.$refs["timeLine"].num = that.num;
           if (data.yxzt == 3) {
             that.num = data.fps
             that.fjlnglat = true;
@@ -2171,8 +2153,8 @@ export default {
                   new Date(that.allDate.startT)
                 );
                 that.action = "暂停";
-                // that.num = 0;
-                // that.$refs["timeLine"].num = that.num;
+                that.num = 1;
+                that.$refs["timeLine"].num = that.num;
               });
             });
           }

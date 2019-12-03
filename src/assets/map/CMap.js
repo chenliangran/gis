@@ -330,16 +330,18 @@ export function Init(ele,CONFIG){
             position:Ce.ToPoint(target.positions),
 
             label:{
-                text:'磁探',
+                text:'磁探/M',
                 font:'15px',
+                fillColor:Cesium.Color.AQUA,
                 verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                 pixelOffset:Ce.XY2D(0,-20)
             },
             billboard:{
-                image:'/static/image/junbiao/citan.png',
-                width:20,
-                height:20,
-                scaleByDistance:Ce.ScaleNF(50000,2,100000,1)
+                image:'/static/image/junbiao/fubiao1.png',
+                width:30,
+                height:30,
+                scaleByDistance:Ce.ScaleNF(2000,2,50000,1)
+                // scaleByDistance:Ce.ScaleNF(50000,2,100000,1)
                 // distanceDisplayCondition:Ce.DisplayNF(500000, 100000000)
             },
             origin:target
