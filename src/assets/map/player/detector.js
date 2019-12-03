@@ -43,7 +43,6 @@ export default class Detect{
 
             // this.Update(target)
         }else{
-
             sourceData.push({
                 target,
                 entity : DrawEntity.Draw({
@@ -53,7 +52,7 @@ export default class Detect{
                     type:'detector',
                     group:'detector',                  
                     label:{
-                        text:'浮标/S',
+                        text:target.origin.fbbh.slice(-3)+'/S',
                         font:'15px',
                         fillColor:Cesium.Color.BLUE,
                         verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
@@ -127,6 +126,7 @@ export default class Detect{
                 label:{
                     text:'浮标目标',
                     font:'15px',
+                    fillColor:Cesium.Color.BLUE,
                     verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                     pixelOffset:Ce.XY2D(0,-10)
                 },

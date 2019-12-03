@@ -220,6 +220,7 @@ export function Init(ele,CONFIG){
             label:{
                 text:target.name,
                 font:'15px',
+                fillColor:Cesium.Color.BLUE,
                 verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                 pixelOffset:Ce.XY2D(0,-20)
             },
@@ -299,11 +300,12 @@ export function Init(ele,CONFIG){
                 label:{
                     text:'核潜艇',
                     font:'15px',
+                    fillColor:Cesium.Color.BLUE,
                     verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                     pixelOffset:Ce.XY2D(0,-20)
                 },
                 billboard:{
-                    image:'/static/image/junbiao/qianting.png',
+                    image:'/static/image/junbiao/heqianting.png',
                     width:40,
                     height:40,
                     // distanceDisplayCondition:Ce.DisplayNF(500000, 100000000)
@@ -330,9 +332,9 @@ export function Init(ele,CONFIG){
             position:Ce.ToPoint(target.positions),
 
             label:{
-                text:'磁探/M',
+                text:'/S',
                 font:'15px',
-                fillColor:Cesium.Color.AQUA,
+                fillColor:Cesium.Color.BLUE,
                 verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                 pixelOffset:Ce.XY2D(0,-20)
             },

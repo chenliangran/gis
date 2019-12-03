@@ -22,8 +22,8 @@
 			</div>
 		</div>
 		<div class="replay" :style="{ left:'5px', top: '285px' }">
-			<div class="replay-cont" v-show="isShow" style="width: 360px;height: 190px;">
-				<div style="width: 360px;height: 190px;">
+			<div class="replay-cont" v-show="isShow" style="width: 360px;height: 185px;">
+				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<div class="close" @click="isShow=false">
 						x
@@ -46,7 +46,7 @@
 							</div>
 							<ul>
 								<li :class="{curFb: curFbBh == item.fbbh}" v-for="(item, i) in detectorData" :key="i">
-									<span style="min-width: 60px">{{item["fbbh"]}}</span>
+									<span style="min-width: 60px">{{item["fbbh"].slice(-3)}}</span>
 									<span style="min-width: 50px">{{Math.floor(item["llcrswzjd"]*100)/100}}</span>
 									<span style="min-width: 50px">{{Math.floor(item["llcrswzwd"]*100)/100}}</span>
 									<span style="min-width: 60px">{{item["fblx"]}}</span>
@@ -60,9 +60,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="replay" :style="{ left:'5px', top:'470px' }">
+		<div class="replay" :style="{ left:'5px', top:'465px' }">
 			<div class="replay-cont" v-show="isShow">
-				<div style="width: 360px;height: 190px;">
+				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<div class="close" @click="isShow=false">
 						x
@@ -89,9 +89,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="replay" :style="{ left:'5px', bottom:'75px' ,top:'inherit'}">
+		<div class="replay" :style="{ left:'5px', bottom:'85px' ,top:'inherit'}">
 			<div class="replay-cont" v-show="isShow">
-				<div style="width: 360px;height: 190px;">
+				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<div class="close" @click="isShow=false">
 						x
