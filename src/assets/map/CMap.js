@@ -332,7 +332,7 @@ export function Init(ele,CONFIG){
             position:Ce.ToPoint(target.positions),
 
             label:{
-                text:'/S',
+                text:'/M',
                 font:'15px',
                 fillColor:Cesium.Color.BLUE,
                 verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
