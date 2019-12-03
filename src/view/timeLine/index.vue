@@ -310,6 +310,9 @@
     color: #83efe6;
 	font-size: 14px;
 }
+.vis-time-axis .vis-grid.vis-minor{
+    border: none;
+}
 /* .bottomicon{
     position: fixed;
     display: flex;
