@@ -921,11 +921,13 @@ export default {
                     let lefts = item.event.x+5,
                     bottoms = 80+10-item.event.y
                     this.timeLabelF = true
+
+                    
                 
-                    // this.timeLabelS = {
-                    //     'left':item.event.x+'px',
-                    //     'top':item.event.y-80+'px'
-                    // }
+                    this.timeLabelS = {
+                        'left':item.event.x+'px',
+                        'top':item.event.y-160+'px'
+                    }
                     
                     let y = []
                     if(this.timeItemArr.length > 0){

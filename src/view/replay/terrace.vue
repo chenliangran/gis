@@ -7,14 +7,14 @@
 					飞行曲线
 				</span>
 			</div>
-			<div id="airChart" style="width: 370px;height:250px;margin-left: 5px;top:-40px"></div>
+			<div v-show='gdFlag' id="airChart" style="width: 370px;height:250px;margin-left: 5px;top:-40px"></div>
 		</div>
         <div class="terrace-item" v-if="detectorData.length > 0">
 			<div>
 				<span></span>
 				<span>浮标目标</span>
 			</div>
-			<div class="list">
+			<div class="list" v-show='gdFlag'>
 				<div>
 					<span style="min-width: 60px">浮标编号</span>
 					<span style="min-width: 80px">经度</span>
@@ -44,7 +44,7 @@
 				<span></span>
 				<span>浮标探测目标统计</span>
 			</div>
-			<div class="list">
+			<div class="list" v-show='gdFlag'>
 				<div>
 					<span style="min-width: 60px">浮标编号</span>
 					<span style="min-width: 60px">经度</span>
@@ -78,7 +78,7 @@
 					磁探目标
 				</span>
 			</div>
-			<div class="list">
+			<div class="list" v-show='gdFlag'>
 				<div>
 					<span style="min-width: 150px">发现时间</span>
 					<span style="min-width: 60px">经纬</span>
@@ -100,7 +100,7 @@
 
 <script>
 export default {
-	props: ["dataInfo", "WebSocketData", "setTime"],
+	props: ["dataInfo", "WebSocketData", "setTime",'gdFlag'],
 	data() {
 		return {
 			name: "",
@@ -264,6 +264,9 @@ export default {
         }
 	},
 	watch: {
+		gdFlag(val){
+			console.log(val)
+		},
 		setTime(v) {
 			let id = sessionStorage.getItem("selectEd")
 			let _this = this
