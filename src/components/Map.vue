@@ -347,7 +347,7 @@ background: none !important;
 <template>
   <div class="MapContainer">
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
-    <gis-header :timeNow="timeNow" @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum" :CTnum="CTnum"></gis-header>
+    <gis-header :timeNow="timeNow" @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum"></gis-header>
     <div id="mapElement">
       <div class="time_bg">
         <div id="timeDiv"></div>

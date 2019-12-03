@@ -96,7 +96,7 @@
 
 <script>
 export default {
-    props: ["WebSocketData","FBnum","CTnum","timeNow"],
+    props: ["WebSocketData","FBnum","timeNow"],
 	data() {
 		return {
 			dataInfo: {},
@@ -119,7 +119,6 @@ export default {
             dialogVisible:false,
             dvShow:false,
             // FBnum:0,
-            // CTnum:0,
             dynamicValidateForm: {
                 domains: [{
                     jd: "",
