@@ -305,7 +305,7 @@ export function Init(ele,CONFIG){
                 image:`/static/image/junbiao/${type}.png`,
                 width:60,
                 height:60,
-                distanceDisplayCondition:typeConfig.displayDistance[type]
+                // distanceDisplayCondition:typeConfig.displayDistance[type]
             },
             origin:target
         }
@@ -331,12 +331,12 @@ export function Init(ele,CONFIG){
                 //     height:60,
                 //     distanceDisplayCondition:Ce.DisplayNF(0, 300000)
                 // },
-                model:{
-                    uri : '/static/SampleData/models/CesiumAir/Cesium_Air.gltf',
-                    minimumPixelSize : 60,
-                    maximumScale : 20000,
-                    distanceDisplayCondition:Ce.DisplayNF(0, 300000)
-                },
+                // model:{
+                //     uri : '/static/SampleData/models/CesiumAir/Cesium_Air.gltf',
+                //     minimumPixelSize : 60,
+                //     maximumScale : 20000,
+                //     distanceDisplayCondition:Ce.DisplayNF(0, 300000)
+                // },
             })
         }
 
