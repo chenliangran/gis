@@ -8,7 +8,7 @@
 	background-size: 100% 100%!important; */
 	position: fixed;
 	z-index: 1000;
-	bottom: 28px;
+	bottom: 20px;
     left: 55%;
 
 }

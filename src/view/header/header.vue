@@ -2,9 +2,17 @@
     <div class="cms-nav">
         <div class="cmsNav cms-left">
             <ul>
-                <li style="margin-left: 30px;" @click="dataShow(flag)"> 
+                <li style="margin-left: 30px;" @click="dataShow(flag2)"> 
                     <i class="icon icon1"></i>
                     <span>数据分析</span>
+                    <i class="icon icon8"></i>
+                    <div class="menu" v-show="flag2">
+                        <p></p>
+                        <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='飞行曲线'>✔</span><label>飞行曲线</label></p>
+                        <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='浮标投放信息'>✔</span><label>浮标投放信息</label></p>
+                        <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='磁探探测目标'>✔</span><label>磁探探测目标</label></p>
+                        <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='浮标探测目标'>✔</span><label>浮标探测目标</label></p>
+                    </div>
                 </li>
                 <li>
                     <i class="icon icon2"></i>
@@ -91,10 +99,12 @@
             <el-button type="primary" @click="drawPolygon">确 定</el-button>
           </span>
         </el-dialog>
+   
     </div>
 </template>
 
 <script>
+
 export default {
     props: ["WebSocketData","FBnum","timeNow"],
 	data() {
@@ -104,6 +114,7 @@ export default {
             FPS:0,
             flag:true,
             flag1:true,
+            flag2:false,
             groupNum:'',
             NowTime:'',
             jwdVisible:false,
@@ -126,7 +137,17 @@ export default {
                     key: ""
                 }],
             },
-            lineId:[]
+            lineId:[],
+            menuData:{
+			  '飞行曲线':'',
+			  '浮标投放信息':'',
+              '磁探探测目标':'',
+              '浮标探测目标':''
+           },
+            menuDataType1:true,
+            menuDataType2:true,
+            menuDataType3:true,
+            menuDataType4:true
 		}
 	},
 	methods: {
@@ -233,8 +254,8 @@ export default {
                 })
                 this.dvShow = false
         },
-        dataShow(flag){
-           this.$emit("dataShow")             
+        dataShow(flag2){
+           this.flag2 = !flag2;          
         },	
         tool(flag){
             this.flag = !flag;
@@ -354,7 +375,7 @@ export default {
         setInterval(function(){
             that.NowTime  = that.CurentTime(that.timeNow);
         },1000);
-             var dv = document.getElementById('dv');
+         var dv = document.getElementById('dv');
          var x = 0;
          var y = 0;
          var l = 0;
@@ -395,6 +416,52 @@ export default {
              isDown = false;
              dv.style.cursor = 'default';
          }
+        $(".event-menu-checkbox[type=checkbox]+span").click((e) => {
+            debugger
+            if($(e.target).html()){
+                    $(e.target).html('')
+                    if($(e.target).data('type') == "飞行曲线"){
+                        this.menuDataType = false
+                        delete this.menuData[$(e.target).data('type')]
+                        this.$emit('flagType1',this.menuDataType1)
+                    }
+                   if($(e.target).data('type') == "浮标投放信息"){
+                        this.menuDataType2 = false
+                        delete this.menuData[$(e.target).data('type')]
+                        this.$emit('flagType2',this.menuDataType2)
+                    }
+                    if($(e.target).data('type') == "磁探探测目标"){
+                        this.menuDataType3 = false
+                        delete this.menuData[$(e.target).data('type')]
+                        this.$emit('flagType3',this.menuDataType3)
+                    }
+                    if($(e.target).data('type') == "浮标探测目标"){
+                        this.menuDataType4 = false
+                        delete this.menuData[$(e.target).data('type')]
+                        this.$emit('flagType4',this.menuDataType4)
+                    }
+                    
+            }else{
+                    this.menuData[$(e.target).data('type')] = ''
+                    $(e.target).html('✔')
+                     if($(e.target).data('type') == "飞行曲线"){
+                        this.menuDataType1 = true
+                        this.$emit('flagType1',this.menuDataType1)
+                    }
+                   if($(e.target).data('type') == "浮标投放信息"){
+                        this.menuDataType2 = true
+                        this.$emit('flagType2',this.menuDataType2)
+                    }
+                    if($(e.target).data('type') == "磁探探测目标"){
+                        this.menuDataType3 = true
+                        this.$emit('flagType3',this.menuDataType3)
+                    }
+                    if($(e.target).data('type') == "浮标探测目标"){
+                        this.menuDataType4 = true
+                        this.$emit('flagType4',this.menuDataType4)
+                    }
+            }
+        })
     },
     watch: {
 
@@ -435,10 +502,47 @@ export default {
        float: left;
        text-align: center;
     }
+    .cmsNav .menu{
+        position: absolute;
+        width: 134px;
+        height: 210px;
+        top: 53px;
+        left: 29px;
+        background-color: #102d58;
+    }
+    .menu{
+        display: flex;
+        justify-content: space-around;
+        align-items: center
+    }
+    .menu p{
+        color: #ffffff;
+        font-size: 12px;
+        position: relative;      
+    }
+    .event-menu-checkbox{
+        display: none
+    }
+    .menu .event-menu-checkbox[type=checkbox]+span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* border-radius: 12px; */
+        width: 12px;
+        height: 12px;
+        font-size: 12px;
+        border: 1px solid #8efffb;
+        color: #8efffb;
+        position: absolute;
+        top: 19px;
+        left: 10px;
+        cursor: pointer;
+    }
     .cms-nav .cms-left span{
         color: #27c1e9;;
         font-size: 12px;
-        letter-spacing: 4px;
+        /* letter-spacing: 4px; */
+        padding-left: 2px;
     }
     .cms-nav .cms-middle{
          margin:0;
@@ -460,6 +564,7 @@ export default {
         justify-content: center;
     }
     .cms-middle ul li{
+        position: relative;
         float: left;
         color: #80c1ed;
         list-style: none;
@@ -538,6 +643,14 @@ export default {
         top: 3px;
         margin-right: 5px;  
     }
+    .cmsNav ul li .icon8{
+        background: url(../../assets/header/jiantou.png);  
+        width: 8px;
+        height: 4px;
+        top: -1px;
+        margin-left: 9px;
+        margin-right: 0;
+    }
     .cms-middle ul li .fubiao{
         background: url(../../assets/header/fubiao1.png);
         display: inline-block;
@@ -550,7 +663,7 @@ export default {
         margin-right: 5px;      
     }
     .cms-middle ul li .group{
-        background: url(../../assets/header/qianting.png);   
+        background: url(../../assets/header/qianting1.png);   
         display: inline-block;
         width: 7px;
         height: 17px;

@@ -61,7 +61,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    bottom:20px;
+    bottom:12px;
     left: 40% ;
     z-index: 10000;
     margin: 0 auto;
@@ -300,7 +300,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    bottom:28px;
+    bottom:20px;
     right: 400px;
     z-index: 10000;
     margin: 0 auto;

@@ -1,14 +1,14 @@
 <template>
 	<div class="terrace">
 		<div class="replay" :style="{ left: '5px', top: '50px' }">
-			<div class="replay-cont" style="height: 250px;" v-show="isShow">
+			<div class="replay-cont" style="height: 250px;" v-show="flagTypeOne">
 				<div style="width: 360px;height: 250px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<!-- <div class="close" @click="isShow=false" style="position:absolute ;z-index:10">
 						x
 					</div> -->
 					<div class="nav">飞行曲线</div>
-					<div class="terrace-item" v-show="gdFlag">
+					<div class="terrace-item">
 						<div id="airChart" style="width:370px;height:250px;margin-left: 10px;top:-8px"></div>
 					</div>
 					<div style="text-align: center;position: relative; top: -10px;">
@@ -21,8 +21,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="replay" :style="{ left:'5px', top: '290px' }">
-			<div class="replay-cont" v-show="isShow" style="width: 360px;height: 190px;">
+		<div class="replay" :style="{ left:'5px', top: '288px' }">
+			<div class="replay-cont" v-show="flagTypeTwo" style="width: 360px;height: 190px;">
 				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<!-- <div class="close" @click="isShow=false">
@@ -34,7 +34,7 @@
 							<span></span>
 							<span>浮标目标</span>
 						</div> -->
-						<div class="list" v-show="gdFlag">
+						<div class="list">
 							<div>
 								<span style="min-width: 60px">浮标编号</span>
 								<span style="min-width: 50px">经度</span>
@@ -60,8 +60,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="replay" :style="{ left:'5px', top:'470px' }">
-			<div class="replay-cont" v-show="isShow">
+		<div class="replay" :style="{ left:'5px', top:'472px' }">
+			<div class="replay-cont"  v-show="flagTypeThree">
 				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<!-- <div class="close" @click="isShow=false">
@@ -69,7 +69,7 @@
 					</div> -->
 					<div class="nav">磁探探测目标</div>
 					<div class="terrace-item" v-if="ctData.length > 0">
-						<div class="list" v-show="gdFlag">
+						<div class="list">
 							<div>
 								<span style="min-width: 150px">发现时间</span>
 								<span style="min-width: 50px">经纬</span>
@@ -89,8 +89,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="replay" :style="{ left:'5px', bottom:'85px' ,top:'inherit'}">
-			<div class="replay-cont" v-show="isShow">
+		<div class="replay" :style="{ left:'5px' ,top:'655px'}">
+			<div class="replay-cont" v-show="flagTypeFour">
 				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<!-- <div class="close" @click="isShow=false">
@@ -123,7 +123,7 @@
 
 <script>
 export default {
-	props: ["dataInfo", "WebSocketData", "setTime",'gdFlag'],
+	props: ["dataInfo", "WebSocketData", "setTime",'gdFlag','flagTypeOne','flagTypeTwo','flagTypeThree','flagTypeFour'],
 	data() {
 		return {
 			name: "",
@@ -293,7 +293,20 @@ export default {
         }
 	},
 	watch: {
+		
 		gdFlag(val){
+			console.log(val)
+		},
+		flagTypeOne(val){
+			console.log(val)
+		},
+		flagTypeTwo(val){
+			console.log(val)
+		},
+		flagTypeThree(val){
+			console.log(val)
+		},
+		flagTypeFour(val){
 			console.log(val)
 		},
 		setTime(v) {

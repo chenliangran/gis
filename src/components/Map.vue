@@ -21,9 +21,13 @@
 .cesium-timeline-icon16 {
   height: 100px;
   padding: 0px;
-  background: rgba(49, 172, 255, 0.89);
+  /* background: rgba(49, 172, 255, 0.89); */
   /* position:fixed !important;
     bottom: 30px !important; */
+  background: url(../assets/icon4.png) no-repeat !important;
+  background-size: 100% 100% !important;
+  width: 13px;
+  height: 15px;
 }
 .cesium-infoBox {
   top: 30px !important;
@@ -124,7 +128,7 @@ setTime.icon-bigdiv {
   width: calc(100% - 20px);
   position: absolute;
   height: 100px;
-  bottom: 10px;
+  bottom: 0;
   background: url(../assets/time_bg.png) no-repeat;
   background-size: 100% 100%;
   z-index: 3;
@@ -147,7 +151,7 @@ setTime.icon-bigdiv {
   width: 80%;
   height: 15px;
   margin: 0 auto;
-  bottom:58px;
+  bottom:47px;
 }
 .cesium-timeline-main{
   border:none !important;
@@ -271,6 +275,7 @@ background: none !important;
     /* margin-right: 20px; */
     display: inline-block;
   }
+
 /* .icons{
     border: none;
 }
@@ -350,7 +355,7 @@ background: none !important;
   background: #8fcdf7b3;
   height: 15px;
   z-index: 10000001;
-  bottom: 58px;
+  bottom: 47px;
   width: 80%;
 
 }
@@ -361,7 +366,15 @@ background: none !important;
     
     
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
-    <gis-header @dataShow='dataShow' :timeNow="timeNow" @mapTool="maptool" @controller="controller" :WebSocketData="WebSocketData" :FBnum="FBnum"></gis-header>
+    <gis-header :timeNow="timeNow"
+      @flagType1="flagType1" 
+      @flagType2="flagType2"
+      @flagType3="flagType3" 
+      @flagType4="flagType4"  
+      @mapTool="maptool" 
+    @controller="controller" 
+    :WebSocketData="WebSocketData" 
+    :FBnum="FBnum"></gis-header>
     <div id="mapElement">
       <div class="time_bg">
         <div id="timeDiv"></div>
@@ -483,6 +496,10 @@ background: none !important;
       :dataInfo="dataInfo"
       :WebSocketData="WebSocketData"
       @uploading="uploading"
+      :flagTypeOne="flagTypeOne" 
+      :flagTypeTwo="flagTypeTwo" 
+      :flagTypeThree="flagTypeThree" 
+      :flagTypeFour="flagTypeFour" 
     ></replay>
     <info v-if="sleC" :dataInfo="buoyInfo" :visible="showInfo" @close="showInfo=false"></info>
     <selects-elm
@@ -589,7 +606,12 @@ export default {
       newEventDate:'',
       eventVal:'',
       topNum:0,
-      leftNum:0
+      leftNum:0,
+      jiaciName:'',
+      flagTypeOne:true,
+      flagTypeTwo:true,
+      flagTypeThree:true,
+      flagTypeFour:true
     };
   },
 
@@ -731,11 +753,13 @@ export default {
       }, 700);
     }
   },
-
+  created(){
+      this.groupNow();
+  },
   methods: {
-    dataShow(){
-      this.$refs["myreplay"].$refs['myterrace'].isShow = !this.$refs["myreplay"].$refs['myterrace'].isShow;
-    },
+    // dataShow(){
+    //   this.$refs["myreplay"].$refs['myterrace'].isShow = !this.$refs["myreplay"].$refs['myterrace'].isShow;
+    // },
     getNum(){
       // console.log(this.num)
       if(this.num == 0)return 1
@@ -753,8 +777,16 @@ export default {
       this.setZZStyle.width=Math.ceil($(".cesium-timeline-icon16").css('left').split('px')[0])+10+'px'
 
     },
+    groupNow(){
+        let id = sessionStorage.getItem("selectEd")
+        let ptData = JSON.parse(sessionStorage.getItem("ptData"))
+        ptData.map(item => {
+            if(item.id == id) {
+                this.jiaciName = item.ptmc.slice(-7,-2)
+            }
+        })
+    },
     eventConfirm(){
-      debugger
         let that = this
         let params = {
             nr:that.eventVal,
@@ -838,6 +870,19 @@ export default {
     },
     eventCancel(){
        this.eventType =false;
+    },
+    flagType1(type){
+      debugger
+      this.flagTypeOne = type;
+    },
+    flagType2(type){
+       this.flagTypeTwo = type;
+    },
+    flagType3(type){
+        this.flagTypeThree = type;
+    },
+    flagType4(type){
+        this.flagTypeFour = type;
     },
     maptool(flag){
       this.toolF = flag;
@@ -1403,7 +1448,8 @@ export default {
         window.Map.AddCtTarget({
           id: "citan_" + item["mbbh"],
           positions: [Number(item["mbjd"]), Number(item["mbwd"])],
-          origin: item
+          origin: item,
+          name:that.jiaciName
         });
       }
     },
@@ -2094,7 +2140,8 @@ export default {
             window.Map.AddCtTarget({
               id: "citan_" + item["mbbh"],
               positions: [Number(item["mbjd"]), Number(item["mbwd"])],
-              origin: item
+              origin: item,
+              name:_this.jiaciName
             });
           }
         }

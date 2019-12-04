@@ -56,7 +56,8 @@ export default class Detect{
                     type:'detector',
                     group:'detector',                  
                     label:{
-                        text:target.origin.fbbh.slice(-3)+'/S',
+                        text:target.origin.fbbh.slice(-3),
+                        // text:target.origin.fbbh.slice(-3)+'/S',
                         font:'15px',
                         fillColor:Cesium.Color.BLUE,
                         verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
@@ -67,17 +68,17 @@ export default class Detect{
                         width:30,
                         height:30,
                         scaleByDistance:Ce.ScaleNF(2000,2,50000,1),
-                        color:Ce.CssColor('grey')
+                        // color:Ce.CssColor('grey')
                     },
-                    // cylinder:{
-                    //     length:1,
-                    //     topRadius:target.R || 2000,
-                    //     bottomRadius:target.R || 2000,
-                    //     fill:false,
-                    //     outline:true,
-                    //     outlineWidth:2,
-                    //     outlineColor:Ce.CssColor('aqua')
-                    // },
+                    cylinder:{
+                        length:1,
+                        topRadius:target.R || 2000,
+                        bottomRadius:target.R || 2000,
+                        fill:false,
+                        outline:true,
+                        outlineWidth:2,
+                        outlineColor:Ce.CssColor('aqua')
+                    },
                     origin:target
                 })
             });
@@ -118,7 +119,8 @@ export default class Detect{
             if(onShow.length){
                 detector.billboard.color = Ce.CssColor('white')
             }else{
-                detector.billboard.color = Ce.CssColor('grey')
+                // detector.billboard.color = Ce.CssColor('grey')
+                detector.billboard.image = '/static/image/junbiao/fubiao5.png'
             }
         })
         
@@ -153,8 +155,6 @@ export default class Detect{
                 return _lpos
             },false) 
         }else{
-
-
             DrawEntity.Draw({
                 id:link.id,
                 name:'浮标目标',
@@ -164,14 +164,15 @@ export default class Detect{
                 label:{
                     text:'浮标目标',
                     font:'15px',
+                    text:link.origin.dwfbxh2.slice(-3) +'/S',
                     fillColor:Cesium.Color.BLUE,
                     verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                     pixelOffset:Ce.XY2D(0,-10)
                 },
                 billboard:{
-                    image:'/static/image/junbiao/fubiaomb.png',
-                    width:40,
-                    height:40,
+                    image:'/static/image/junbiao/wofang.png',
+                    width:30,
+                    height:30,
                     // scaleByDistance:Ce.ScaleNF(2000,2,50000,1)
                 },
                 polyline:{

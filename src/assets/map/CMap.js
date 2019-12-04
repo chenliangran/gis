@@ -248,7 +248,7 @@ export function Init(ele,CONFIG){
                 positions:Ce.ToPointsHeight([])
             },
             billboard:{
-                image:'/static/image/junbiao/feiji.png',
+                image:'/static/image/junbiao/feiji1.png',
                 width:60,
                 height:60
             },
@@ -277,11 +277,9 @@ export function Init(ele,CONFIG){
     }
 
     function AddCompare(type, target){
-
         if(!target.id){
             return;
         }
-
         let shape = {
             id:target.id,
             name:target.name,
@@ -311,7 +309,10 @@ export function Init(ele,CONFIG){
             },
             origin:target
         }
-
+        if(type == 'qianting'){
+            shape.billboard.width = 7
+            shape.billboard.height = 17
+        }
         if(type == 'feiji'){
 
             _.merge(shape,{
@@ -324,12 +325,18 @@ export function Init(ele,CONFIG){
                     outlineWidth:2,
                     outlineColor:Ce.CssColor('aqua')
                 },
-                model:{
-                    uri : '/static/SampleData/models/CesiumAir/Cesium_Air.gltf',
-                    minimumPixelSize : 60,
-                    maximumScale : 20000,
+                billboard:{
+                    image:`/static/image/junbiao/feiji1.png`,
+                    width:60,
+                    height:60,
                     distanceDisplayCondition:Ce.DisplayNF(0, 300000)
                 },
+                // model:{
+                //     uri : '/static/SampleData/models/CesiumAir/Cesium_Air.gltf',
+                //     minimumPixelSize : 60,
+                //     maximumScale : 20000,
+                //     distanceDisplayCondition:Ce.DisplayNF(0, 300000)
+                // },
             })
         }
 
@@ -380,7 +387,7 @@ export function Init(ele,CONFIG){
                     pixelOffset:Ce.XY2D(0,-20)
                 },
                 billboard:{
-                    image:'/static/image/junbiao/heqianting.png',
+                    image:'/static/image/junbiao/qianting.png',
                     width:40,
                     height:40,
                     // distanceDisplayCondition:Ce.DisplayNF(500000, 100000000)
@@ -394,7 +401,6 @@ export function Init(ele,CONFIG){
     }
 
     function AddCtTarget(target){
-
         if(Tool.GetId(target.id)){
             return
         }
@@ -402,7 +408,6 @@ export function Init(ele,CONFIG){
         if(!target.id){
             return;
         }
-
         DrawEntity.Draw({
             id:target.id,
             name:'磁探目标',
@@ -411,14 +416,14 @@ export function Init(ele,CONFIG){
             position:Ce.ToPoint(target.positions),
 
             label:{
-                text:'/M',
+                text:target.name+'/M',
                 font:'15px',
                 fillColor:Cesium.Color.BLUE,
                 verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                 pixelOffset:Ce.XY2D(0,-20)
             },
             billboard:{
-                image:'/static/image/junbiao/citan.png',
+                image:'/static/image/junbiao/wofang.png',
                 width:30,
                 height:30,
                 scaleByDistance:Ce.ScaleNF(2000,2,50000,1)

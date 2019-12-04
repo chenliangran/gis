@@ -1,7 +1,7 @@
 <template>
 	<div class="cont">
 		<!-- <bulletin v-show="curNav=='简报'" :dataInfo="dataInfo" :WebSocketData="WebSocketData"></bulletin> -->
-		<terrace :gdFlag='gdFlag' ref='myterrace' v-show="curNav=='平台信息'" :setTime="setTime" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
+		<terrace :gdFlag='gdFlag' :flagTypeOne='flagTypeOne' :flagTypeTwo='flagTypeTwo' :flagTypeThree='flagTypeThree' :flagTypeFour='flagTypeFour' ref='myterrace' v-show="curNav=='平台信息'" :setTime="setTime" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
 		<event v-show="curNav=='事件列表'" :setTime="setTime" @uploading="uploading" :dataInfo="dataInfo" :WebSocketData="WebSocketData"/>
 		<buoy ref='mybuoy'  v-show="curNav=='目标'" :setTime="setTime" :WebSocketData="WebSocketData"/>
 	</div>
@@ -13,7 +13,7 @@ import event from "./event.vue";
 import terrace from "./terrace.vue"
 import buoy from "./buoy.vue"
 export default {
-	props: ["dataInfo", "WebSocketData", "setTime",'gdFlag'],
+	props: ["dataInfo", "WebSocketData", "setTime",'gdFlag','flagTypeOne','flagTypeTwo','flagTypeThree','flagTypeFour'],
 	data() {
 		return {
 			nav: ["平台信息","目标","简报"],
@@ -28,6 +28,14 @@ export default {
 		terrace,
 		buoy,
 		bulletin
+	},
+	watch:{
+		flagTypeOne(val){
+		debugger
+		},
+		flagTypeTwo(val){
+		debugger
+		}
 	},
 	methods: {
 		updtea(data) {
