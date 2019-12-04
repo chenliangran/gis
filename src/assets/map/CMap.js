@@ -325,18 +325,18 @@ export function Init(ele,CONFIG){
                     outlineWidth:2,
                     outlineColor:Ce.CssColor('aqua')
                 },
-                billboard:{
-                    image:`/static/image/junbiao/feiji1.png`,
-                    width:60,
-                    height:60,
-                    distanceDisplayCondition:Ce.DisplayNF(0, 300000)
-                },
-                // model:{
-                //     uri : '/static/SampleData/models/CesiumAir/Cesium_Air.gltf',
-                //     minimumPixelSize : 60,
-                //     maximumScale : 20000,
+                // billboard:{
+                //     image:`/static/image/junbiao/feiji.png`,
+                //     width:60,
+                //     height:60,
                 //     distanceDisplayCondition:Ce.DisplayNF(0, 300000)
                 // },
+                model:{
+                    uri : '/static/SampleData/models/CesiumAir/Cesium_Air.gltf',
+                    minimumPixelSize : 60,
+                    maximumScale : 20000,
+                    distanceDisplayCondition:Ce.DisplayNF(0, 300000)
+                },
             })
         }
 

@@ -357,14 +357,12 @@ background: none !important;
   z-index: 10000001;
   bottom: 47px;
   width: 80%;
-
+  max-width: 80%;
 }
 </style>
 
 <template>
   <div class="MapContainer">
-    
-    
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
     <gis-header :timeNow="timeNow"
       @flagType1="flagType1" 
@@ -384,7 +382,59 @@ background: none !important;
         <p style="margin:35px 0 0 35px;color:#ffffff">当前播放倍数：{{getNum()}}</p>
       </div>
     </div>
-     <vue-seamless-scroll  id='mySeamless'  style="background: rgba(8, 38, 93, 0.5)"  :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
+    <div class="seamless-warp" id='mySeamless' style="background: rgba(8, 38, 93, 0.5)">
+      <div class="notifyDiv myMsgList" :data="notifyList"> 
+        <div  :style="{'height':item.typeall === 'FBSJ'?'160px':'130px'}" class="notify" v-for="(item, i) in notifyList " :key="i">
+          <div   v-if="item.typeall === 'FBSJ'" >
+            <p>
+              <span>事件</span><span style="color:#ffd400">浮标投放</span>
+            </p>
+            <p>
+              <span>时间</span><span>{{item["sb"]?item["sb"].split('.')[0]:item["sb"]}}</span>
+            </p>
+            <p>
+              <span>编号</span><span>{{item["fbbh"]}}</span>
+            </p>
+            <p>
+              <span>经度</span><span>{{item["llcrswzjd"]}}</span>
+            </p>
+            <p>
+              <span>纬度</span><span>{{item["llcrswzwd"]}}</span>
+            </p>
+          </div>
+          <div  v-if="item.typeall === 'CTMBSJ'">
+            <p>
+              <span>事件</span><span style="color:#ffd400">磁探发现目标</span>
+            </p>
+            <p>
+              <span>时间</span><span>{{item["mbsj"]?item["mbsj"].split('.')[0]:item["mbsj"]}}</span>
+            </p>
+            <p>
+              <span>经度</span><span>{{item["mbjd"]}}</span>
+            </p>
+            <p>
+              <span>纬度</span><span>{{item["mbwd"]}}</span>
+            </p>
+          </div>
+          <div  v-if="item.typeall === 'FBMBSJ'">
+            <p>
+              <span>事件</span><span style="color:#ffd400">浮标发现目标</span>
+            </p>
+            <p>
+              <span>时间</span><span>{{item["mbsj"]?item["mbsj"].split('.')[0]:item["mbsj"]}}</span>
+            </p>
+            <p>
+              <span>经度</span><span>{{item["mbwzjd"]}}</span>
+            </p>
+            <p>
+              <span>纬度</span><span>{{item["mbwzwd"]}}</span>
+            </p>
+          </div>
+        </div> 
+      </div>
+    </div>
+
+     <!-- <vue-seamless-scroll  id='mySeamless'  style="background: rgba(8, 38, 93, 0.5)"  :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
         <div  class="notifyDiv myMsgList" > 
           <div  :style="{'height':item.typeall === 'FBSJ'?'160px':'130px'}" class="notify" v-for="(item, i) in notifyList " :key="i">
             <div   v-if="item.typeall === 'FBSJ'" >
@@ -434,7 +484,7 @@ background: none !important;
             </div>
           </div> 
         </div>
-      </vue-seamless-scroll>
+      </vue-seamless-scroll> -->
       <div v-show='eventType' class="time-label"  :style="{top: topNum + 'px', left: leftNum + 'px'}">
          <ul>
             <li style="color:#ffffff">事件时间：<el-date-picker
@@ -656,7 +706,12 @@ export default {
       }
     }
   },
+  updated:function () {  
+      this.scrollToBottom();       
+  },
+
   mounted() {
+    this.scrollToBottom();
     $('#mySeamless').on('mouseenter',() => {
       this.timerFlag = false
       if(this.timeras){
@@ -757,6 +812,12 @@ export default {
       this.groupNow();
   },
   methods: {
+    scrollToBottom() {
+      this.$nextTick(() => {
+        var container = this.$el.querySelector("#mySeamless");
+        container.scrollTop = container.scrollHeight;
+      })
+    },
     // dataShow(){
     //   this.$refs["myreplay"].$refs['myterrace'].isShow = !this.$refs["myreplay"].$refs['myterrace'].isShow;
     // },
