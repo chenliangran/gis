@@ -933,7 +933,7 @@ export default {
        this.eventType =false;
     },
     flagType1(type){
-      debugger
+      console.log(type)
       this.flagTypeOne = type;
     },
     flagType2(type){
@@ -1414,7 +1414,6 @@ export default {
       let notifyList = [];
       that.notifyType = '';
       // debugger
-      console.log(data)
       window["Map"].viewer.entities.removeAll();
       window.Map.AddCompare("feiji", {
         id: "plane_1",
@@ -1562,7 +1561,7 @@ export default {
             console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime))
             that.progress(that.formatSeconds(dfTime),totleTime)
             // console.log(viewer.clock)
-            that.diffTime(new Cesium.JulianDate.toDate(viewer.clock.currentTime));
+            
 
           
           window.Map.FlyCompare.ClearPath();
@@ -1576,6 +1575,7 @@ export default {
             that.playFLAG = true;
             that.$refs.timeLine.playFlag = true;
             that.setZZTime()
+            that.diffTime(new Cesium.JulianDate.toDate(viewer.clock.currentTime));
             // that.num = 0;
             // that.$refs["timeLine"].num = that.num;
           });

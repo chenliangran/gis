@@ -8,10 +8,10 @@
 						x
 					</div> -->
 					<div class="nav">飞行曲线</div>
-					<div class="terrace-item">
+					<div class="terrace-item"  v-show="gdFlag">
 						<div id="airChart" style="width:370px;height:250px;margin-left: 10px;top:-8px"></div>
 					</div>
-					<div style="text-align: center;position: relative; top: -10px;">
+					<div style="text-align: center;position: relative; top: -10px;"  v-show="gdFlag">
 						<p>
 							<span>经度：</span><span style="margin-right: 15px;">{{Math.floor(jingdu*100)/100}}</span> 
 							<span>纬度：</span> <span style="margin-right: 15px;">{{Math.floor(weidu*100)/100}}</span>
@@ -34,7 +34,7 @@
 							<span></span>
 							<span>浮标目标</span>
 						</div> -->
-						<div class="list">
+						<div class="list" v-show="gdFlag">
 							<div>
 								<span style="min-width: 60px">浮标编号</span>
 								<span style="min-width: 50px">经度</span>
@@ -69,7 +69,7 @@
 					</div> -->
 					<div class="nav">磁探探测目标</div>
 					<div class="terrace-item" v-if="ctData.length > 0">
-						<div class="list">
+						<div class="list" v-show="gdFlag">
 							<div>
 								<span style="min-width: 150px">发现时间</span>
 								<span style="min-width: 50px">经纬</span>

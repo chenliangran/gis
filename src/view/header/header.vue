@@ -417,11 +417,11 @@ export default {
              dv.style.cursor = 'default';
          }
         $(".event-menu-checkbox[type=checkbox]+span").click((e) => {
-            debugger
+            console.log($(e.target).html())
             if($(e.target).html()){
                     $(e.target).html('')
                     if($(e.target).data('type') == "飞行曲线"){
-                        this.menuDataType = false
+                        this.menuDataType1 = false
                         delete this.menuData[$(e.target).data('type')]
                         this.$emit('flagType1',this.menuDataType1)
                     }
