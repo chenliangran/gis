@@ -97,7 +97,7 @@
 						x
 					</div> -->
 					<div class="nav">浮标探测目标</div>
-					<div class="terrace-item">
+					<div class="terrace-item" v-if="events['mbtcsj'].length > 0">
 						<div class="list" v-show="gdFlag">
 							<div>
 								<span style="min-width: 60px">浮标编号</span>

@@ -1005,7 +1005,6 @@ export default {
                 }
             })
             this.timeline.on('doubleClick',(item) => {
-                debugger
                 this.newEventDate = this.toDate(item.time)
                 this.timeLabelType = false
                 
