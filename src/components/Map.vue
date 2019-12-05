@@ -487,12 +487,8 @@ background: none !important;
       </vue-seamless-scroll> -->
       <div v-show='eventType' class="time-label"  :style="{top: topNum + 'px', left: leftNum + 'px'}">
          <ul>
-            <li style="color:#ffffff">事件时间：<el-date-picker
-              v-model="newEventDate"
-              type="datetime"
-              placeholder="选择日期时间"
-              align="right">
-            </el-date-picker> </li>
+            <li style="color:#ffffff">事件时间：<input type='text' v-model="newEventDate"/></li>
+            <li><p style="font-size:12px;color:red;">时间格式为：2019-04-25 13:30:30</p></li>
             <li style="color:#ffffff">事件内容：<input type='text' v-model="eventVal"/></li>
             <li class="events-btn">
                 <div @click='eventConfirm'>确定</div>
@@ -933,7 +929,6 @@ export default {
        this.eventType =false;
     },
     flagType1(type){
-      console.log(type)
       this.flagTypeOne = type;
     },
     flagType2(type){
@@ -1559,6 +1554,7 @@ export default {
           var dfTime = (viewer.clock.currentTime.dayNumber - startTime.dayNumber)*86400 + (viewer.clock.currentTime.secondsOfDay - startTime.secondsOfDay)
           
             console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime))
+            that.newEventDate = that.toDate(viewer.clock.currentTime)
             that.progress(that.formatSeconds(dfTime),totleTime)
             // console.log(viewer.clock)
             

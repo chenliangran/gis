@@ -29,14 +29,14 @@ export default {
 		buoy,
 		bulletin
 	},
-	watch:{
-		flagTypeOne(val){
-		debugger
-		},
-		flagTypeTwo(val){
-		debugger
-		}
-	},
+	// watch:{
+	// 	flagTypeOne(val){
+	// 	debugger
+	// 	},
+	// 	flagTypeTwo(val){
+	// 	debugger
+	// 	}
+	// },
 	methods: {
 		updtea(data) {
 			this.$refs['myterrace'].updtea(data)
