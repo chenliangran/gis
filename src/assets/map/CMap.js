@@ -309,10 +309,10 @@ export function Init(ele,CONFIG){
             },
             origin:target
         }
-        if(type == 'qianting'){
-            shape.billboard.width = 7
-            shape.billboard.height = 17
-        }
+        // if(type == 'qianting'){
+        //     shape.billboard.width = 7
+        //     shape.billboard.height = 17
+        // }
         if(type == 'feiji'){
 
             _.merge(shape,{
@@ -388,8 +388,8 @@ export function Init(ele,CONFIG){
                 },
                 billboard:{
                     image:'/static/image/junbiao/qianting.png',
-                    width:40,
-                    height:40,
+                    width:60,
+                    height:60,
                     // distanceDisplayCondition:Ce.DisplayNF(500000, 100000000)
                 },
                 origin:target
