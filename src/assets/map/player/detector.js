@@ -96,7 +96,7 @@ export default class Detect{
     }
 
     Lights( detectorIds ){
-
+        // console.log(detectorIds);
         if(!detectorIds.length){
             return
         }
@@ -162,7 +162,6 @@ export default class Detect{
                 type:'detector_mb',
                 group:'detector_mb',
                 label:{
-                    text:'浮标目标',
                     font:'15px',
                     text:link.origin.dwfbxh2.slice(-3) +'/S',
                     fillColor:Cesium.Color.BLUE,
