@@ -127,7 +127,6 @@ export default class Detect{
     }
 
     LinkOn( detectorId, link ){
-
         let detector = Tool.GetId(detectorId);
 
         if(!detector){
@@ -163,7 +162,7 @@ export default class Detect{
                 group:'detector_mb',
                 label:{
                     font:'15px',
-                    text:link.origin.dwfbxh2.slice(-3) +'/S',
+                    text:link.fbbh+'S',
                     fillColor:Cesium.Color.BLUE,
                     verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                     pixelOffset:Ce.XY2D(0,-10)

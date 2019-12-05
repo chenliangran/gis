@@ -918,6 +918,24 @@ export default {
             // })
             this.timeline.setWindow(a,b)
             $("#visualization .vis-bottom").eq(i).hide()
+            this.timeline.on('mouseOut',(item)=>{
+                if(item.item){
+                    setTimeout(function () {
+                        this.timeLabelType = false
+                        this.timeLabelF = false
+                    },100)
+                    
+                }
+            })
+            // let setTime = setTimeout(function () {
+            //     this.timeline.on('mouseOut',(item)=>{
+            //             if(item.item){
+            //                 this.timeLabelType = false
+            //                 this.timeLabelF = false
+            //             }
+            //         })
+            // }, 15000);
+            // clearInterval(setTime)
             this.timeline.on('mouseOver',(item) => {
 
                 if(item.item){

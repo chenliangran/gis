@@ -705,9 +705,18 @@ export default {
   updated:function () {  
       this.scrollToBottom();       
   },
-
+  created(){
+    let id = sessionStorage.getItem("selectEd")
+    let ptData = JSON.parse(sessionStorage.getItem("ptData"))
+    ptData.map(item => {
+        if(item.id == id) {
+            this.jiaciName = item.ptmc.slice(-7,-2)
+        }
+    })
+  },
   mounted() {
     this.scrollToBottom();
+    let that = this
     $('#mySeamless').on('mouseenter',() => {
       this.timerFlag = false
       if(this.timeras){
@@ -727,8 +736,13 @@ export default {
         $(".myMsgList").eq(1).fadeOut();
       }, 60000);
     });
-    let that = this;
- 
+    $.get(`${globalUrl.host}/find/findAllGroupName`, {}).then(data => {
+      if(data){
+        this.jiaciName = data[0].ptmc.slice(-5)
+      }
+
+    });
+
     document.onselectstart = function() {
       return false;
     };
@@ -804,9 +818,6 @@ export default {
       }, 700);
     }
   },
-  created(){
-      this.groupNow();
-  },
   methods: {
     scrollToBottom() {
       this.$nextTick(() => {
@@ -833,15 +844,6 @@ export default {
     setZZTime(){
       this.setZZStyle.width=Math.ceil($(".cesium-timeline-icon16").css('left').split('px')[0])+10+'px'
 
-    },
-    groupNow(){
-        let id = sessionStorage.getItem("selectEd")
-        let ptData = JSON.parse(sessionStorage.getItem("ptData"))
-        ptData.map(item => {
-            if(item.id == id) {
-                this.jiaciName = item.ptmc.slice(-7,-2)
-            }
-        })
     },
     eventConfirm(){
         let that = this
@@ -1487,13 +1489,32 @@ export default {
       // 处理浮标目标数据
       function dealFbSJMb(item) {
         let FbId = "detector_" + item["jcxxid"];
-
+        let fbbhName = ''
+        if(item.dwfbxh1 != '0'){
+          fbbhName = item.dwfbxh1.slice(-3)+'/'
+        }
+        if(item.dwfbxh2 != '0'){
+          fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
+        }
+        if(item.dwfbxh3 != '0'){
+          fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
+        }
+        if(item.dwfbxh4 != '0'){
+          fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
+        }
+        if(item.dwfbxh5 != '0'){
+          fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
+        }
+        if(item.dwfbxh6 != '0'){
+          fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
+        }
         let link = {
           id: "Link_1",
           positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
-          origin: item
+          origin: item,
+          fbbh:fbbhName
         };
-
+        
         window.Map.Detector.LinkOn(FbId, link);
       }
 
@@ -2176,10 +2197,30 @@ export default {
             _.forEach(item, (v, k) => {
               if (k.indexOf("dwfbxh") != -1) {
                 var FbId = "detector_" + item[k];
+                let fbbhName = ''
+                if(item.dwfbxh1 != '0'){
+                  fbbhName = item.dwfbxh1.slice(-3)+'/'
+                }
+                if(item.dwfbxh2 != '0'){
+                  fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
+                }
+                if(item.dwfbxh3 != '0'){
+                  fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
+                }
+                if(item.dwfbxh4 != '0'){
+                  fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
+                }
+                if(item.dwfbxh5 != '0'){
+                  fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
+                }
+                if(item.dwfbxh6 != '0'){
+                  fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
+                }
                 let link = {
                   id: "Link_" + FbId,
                   positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
-                  origin: item
+                  origin: item,
+                   fbbh:fbbhName
                 };
                 window.Map.Detector.LinkOn(FbId, link);
               }
@@ -2190,7 +2231,7 @@ export default {
         }
 
         // 处理磁探数据
-        function dealCtSJMB(item, i,_this) {
+        function dealCtSJMB(item,i,_this) {
           if (window.Map.viewer.entities.getById("citan_" + item["mbbh"]))
             return;
           if (Number(item["mbjd"]) && Number(item["mbwd"])) {
@@ -2371,10 +2412,31 @@ export default {
       function dealFbSJMb(item) {
         let FbId = "detector_" + item["jcxxid"];
         if (item["mbwzjd"] && item["mbwzwd"]) {
+            let fbbhName = ''
+            if(item.dwfbxh1 != '0'){
+              fbbhName = item.dwfbxh1.slice(-3)+'/'
+            }
+            if(item.dwfbxh2 != '0'){
+              fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
+            }
+            if(item.dwfbxh3 != '0'){
+              fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
+            }
+            if(item.dwfbxh4 != '0'){
+              fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
+            }
+            if(item.dwfbxh5 != '0'){
+              fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
+            }
+            if(item.dwfbxh6 != '0'){
+              fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
+            }
+
           let link = {
             id: item.jcxxid,
             positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
-            origin: item
+            origin: item,
+            fbbh:fbbhName
           };
           window.Map.Detector.LinkOn(FbId, link);
         }
