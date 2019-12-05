@@ -272,7 +272,7 @@ export function Init(ele,CONFIG){
         },
         displayDistance : {
             feiji : Ce.DisplayNF(300000, 100000000),
-            qianting : Ce.DisplayNF(0, 100000000)
+            qianting : Ce.DisplayNF(300000, 100000000)
         }
     }
 

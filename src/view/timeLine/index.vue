@@ -500,7 +500,9 @@ export default {
 
   mounted() {
       this.showFPS().go()
+
     //   this.getAllDate()
+
     
   },
 
@@ -973,19 +975,20 @@ export default {
                     // this.timeLabelF = false
                 }
             })
+            
 
             $(".vis-item.vis-box.vis-readonly").mouseout(function(s){
                 that.showInterval = null;
                 that.showNumber = 0;
-                clearInterval(that.showInterval)
-                that.showInterval = setInterval(()=>{
+                clearTimeout(that.showInterval)
+                that.showInterval = setTimeout(()=>{
                     that.showNumber++;
                     console.log(that.showNumber);
-                    if(that.showNumber >=15){
+                    // if(that.showNumber >=15){
                         that.timeLabelF = false;
                         that.showNumber = 0;
-                    }
-                },1000)
+                    // }
+                },15000)
             })
             this.timeline.on('mouseDown',(item) => {
 

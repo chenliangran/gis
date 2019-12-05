@@ -1,5 +1,6 @@
 import Calculater from '../tools/calculater.js';
 import Tools from '../tools/tools.js';
+import { setTimeout } from 'core-js';
 
 const Drawer     = require('../drawer/Draw.js');
 
@@ -117,7 +118,8 @@ export default class Detect{
             }
 
             if(onShow.length){
-                detector.billboard.color = Ce.CssColor('white')
+                // detector.billboard.color = Ce.CssColor('white')
+                detector.billboard.image = '/static/image/junbiao/fubiao1.png'
             }else{
                 // detector.billboard.color = Ce.CssColor('grey')
                 detector.billboard.image = '/static/image/junbiao/fubiao5.png'
@@ -183,6 +185,10 @@ export default class Detect{
                 },
                 origin:link
             })
+
+            setTimeout(()=>{
+                Tool.Remove(Tool.GetId(link.id))
+            },30000)
         }
     }
 
