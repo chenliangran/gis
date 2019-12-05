@@ -485,7 +485,9 @@ export default {
         type: "",
         WebSocketData: {},
         buoyInfo: {},
-        showInfo: false
+        showInfo: false,
+          showNumber:0,
+          showInterval:null
       }
   },
 
@@ -877,6 +879,7 @@ export default {
          * 初始化时间轴
          */
         initVis(viewer,arr){
+            let that =this;
             let a = Cesium.JulianDate.toDate(viewer.clock.startTime)
             let b = Cesium.JulianDate.toDate(viewer.clock.stopTime)
 
@@ -939,6 +942,8 @@ export default {
             this.timeline.on('mouseOver',(item) => {
 
                 if(item.item){
+                    that.showNumber = 0;
+                    clearInterval(that.showInterval)
                     this.timeLabelType = true
                     let lefts = item.event.x+5,
                     bottoms = 80+10-item.event.y
@@ -963,13 +968,25 @@ export default {
                     this.buoyData = y[0].data
                     this.buoyData.start = y[0].start
                 }else{
-                    this.timeLabelType = false
-                    
-                    this.timeLabelF = false
+                    // this.timeLabelType = false
+                    //
+                    // this.timeLabelF = false
                 }
             })
-           
-            
+
+            $(".vis-item.vis-box.vis-readonly").mouseout(function(s){
+                that.showInterval = null;
+                that.showNumber = 0;
+                clearInterval(that.showInterval)
+                that.showInterval = setInterval(()=>{
+                    that.showNumber++;
+                    console.log(that.showNumber);
+                    if(that.showNumber >=15){
+                        that.timeLabelF = false;
+                        that.showNumber = 0;
+                    }
+                },1000)
+            })
             this.timeline.on('mouseDown',(item) => {
 
                 if(item.item){
