@@ -984,11 +984,11 @@ export default {
                 that.showInterval = setTimeout(()=>{
                     that.showNumber++;
                     console.log(that.showNumber);
-                    if(that.showNumber >=10){
+                    if(that.showNumber >=1){
                         that.timeLabelF = false;
                         that.showNumber = 0;
                      }
-                },10000)
+                },1000)
             })
             this.timeline.on('mouseDown',(item) => {
 

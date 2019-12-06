@@ -272,7 +272,7 @@ export function Init(ele,CONFIG){
         },
         displayDistance : {
             feiji : Ce.DisplayNF(300000, 100000000),
-            qianting : Ce.DisplayNF(300000, 100000000)
+            qianting : Ce.DisplayNF(0, 100000000)
         }
     }
 
@@ -388,8 +388,8 @@ export function Init(ele,CONFIG){
                 },
                 billboard:{
                     image:'/static/image/junbiao/qianting.png',
-                    width:60,
-                    height:60,
+                    width:40,
+                    height:40,
                     // distanceDisplayCondition:Ce.DisplayNF(500000, 100000000)
                 },
                 origin:target
@@ -432,8 +432,10 @@ export function Init(ele,CONFIG){
             },
             origin:target
         })
+        if(target.Blink){
+          Tool.Blink( target.id );
+        }
 
-        Tool.Blink( target.id );
     }
 
 

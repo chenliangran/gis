@@ -79,6 +79,11 @@ export default {
                key : 'detector_mb',
                 state : true
            },
+           {
+               label : '失联浮标',
+               key : 'detector_sl',
+                state : true
+           },
         //    {
         //        label : '不明',
         //        key : 'unknow',

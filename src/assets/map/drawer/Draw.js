@@ -11,7 +11,7 @@ export class DrawEntity{
     }
 
     Draw(shapeConfig){
-
+        // debugger  
         let gname = shapeConfig.group;
 
         if(gname){
@@ -45,7 +45,7 @@ export class GroupController{
     }
 
     SetGroup( gname, state ){
-
+      debugger
         if(!GroupRecords[gname]){
             GroupRecords[gname] = new this.Cesium.Entity({})
         }
@@ -54,12 +54,13 @@ export class GroupController{
     }
 
     Show( gname ){
+        debugger
 
         GroupRecords[gname] && (GroupRecords[gname].show = true)
     }
 
     Hide( gname ){
-
+        debugger
         GroupRecords[gname] && (GroupRecords[gname].show = false)
     }
 
