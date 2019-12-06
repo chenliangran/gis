@@ -981,7 +981,7 @@ export default {
                 that.showInterval = setInterval(()=>{
                     that.showNumber++;
                     console.log(that.showNumber);
-                    if(that.showNumber >=15){
+                    if(that.showNumber >=10){
                         that.timeLabelF = false;
                         that.showNumber = 0;
                     }
