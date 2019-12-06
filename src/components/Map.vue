@@ -25,6 +25,7 @@
   /* position:fixed !important;
     bottom: 30px !important; */
   background: url(../assets/icon4.png) no-repeat !important;
+  left: 8px;
   background-size: 100% 100% !important;
   width: 13px;
   height: 15px;
@@ -679,22 +680,16 @@ export default {
     
   },
   watch:{
-    notifyList(data){
-      // console.log(data)
-      
+    notifyList(data){  
       clearTimeout(this.timeras)
       $(".myMsgList").eq(0).fadeIn();
       $(".myMsgList").eq(1).fadeIn();
       
       if(this.timerFlag){
-           
         
         if(this.timeras){
-  
-          console.log(this.timeras)
         }
         this.timeras = setTimeout(() => {
-          // console.log($("#myMsgList"))
           $(".myMsgList").eq(0).fadeOut();
           $(".myMsgList").eq(1).fadeOut();
         }, 60000);
@@ -723,7 +718,6 @@ export default {
         clearTimeout(this.timeras)
         this.timeras = null
       }
-      console.log(this.timeras)
      
       $(".myMsgList").eq(0).fadeIn();
       $(".myMsgList").eq(1).fadeIn();
@@ -731,17 +725,17 @@ export default {
     $('#mySeamless').on('mouseleave',() => {
       this.timerFlag = true
       this.timeras = setTimeout(() => {
-        // console.log($("#myMsgList"))
         $(".myMsgList").eq(0).fadeOut();
         $(".myMsgList").eq(1).fadeOut();
       }, 60000);
     });
-    $.get(`${globalUrl.host}/find/findAllGroupName`, {}).then(data => {
-      if(data){
-        this.jiaciName = data[0].ptmc.slice(-5)
-      }
-
-    });
+    setTimeout(function(){
+      $.get(`${globalUrl.host}/find/findAllGroupName`, {}).then(data => {
+        if(data){
+          this.jiaciName = data[0].ptmc.slice(-5)
+        }
+      })
+    },100);
 
     document.onselectstart = function() {
       return false;
@@ -757,9 +751,6 @@ export default {
     if (sessionStorage.getItem("selectEd")) {
       this.selectId = sessionStorage.getItem("selectEd");
       this.getAllDate();
-      // setTimeout(() => {
-      //   this.setVisItem("2019-04-25 13:36:17")
-      // },1000)
     } else {
       this.selectF = true;
     }
@@ -1428,13 +1419,8 @@ export default {
           item.typeall = 'CTMBSJ'
           dealCtSJMB(item, i,that);
         });
-        console.log(that.notifyList )
         notifyList = [...notifyList,...data["CTMBSJ"]]
-
-        
       }
-
-      console.log(that.notifyList)
       if (data["FBSJ"].length > 0) {
         that.notifyType = 'FBSJ';
         
@@ -1490,39 +1476,43 @@ export default {
 
       // 处理浮标目标数据
       function dealFbSJMb(item) {
-        let FbId = "detector_" + item["jcxxid"];
-        let fbbhName = ''
-        if(item.dwfbxh1 != '0'){
-          fbbhName = item.dwfbxh1.slice(-3)+'/'
+        //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
+        if(item.zxd >100){   
+          let FbId = "detector_" + item["jcxxid"];
+          let fbbhName = ''
+          if(item.dwfbxh1 != '0'){
+            fbbhName = item.dwfbxh1.slice(-3)+'/'
+          }
+          if(item.dwfbxh2 != '0'){
+            fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
+          }
+          if(item.dwfbxh3 != '0'){
+            fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
+          }
+          if(item.dwfbxh4 != '0'){
+            fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
+          }
+          if(item.dwfbxh5 != '0'){
+            fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
+          }
+          if(item.dwfbxh6 != '0'){
+            fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
+          }
+          let link = {
+            id: "Link_1",
+            positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
+            origin: item,
+            fbbh:fbbhName
+          };
+          
+          window.Map.Detector.LinkOn(FbId, link); 
         }
-        if(item.dwfbxh2 != '0'){
-          fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
-        }
-        if(item.dwfbxh3 != '0'){
-          fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
-        }
-        if(item.dwfbxh4 != '0'){
-          fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
-        }
-        if(item.dwfbxh5 != '0'){
-          fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
-        }
-        if(item.dwfbxh6 != '0'){
-          fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
-        }
-        let link = {
-          id: "Link_1",
-          positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
-          origin: item,
-          fbbh:fbbhName
-        };
-        
-        window.Map.Detector.LinkOn(FbId, link);
+
       }
 
       // 处理磁探数据
       function dealCtSJMB(item, i,that) {
-        // console.log(item)
+
         window.Map.AddCtTarget({
           id: "citan_" + item["mbbh"],
           positions: [Number(item["mbjd"]), Number(item["mbwd"])],
@@ -1545,7 +1535,7 @@ export default {
       let nowTime = "00:00:00"
       let totleTime = that.countDate(this.allDate.startT,this.allDate.endT)
       this.progress(nowTime,totleTime)
-      console.log(viewer.timeline)
+      // console.log(viewer.timeline)
       
       viewer.timeline.addEventListener(
         "setzoom",
@@ -1564,7 +1554,7 @@ export default {
         false
       );
       // viewer.clock.shouldAnimate = true;
-      console.log(startTime,stopTime)
+      // console.log(startTime,stopTime)
       viewer.clock.startTime = startTime;
       viewer.clock.stopTime = stopTime;
 
@@ -1932,7 +1922,6 @@ export default {
       };
 
       socketController.onmessage = function(e) {
-        //console.log(e)
         if (_this.wsF) {
           _this.wsName = e.data;
           sessionStorage.setItem("name", e.data);
@@ -2213,41 +2202,47 @@ export default {
 
         // 处理浮标目标数据
         function dealFbSJMb(item) {
-          if (Number(item["mbwzjd"]) && Number(item["mbwzwd"])) {
-            _.forEach(item, (v, k) => {
-              if (k.indexOf("dwfbxh") != -1) {
-                var FbId = "detector_" + item[k];
-                let fbbhName = ''
-                if(item.dwfbxh1 != '0'){
-                  fbbhName = item.dwfbxh1.slice(-3)+'/'
+          if(item.zxd >100){
+            if (window.Map.viewer.entities.getById("detector_" + item["fbbh"]))
+            return;
+            if (Number(item["mbwzjd"]) && Number(item["mbwzwd"])) {
+              _.forEach(item, (v, k) => {
+                if (k.indexOf("dwfbxh") != -1) {
+                  var FbId = "detector_" + item[k];
+                  let fbbhName = ''
+                  if(item.dwfbxh1 != '0'){
+                    fbbhName = item.dwfbxh1.slice(-3)+'/'
+                  }
+                  if(item.dwfbxh2 != '0'){
+                    fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
+                  }
+                  if(item.dwfbxh3 != '0'){
+                    fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
+                  }
+                  if(item.dwfbxh4 != '0'){
+                    fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
+                  }
+                  if(item.dwfbxh5 != '0'){
+                    fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
+                  }
+                  if(item.dwfbxh6 != '0'){
+                    fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
+                  }
+                  let link = {
+                    id: "Link_" + FbId,
+                    positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
+                    origin: item,
+                    fbbh:fbbhName,
+                    blink:true
+                  };
+                  window.Map.Detector.LinkOn(FbId, link);
                 }
-                if(item.dwfbxh2 != '0'){
-                  fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
-                }
-                if(item.dwfbxh3 != '0'){
-                  fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
-                }
-                if(item.dwfbxh4 != '0'){
-                  fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
-                }
-                if(item.dwfbxh5 != '0'){
-                  fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
-                }
-                if(item.dwfbxh6 != '0'){
-                  fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
-                }
-                let link = {
-                  id: "Link_" + FbId,
-                  positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
-                  origin: item,
-                   fbbh:fbbhName
-                };
-                window.Map.Detector.LinkOn(FbId, link);
+              });
+              {
               }
-            });
-            {
             }
           }
+
         }
 
         // 处理磁探数据
@@ -2259,7 +2254,8 @@ export default {
               id: "citan_" + item["mbbh"],
               positions: [Number(item["mbjd"]), Number(item["mbwd"])],
               origin: item,
-              name:_this.jiaciName
+              name:_this.jiaciName,
+              blink:true
             });
           }
         }
@@ -2430,6 +2426,8 @@ export default {
 
       // 处理浮标目标数据
       function dealFbSJMb(item) {
+        //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
+        if(item.zxd >100){
         let FbId = "detector_" + item["jcxxid"];
         if (item["mbwzjd"] && item["mbwzwd"]) {
             let fbbhName = ''
@@ -2452,13 +2450,14 @@ export default {
               fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
             }
 
-          let link = {
-            id: item.jcxxid,
-            positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
-            origin: item,
-            fbbh:fbbhName
-          };
-          window.Map.Detector.LinkOn(FbId, link);
+            let link = {
+              id: item.jcxxid,
+              positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
+              origin: item,
+              fbbh:fbbhName
+            };
+            window.Map.Detector.LinkOn(FbId, link);
+          }
         }
       }
     },

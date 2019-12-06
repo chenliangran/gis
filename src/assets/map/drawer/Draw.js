@@ -13,7 +13,7 @@ export class DrawEntity{
     }
 
     Draw(shapeConfig){
-
+        // debugger  
         let gname = shapeConfig.group;
 
         if(gname){
@@ -47,27 +47,29 @@ export class GroupController{
     }
 
     SetGroup( gname, state ){
-
+        if(gname == 'detector_sl'){//失联浮标
+            GroupRecords['detector']._children.map(s=>{
+                if(s.billboard.image._value.includes("fubiao5")){
+                    s.show = state;
+                };
+            })
+            return
+        }
         if(!GroupRecords[gname]){
             GroupRecords[gname] = new this.Cesium.Entity({})
         }
-        console.log(GroupRecords[gname]._children);
         GroupRecords[gname].show = state;
-        GroupRecords[gname]._children.map(s=>{
-            if(s.billboard.image._value.includes("fubiao5")){
-                s.show = state;
-                console.log(s);
-            };
-        })
+
     }
 
     Show( gname ){
+        debugger
 
         GroupRecords[gname] && (GroupRecords[gname].show = true)
     }
 
     Hide( gname ){
-
+        debugger
         GroupRecords[gname] && (GroupRecords[gname].show = false)
     }
 

@@ -20,7 +20,6 @@
     padding : 6px 5px;
     border-right: none;
     border-bottom: 1px solid #155073;
-    line-height: 24px;
     text-align: center;
     font-size: 12px;
     color:rgb(170, 167, 167);
@@ -77,6 +76,11 @@ export default {
            {
                label : '浮标目标',
                key : 'detector_mb',
+                state : true
+           },
+           {
+               label : '失联浮标',
+               key : 'detector_sl',
                 state : true
            },
         //    {
