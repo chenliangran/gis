@@ -700,15 +700,7 @@ export default {
   updated:function () {  
       this.scrollToBottom();       
   },
-  created(){
-    let id = sessionStorage.getItem("selectEd")
-    let ptData = JSON.parse(sessionStorage.getItem("ptData"))
-    ptData.map(item => {
-        if(item.id == id) {
-            this.jiaciName = item.ptmc.slice(-7,-2)
-        }
-    })
-  },
+
   mounted() {
     this.scrollToBottom();
     let that = this
@@ -729,14 +721,7 @@ export default {
         $(".myMsgList").eq(1).fadeOut();
       }, 60000);
     });
-    setTimeout(function(){
-      $.get(`${globalUrl.host}/find/findAllGroupName`, {}).then(data => {
-        if(data){
-          this.jiaciName = data[0].ptmc.slice(-5)
-        }
-      })
-    },100);
-
+    
     document.onselectstart = function() {
       return false;
     };
@@ -1400,6 +1385,14 @@ export default {
      */
     upateGis(data) {
       let that = this;
+      let id = sessionStorage.getItem("selectEd")
+      let ptData = JSON.parse(sessionStorage.getItem("ptData"))
+      ptData.map(item => {
+          if(item.id == id) {
+              that.jiaciName = item.ptmc.slice(-7,-2)
+              sessionStorage.setItem('jiaciName',that.jiaciName)
+          }
+      })
       that.FBnum = 0;
       let notifyList = [];
       that.notifyType = '';
@@ -1477,7 +1470,7 @@ export default {
       // 处理浮标目标数据
       function dealFbSJMb(item) {
         //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
-        if(item.zxd >100){   
+        if(item.zxd >0){   
           let FbId = "detector_" + item["jcxxid"];
           let fbbhName = ''
           if(item.dwfbxh1 != '0'){
@@ -1517,7 +1510,7 @@ export default {
           id: "citan_" + item["mbbh"],
           positions: [Number(item["mbjd"]), Number(item["mbwd"])],
           origin: item,
-          name:that.jiaciName
+          name:sessionStorage.getItem('jiaciName')
         });
       }
     },
@@ -1983,7 +1976,14 @@ export default {
     dealMessage(data) {
       const _this = this;
       let notifyList = [];
-
+      let id = sessionStorage.getItem("selectEd")
+      let ptData = JSON.parse(sessionStorage.getItem("ptData"))
+      ptData.map(item => {
+          if(item.id == id) {
+              _this.jiaciName = item.ptmc.slice(-7,-2)
+              sessionStorage.setItem('jiaciName',_this.jiaciName)
+          }
+      })
       // _this.notifyType = '';
       if (data.length == 0) return;
      // debugger
@@ -2203,7 +2203,8 @@ export default {
 
         // 处理浮标目标数据
         function dealFbSJMb(item) {
-          if(item.zxd >100){
+          //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
+          if(item.zxd >0){ 
             if (window.Map.viewer.entities.getById("detector_" + item["fbbh"]))
             return;
             if (Number(item["mbwzjd"]) && Number(item["mbwzwd"])) {
@@ -2255,7 +2256,7 @@ export default {
               id: "citan_" + item["mbbh"],
               positions: [Number(item["mbjd"]), Number(item["mbwd"])],
               origin: item,
-              name:_this.jiaciName,
+              name:sessionStorage.getItem('jiaciName'),
               blink:true
             });
           }
@@ -2428,7 +2429,7 @@ export default {
       // 处理浮标目标数据
       function dealFbSJMb(item) {
         //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
-        if(item.zxd >100){
+        if(item.zxd >0){
         let FbId = "detector_" + item["jcxxid"];
         if (item["mbwzjd"] && item["mbwzwd"]) {
             let fbbhName = ''

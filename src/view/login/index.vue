@@ -195,6 +195,13 @@ export default {
                 if(this.login.password == data.passWord){
                     this.$emit('login')   
                     sessionStorage.setItem('user',JSON.stringify(this.login))
+                    let id = sessionStorage.getItem("selectEd")
+                    let ptData = JSON.parse(sessionStorage.getItem("ptData"))
+                    ptData.map(item => {
+                        if(item.id == id) {
+                            this.jiaciName = item.ptmc.slice(-7,-2)
+                        }
+                    })
                 }else{
                     this.msg = '密码错误'    
                 }

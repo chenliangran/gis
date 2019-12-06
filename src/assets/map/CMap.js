@@ -26,9 +26,23 @@ export function Init(ele,CONFIG){
 
         return new Cesium.Viewer(eleid,{
             timeline:true,
-            imageryProvider: new Cesium.SingleTileImageryProvider({
-                url : '/static/image/Map/single.jpg'
+            imageryProvider: new Cesium.UrlTemplateImageryProvider({
+                url : 'http://192.168.0.111:8080/earthview/services/v/get/gxservice/getTile/map/0/{r}/{c}/{m}',
+                ellipsoid: Cesium.Ellipsoid.WGS84,
+                tilingScheme: new Cesium.GeographicTilingScheme({
+                    numberOfLevelZeroTilesX : 2,
+                    numberOfLevelZeroTilesY : 1,
+                    rectangle : new Cesium.Rectangle(-Cesium.Math.PI, -Cesium.Math.PI * 0.5, Cesium.Math.PI, Cesium.Math.PI * 0.5),
+                    ellipsoid : Cesium.Ellipsoid.WGS84
+                }),
+                maximumLevel:14,
+                customTags:{
+                    m : (provider,x,y,level) => level+1,
+                    r : (provider,x,y,level) => y,
+                    c : (provider,x,y,level) => x
+                }
             }),
+            
             navigation:false,
             selectionIndicator : false,
             contextOptions:{

@@ -193,13 +193,21 @@ export default class Detect{
                 },
                 origin:link
             })
+            setTimeout(()=>{
+                DrawEntity.Draw({
+                    polyline:{
+                        show:false
+                    }
+                })
+                // detector.polyline.show = false
+            },3000)
             // if(link.blink){
 
             //     Tool.Blink( link.id )
             // }
-            setTimeout(()=>{
-                Tool.Remove(Tool.GetId(link.id))
-            },3000)
+            // setTimeout(()=>{
+            //     Tool.Remove(Tool.GetId(link.id))
+            // },30000)
         }
     }
 
