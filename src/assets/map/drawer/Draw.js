@@ -1,3 +1,5 @@
+import de from "element-ui/src/locale/lang/de";
+
 let GroupRecords = {}
 
 export class DrawEntity{
@@ -45,12 +47,19 @@ export class GroupController{
     }
 
     SetGroup( gname, state ){
-      debugger
+        if(gname == 'detector_sl'){//失联浮标
+            GroupRecords['detector']._children.map(s=>{
+                if(s.billboard.image._value.includes("fubiao5")){
+                    s.show = state;
+                };
+            })
+            return
+        }
         if(!GroupRecords[gname]){
             GroupRecords[gname] = new this.Cesium.Entity({})
         }
-
         GroupRecords[gname].show = state;
+
     }
 
     Show( gname ){
