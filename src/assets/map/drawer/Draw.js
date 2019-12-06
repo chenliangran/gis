@@ -1,3 +1,5 @@
+import de from "element-ui/src/locale/lang/de";
+
 let GroupRecords = {}
 
 export class DrawEntity{
@@ -49,8 +51,14 @@ export class GroupController{
         if(!GroupRecords[gname]){
             GroupRecords[gname] = new this.Cesium.Entity({})
         }
-
+        console.log(GroupRecords[gname]._children);
         GroupRecords[gname].show = state;
+        GroupRecords[gname]._children.map(s=>{
+            if(s.billboard.image._value.includes("fubiao5")){
+                s.show = state;
+                console.log(s);
+            };
+        })
     }
 
     Show( gname ){

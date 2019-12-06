@@ -1932,7 +1932,7 @@ export default {
       };
 
       socketController.onmessage = function(e) {
-        console.log(e)
+        //console.log(e)
         if (_this.wsF) {
           _this.wsName = e.data;
           sessionStorage.setItem("name", e.data);
@@ -2031,7 +2031,7 @@ export default {
         this.fjlnglat = false;
       }
       let newDate = date;
-      console.log(date)
+      //console.log(date)
       
       // arrTime.push(1)
 
