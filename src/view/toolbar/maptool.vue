@@ -33,6 +33,9 @@
         <div class="icon-div" v-for="tool in toolList" :key="tool.key" @click="useTool(tool.key)">
             {{tool.label}}
         </div>
+        <div class="icon-div" @click="mapGrid">
+            网格
+        </div>
     </div>
     
 </template>
@@ -67,7 +70,8 @@ export default {
            },{
                label : '停止',
                key : 'Stop'
-           }]
+           }],
+           gridState:false,
         }
     },
     methods: {
@@ -82,6 +86,10 @@ export default {
             window.Map.MarkTool.Start({
                 shape : key
             })
+        },
+        mapGrid(){
+            this.gridState = !this.gridState;
+            window.Map.Tool.Grid(this.gridState)
         }
     },
     watch: {

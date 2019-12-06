@@ -138,4 +138,23 @@ export default class Tools{
 
         parent._children = [];
     }
+
+    Grid( state ){
+
+        let imageProvider = this.viewer.imageryLayers;
+
+        if(state){
+
+            imageProvider.addImageryProvider(new Cesium.GridImageryProvider({
+                cells: 4,
+                color: Ce.CssColor('red'),
+                glowColor: Ce.CssColor('transparent'),
+                backgroundColor: Ce.CssColor('transparent'),
+            }))
+        }else{
+            let _gridLayer = imageProvider.get(imageProvider.length-1)
+            imageProvider.remove(_gridLayer)
+            console.log(imageProvider)
+        }
+    }
 }
