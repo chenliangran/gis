@@ -987,8 +987,8 @@ export default {
                     if(that.showNumber >=10){
                         that.timeLabelF = false;
                         that.showNumber = 0;
-                    // }
-                },15000)
+                     }
+                },10000)
             })
             this.timeline.on('mouseDown',(item) => {
 
