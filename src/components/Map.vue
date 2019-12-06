@@ -910,6 +910,7 @@ export default {
                   // that.visWidth = viewer.timeline.lastWidth
                   setTimeout(() => {
                     that.setZZ()
+                    that.$refs["timeLine"].timeLabelF = false;
                     that.$refs["timeLine"].timeline.redraw();
                     that.$refs["timeLine"].startXd();
                     setTimeout(() => {
@@ -1356,6 +1357,7 @@ export default {
       window.onresize = function() {
         // that.visWidth = viewer.timeline.lastWidth
         setTimeout(() => {
+          that.$refs["timeLine"].timeLabelF = false;
           that.$refs["timeLine"].visStyle.width =
             viewer.timeline._lastWidth + "px";
           that.$refs["timeLine"].visStyle.right = $(
@@ -1520,7 +1522,7 @@ export default {
 
       // 处理磁探数据
       function dealCtSJMB(item, i,that) {
-        console.log(item)
+        // console.log(item)
         window.Map.AddCtTarget({
           id: "citan_" + item["mbbh"],
           positions: [Number(item["mbjd"]), Number(item["mbwd"])],
@@ -1572,11 +1574,22 @@ export default {
       viewer.timeline.addEventListener(
         "mouseup",
         function(e) {
-          var dfTime = (viewer.clock.currentTime.dayNumber - startTime.dayNumber)*86400 + (viewer.clock.currentTime.secondsOfDay - startTime.secondsOfDay)
+          // console.log()
           
-            console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime))
-            that.newEventDate = that.toDate(viewer.clock.currentTime)
-            that.progress(that.formatSeconds(dfTime),totleTime)
+          let end = new Date(that.allDate.endT),
+            start = new Date(that.allDate.startT),
+            s = end.getTime() - start.getTime()
+          let a = e.pageX-Number($("#visualization").css('margin-left').split('px')[0]).toFixed(2),
+              b = $(".cesium-timeline-bar").css('width').split('px')[0],
+              zhTime = new Date(start.getTime()+(parseInt((a/b).toFixed(3)*s)))
+          // console.log((a/b).toFixed(3)*s,new Date(start.getTime()+(parseInt((a/b).toFixed(3)*s))),start+(parseInt((a/b).toFixed(3)*s)))    
+          // console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime))
+          // return
+          // var dfTime = (viewer.clock.currentTime.dayNumber - startTime.dayNumber)*86400 + (viewer.clock.currentTime.secondsOfDay - startTime.secondsOfDay)
+          
+            console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime),zhTime)
+            that.newEventDate = zhTime
+            // that.progress(that.formatSeconds(dfTime),totleTime)
             // console.log(viewer.clock)
             
 
@@ -1585,14 +1598,14 @@ export default {
           that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
           that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
           $.get(`${globalUrl.host}/find/triggerSocket`, {
-            startTime: new Cesium.JulianDate.toDate(viewer.clock.currentTime),
+            startTime: zhTime,
             name: sessionStorage.getItem("groupNum"),
             id: that.selectId
           }).then(data => {
             that.playFLAG = true;
             that.$refs.timeLine.playFlag = true;
             that.setZZTime()
-            that.diffTime(new Cesium.JulianDate.toDate(viewer.clock.currentTime));
+            that.diffTime(zhTime);
             // that.num = 0;
             // that.$refs["timeLine"].num = that.num;
           });
@@ -1815,6 +1828,8 @@ export default {
       $.get(`${globalUrl.host}/find/stopScoket`, {
         name: sessionStorage.getItem("groupNum")
       }).then(data => {
+       
+        
         this.playFLAG = false;
         this.$refs.timeLine.playFlag = false;
         window.Map.viewer.clock.shouldAnimate = false;
@@ -1839,6 +1854,9 @@ export default {
           new Date(this.allDate.startT)
         );
         that.setZZTime()
+        setTimeout(() => {
+          this.setZZStyle.width='0px'
+        },200)
       });
     },
     /**
@@ -1914,6 +1932,7 @@ export default {
       };
 
       socketController.onmessage = function(e) {
+        console.log(e)
         if (_this.wsF) {
           _this.wsName = e.data;
           sessionStorage.setItem("name", e.data);
@@ -2012,10 +2031,11 @@ export default {
         this.fjlnglat = false;
       }
       let newDate = date;
+      console.log(date)
       
-      arrTime.push(1)
-      // console.log(arrTime)
-       if(arrTime.length == 12){
+      // arrTime.push(1)
+
+      //  if(arrTime.length == 12){
           // console.log(arrTime)
           arrTime = []
           window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
@@ -2035,7 +2055,7 @@ export default {
           }
           this.setZZTime()
           
-        }
+        // }
       if (this.newDate != newDate) {
         
         this.dqsjd = newDate
