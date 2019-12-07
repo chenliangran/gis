@@ -35,7 +35,7 @@ export default class Detect{
     }
 
     Add( target ){
-    //    debugger
+
         if(!target.id){
             return;
         }
@@ -121,15 +121,7 @@ export default class Detect{
                 // detector.billboard.color = Ce.CssColor('white')
                 detector.billboard.image = '/static/image/junbiao/fubiao1.png'
             }else{
-                // DrawEntity.Draw({
-                //     id:single.target.id,
-                //     position:Ce.ToPoint(single.target.positions),
-                //     type:'detector_sl',
-                //     group:'detector_sl'
-                // })
                 // detector.billboard.color = Ce.CssColor('grey')
-                // detector.type='detector_sl',
-                // detector.group='detector_sl',  
                 detector.billboard.image = '/static/image/junbiao/fubiao5.png'
             }
         })
@@ -193,21 +185,10 @@ export default class Detect{
                 },
                 origin:link
             })
-            setTimeout(()=>{
-                DrawEntity.Draw({
-                    polyline:{
-                        show:false
-                    }
-                })
-                // detector.polyline.show = false
-            },3000)
-            // if(link.blink){
 
-            //     Tool.Blink( link.id )
-            // }
-            // setTimeout(()=>{
-            //     Tool.Remove(Tool.GetId(link.id))
-            // },30000)
+            setTimeout(()=>{
+                Tool.Remove(Tool.GetId(link.id))
+            },3000)
         }
     }
 

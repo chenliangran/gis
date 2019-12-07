@@ -1505,7 +1505,9 @@ export default {
 
       // 处理磁探数据
       function dealCtSJMB(item, i,that) {
-
+        if(Number(item.mbzxd) < 100){
+            return;
+        }
         window.Map.AddCtTarget({
           id: "citan_" + item["mbbh"],
           positions: [Number(item["mbjd"]), Number(item["mbwd"])],
@@ -2248,6 +2250,9 @@ export default {
 
         // 处理磁探数据
         function dealCtSJMB(item,i,_this) {
+          if(Number(item.mbzxd) < 100){
+                return;
+            }
           if (window.Map.viewer.entities.getById("citan_" + item["mbbh"]))
             return;
           if (Number(item["mbjd"]) && Number(item["mbwd"])) {
