@@ -149,6 +149,10 @@ export default class Detect{
     
         if(linked){
 
+            if(!linked.polyline){
+                return;
+            }
+
             let _lpos = Ce.ToPoints(linePosition)
 
             linked.polyline.positions = new Cesium.CallbackProperty(function(){
@@ -187,7 +191,9 @@ export default class Detect{
             })
 
             setTimeout(()=>{
-                Tool.Remove(Tool.GetId(link.id))
+                // Tool.Remove(Tool.GetId(link.id))
+                let _line = Tool.GetId(link.id);
+                _line.polyline.show = false;
             },3000)
         }
     }
