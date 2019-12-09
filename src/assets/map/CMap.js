@@ -42,7 +42,7 @@ export function Init(ele,CONFIG){
                     c : (provider,x,y,level) => x
                 }
             }),
-            
+            sceneModePicker:true,
             navigation:false,
             selectionIndicator : false,
             contextOptions:{
