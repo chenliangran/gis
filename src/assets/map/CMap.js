@@ -27,7 +27,7 @@ export function Init(ele,CONFIG){
         return new Cesium.Viewer(eleid,{
             timeline:true,
             imageryProvider: new Cesium.UrlTemplateImageryProvider({
-                url : 'http://192.168.0.111:8080/earthview/services/v/get/gxservice/getTile/map/0/{r}/{c}/{m}',
+                url : `${mapUrl}/earthview/services/v/get/gxservice/getTile/map/0/{r}/{c}/{m}`,
                 ellipsoid: Cesium.Ellipsoid.WGS84,
                 tilingScheme: new Cesium.GeographicTilingScheme({
                     numberOfLevelZeroTilesX : 2,
@@ -42,7 +42,7 @@ export function Init(ele,CONFIG){
                     c : (provider,x,y,level) => x
                 }
             }),
-            
+            sceneModePicker:true,
             navigation:false,
             selectionIndicator : false,
             contextOptions:{
