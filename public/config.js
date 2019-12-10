@@ -1,6 +1,6 @@
 let env = {
-    //development:'http://127.0.0.1',
-    development:'http://192.168.0.111',
+    development:'http://127.0.0.1',
+    //development:'http://192.168.0.111',
     production:window.location.hostname
 },PORT = '10000';
 
@@ -11,7 +11,6 @@ var globalUrl = {
     ws:`${env[currentEnv]}:${PORT}`.replace('https://','').replace('http://',''),
     initGis:env[currentEnv] + ":8090/iserver/services/map-haituWS/rest/maps/haituMap"
 }
-var mapUrl = `${env[currentEnv]}:8080`;
 // var globalUrl = {
 //     host:window.location.origin,
 //     ws:window.location.origin.replace('https://','').replace('http://',''),
