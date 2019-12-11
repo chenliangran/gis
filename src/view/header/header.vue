@@ -305,6 +305,7 @@ export default {
                     arr.push(Number(s.jd),Number(s.wd));
                 }
             })
+            arr.push(Number(this.dynamicValidateForm.domains[0].jd),Number(this.dynamicValidateForm.domains[0].wd))
             if(flag){
                 this.jwdVisible = false;
                 let id = Math.random().toFixed(10);
