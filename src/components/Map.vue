@@ -2240,8 +2240,6 @@ export default {
                 window.Map.Detector.LinkOn(FbId, link);
               }
             });
-            {
-            }
           }
         }
 

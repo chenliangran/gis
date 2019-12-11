@@ -4,7 +4,7 @@
     flex-direction: column;
     position: fixed;
     right:10px;
-    top:180px;
+    top:150px;
     background-color: rgba(14, 36, 95, 0.7);
     box-shadow: 0px 0px 2px #9a9a9a inset;
 }

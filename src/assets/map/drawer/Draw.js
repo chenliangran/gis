@@ -63,13 +63,10 @@ export class GroupController{
     }
 
     Show( gname ){
-        debugger
-
         GroupRecords[gname] && (GroupRecords[gname].show = true)
     }
 
     Hide( gname ){
-        debugger
         GroupRecords[gname] && (GroupRecords[gname].show = false)
     }
 

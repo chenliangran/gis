@@ -83,6 +83,12 @@ export default {
                key : 'detector_sl',
                 state : true
            },
+            {
+               label : '浮标虚线',
+               key : 'detector_xx',
+                state : true
+           },
+
         //    {
         //        label : '不明',
         //        key : 'unknow',
