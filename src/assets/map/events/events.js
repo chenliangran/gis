@@ -257,11 +257,11 @@ export class Events{
 
                     let path = [];
                     _.forEach(linePositions, (item) => {
-
+                        
                         path.push(item.lon);
                         path.push(item.lat);
                     })
-
+                    if(!path.length){return}
                     currentLine.polyline.positions = new _this.Cesium.CallbackProperty(function(){
 
                         return Ce.ToPoints(path)
