@@ -144,6 +144,7 @@ export function Init(ele,CONFIG){
     $.get(`${globalUrl.host}/find/findGisPath`, {
         
     }).then(data => {
+        debugger
         var url = data
         imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
              
