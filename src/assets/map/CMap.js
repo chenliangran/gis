@@ -159,7 +159,7 @@ export function Init(ele,CONFIG){
                 r : (provider,x,y,level) => y,
                 c : (provider,x,y,level) => x
             }
-        })
+        }))
     });
 
 
