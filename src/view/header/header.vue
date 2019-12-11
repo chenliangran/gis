@@ -299,15 +299,8 @@ export default {
                     arr.push(Number(s.jd),Number(s.wd));
                 }
             })
-            return
             if(flag){
                 this.jwdVisible = false;
-                // window.Map.viewer.entities.add({
-                //     polygon : {
-                //         hierarchy : Cesium.Cartesian3.fromDegreesArray(arr),
-                //         material : ""
-                //     }
-                // });
                 let id = Math.random().toFixed(10);
                 window.Map.viewer.entities.add({
                     polyline : {
