@@ -378,7 +378,8 @@ background: none !important;
     @controller="controller"
     @events="events"
     :WebSocketData="WebSocketData"
-    :FBnum="FBnum"></gis-header>
+    :FBnum="FBnum"
+    :eventsF="eventsF"></gis-header>
     <div id="mapElement">
       <div class="time_bg">
         <div id="timeDiv"></div>
@@ -701,7 +702,12 @@ export default {
           $(".myMsgList").eq(0).fadeOut();
           $(".myMsgList").eq(1).fadeOut();
         }, 60000);
-      
+         if(this.timeras){
+          setTimeout(()=>{
+            this.eventsF = false
+            
+          },70000)
+        }
       }
     }
   },
@@ -729,6 +735,13 @@ export default {
         $(".myMsgList").eq(0).fadeOut();
         $(".myMsgList").eq(1).fadeOut();
       }, 60000);
+      if(this.timeras){
+        setTimeout(()=>{
+          this.eventsF = false
+          
+        },70000)
+      }
+     
     });
     
     document.onselectstart = function() {

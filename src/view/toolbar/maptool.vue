@@ -76,13 +76,11 @@ export default {
     },
     methods: {
         useTool(key){
-
             if(key == 'Clear' || key == 'Stop'){
 
                 window.Map.MarkTool[key]();
                 return
             }
-
             window.Map.MarkTool.Start({
                 shape : key
             })

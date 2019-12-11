@@ -107,7 +107,7 @@
 <script>
 
 export default {
-    props: ["WebSocketData","FBnum","timeNow"],
+    props: ["WebSocketData","FBnum","timeNow","eventsF"],
 	data() {
 		return {
 			dataInfo: {},
@@ -473,6 +473,13 @@ export default {
            handler:function(v){
                //debugger
                this.FBnum = v
+           },
+           deep: true
+        },
+        eventsF:{
+            handler:function(v){
+               //debugger
+               this.flag3 = v
            },
            deep: true
         }
