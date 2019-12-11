@@ -47,7 +47,7 @@
     color:#ffffff;
     align-items: center;
     font-size: 12px;
-    margin-top: 40px
+    margin-top: 20px
 }
 .select-muens li{
     list-style: none;
@@ -90,7 +90,7 @@
 .select-event{
     width: 45%;
     margin: auto;
-	margin-top: 40px;
+	margin-top: 20px;
 	display: flex;
 	justify-content: flex-end;
 }
@@ -158,8 +158,6 @@
                     <!-- <div @click='cancel'>取消</div> -->
                 </div>
             </div>
-
-
             <div class="select-muen" v-if='roundFlag'>
                 <span>选取回合： </span>
                 <select @change='selectC($event)' >
@@ -169,7 +167,10 @@
                 </select>
                 
             </div>
-            <ul class="select-muens">
+            <div class="select-event" style="margin:10px 0 0 -20px;">
+                <div @click="selectJWD(jingweiduF)">选择经纬度</div>
+            </div>
+            <ul class="select-muens" v-show="jingweiduF">
                 <li>
                     <span>经度： </span>
                     <input class="select-input" placeholder="" type='text' v-model="pos.jd"/>
@@ -208,6 +209,7 @@ export default {
           roundFlag:false,
           flag:false,
           loaddingF:false,
+          jingweiduF:false,
           pos:{
               jd:'122',
               wd:'22'
@@ -236,8 +238,10 @@ export default {
       addGroup(){
           this.roundFlag = true
       },
+      selectJWD(jingweiduF){
+          this.jingweiduF = !jingweiduF
+      },
       selectGroup(e){
-
           this.setId = $(e.target).find('option:selected').attr("value")
           sessionStorage.setItem('selectEd',$(e.target).find('option:selected').attr("value"))
           sessionStorage.setItem('groupNum',$(e.target).find('option:selected').attr("group"))
