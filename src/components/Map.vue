@@ -1470,7 +1470,6 @@ export default {
       // 处理浮标目标数据
       function dealFbSJMb(item) {
         //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
-        if(item.zxd >0){   
           let FbId = "detector_" + item["jcxxid"];
           let fbbhName = ''
           if(item.dwfbxh1 != '0'){
@@ -1497,10 +1496,7 @@ export default {
             origin: item,
             fbbh:fbbhName
           };
-          
           window.Map.Detector.LinkOn(FbId, link); 
-        }
-
       }
 
       // 处理磁探数据
@@ -2205,47 +2201,44 @@ export default {
         // 处理浮标目标数据
         function dealFbSJMb(item) {
           //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
-          if(item.zxd >0){ 
-            if (window.Map.viewer.entities.getById("detector_" + item["fbbh"]))
-            return;
-            if (Number(item["mbwzjd"]) && Number(item["mbwzwd"])) {
-              _.forEach(item, (v, k) => {
-                if (k.indexOf("dwfbxh") != -1) {
-                  var FbId = "detector_" + item[k];
-                  let fbbhName = ''
-                  if(item.dwfbxh1 != '0'){
-                    fbbhName = item.dwfbxh1.slice(-3)+'/'
-                  }
-                  if(item.dwfbxh2 != '0'){
-                    fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
-                  }
-                  if(item.dwfbxh3 != '0'){
-                    fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
-                  }
-                  if(item.dwfbxh4 != '0'){
-                    fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
-                  }
-                  if(item.dwfbxh5 != '0'){
-                    fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
-                  }
-                  if(item.dwfbxh6 != '0'){
-                    fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
-                  }
-                  let link = {
-                    id: "Link_" + FbId,
-                    positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
-                    origin: item,
-                    fbbh:fbbhName,
-                    blink:true
-                  };
-                  window.Map.Detector.LinkOn(FbId, link);
+          if (window.Map.viewer.entities.getById("detector_" + item["fbbh"]))
+          return;
+          if (Number(item["mbwzjd"]) && Number(item["mbwzwd"])) {
+            _.forEach(item, (v, k) => {
+              if (k.indexOf("dwfbxh") != -1) {
+                var FbId = "detector_" + item[k];
+                let fbbhName = ''
+                if(item.dwfbxh1 != '0'){
+                  fbbhName = item.dwfbxh1.slice(-3)+'/'
                 }
-              });
-              {
+                if(item.dwfbxh2 != '0'){
+                  fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
+                }
+                if(item.dwfbxh3 != '0'){
+                  fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
+                }
+                if(item.dwfbxh4 != '0'){
+                  fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
+                }
+                if(item.dwfbxh5 != '0'){
+                  fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
+                }
+                if(item.dwfbxh6 != '0'){
+                  fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
+                }
+                let link = {
+                  id: "Link_" + FbId,
+                  positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
+                  origin: item,
+                  fbbh:fbbhName,
+                  blink:true
+                };
+                window.Map.Detector.LinkOn(FbId, link);
               }
+            });
+            {
             }
           }
-
         }
 
         // 处理磁探数据
