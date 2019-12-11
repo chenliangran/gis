@@ -57,7 +57,7 @@ export default class Detect{
                     type:'detector',
                     group:'detector',                  
                     label:{
-                        text:target.origin.fbbh.slice(-3),
+                        text:target.origin.sptdh,
                         // text:target.origin.fbbh.slice(-3)+'/S',
                         font:'15px',
                         fillColor:Cesium.Color.BLUE,

@@ -31,6 +31,7 @@ export function Init(ele,CONFIG){
             }),
             navigation:false,
             selectionIndicator : false,
+            sceneModePicker:true,
             contextOptions:{
                 webgl:{
                     alpha: true,

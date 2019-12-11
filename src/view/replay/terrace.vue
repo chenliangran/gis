@@ -72,7 +72,7 @@
 						<div class="list" v-show="gdFlag">
 							<div>
 								<span style="min-width: 150px">发现时间</span>
-								<span style="min-width: 50px">经纬</span>
+								<span style="min-width: 50px">经度</span>
 								<span style="min-width: 50px">纬度</span>
 								<span style="min-width: 100px">探测目标位置偏差</span>
 							</div>

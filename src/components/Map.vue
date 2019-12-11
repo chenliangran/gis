@@ -384,6 +384,7 @@ background: none !important;
          <div id="progress" :style="'width:'+ widthNum +''"></div>
          <div :style="setZZStyle" class="timeLineZZ"></div>
         <div id="visualization" :style="visStyle"></div>
+        <span style="position: absolute;right:80px;color:#fff;top:40px">FPS : {{FPS}}</span>
         <p style="margin:35px 0 0 35px;color:#ffffff">当前播放倍数：{{getNum()}}</p>
       </div>
     </div>
@@ -662,7 +663,8 @@ export default {
       flagTypeOne:true,
       flagTypeTwo:true,
       flagTypeThree:true,
-      flagTypeFour:true
+      flagTypeFour:true,
+      FPS:0
     };
   },
 
@@ -706,6 +708,7 @@ export default {
   },
 
   mounted() {
+    this.showFPS().go();
     this.scrollToBottom();
     let that = this
     $('#mySeamless').on('mouseenter',() => {
@@ -799,6 +802,46 @@ export default {
     }
   },
   methods: {
+    showFPS(){
+      let _this = this
+      var requestAnimationFrame =
+              window.requestAnimationFrame || //Chromium
+              window.webkitRequestAnimationFrame || //Webkit
+              window.mozRequestAnimationFrame || //Mozilla Geko
+              window.oRequestAnimationFrame || //Opera Presto
+              window.msRequestAnimationFrame || //IE Trident?
+              function(callback) { //Fallback function
+                window.setTimeout(callback, 1000/60);
+              };
+      var e,pe,pid,fps,last,offset,step,appendFps;
+
+      fps = 0;
+      last = Date.now();
+      step = function(){
+        offset = Date.now() - last;
+        fps += 1;
+        if( offset >= 1000 ){
+          last += offset;
+          appendFps(fps);
+          fps = 0;
+        }
+        requestAnimationFrame( step );
+      };
+      //显示fps; 如果未指定元素id，默认<body>标签
+      appendFps = function(fps){
+
+        _this.FPS = fps
+
+        // if(!e) e=document.createElement('span');
+        // pe=pid?document.getElementById(pid):document.getElementsByTagName('body')[0];
+        // e.innerHTML = "fps: " + fps;
+        // pe.appendChild(e);
+      }
+      return {
+        setParentElementId :  function(id){pid=id;},
+        go          :  function(){step();}
+      }
+    },
     scrollToBottom() {
       this.$nextTick(() => {
         var container = this.$el.querySelector("#mySeamless");
