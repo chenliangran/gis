@@ -131,12 +131,11 @@ export class Events{
                                 parent : MarkParent,
                                 point : {
                                     pixelSize : 5,
-                                    color : Ce.CssColor('red')
+                                    color : Ce.CssColor('yellow')
                                 },
                                 label : {
                                     text : (Ce.Distance([lastP.lon, lastP.lat, 0],[_gps.lon, _gps.lat, 0]) / 1000).toFixed(2) + ' KM',
-                                    font : '20px',
-                                    fillColor:Cesium.Color.RED,
+                                    font : '16px',
                                     showBackground : true,
                                     verticalOrigin : Cesium.VerticalOrigin.BOTTOM
                                 }
@@ -146,14 +145,14 @@ export class Events{
                     }else{
 
                         let startPoint = [_gps.lon, _gps.lat, _gps.lon+0.01, _gps.lat+0.01]
+
                         currentLine = Drawer.Draw({
                             parent : MarkParent,
                             polyline : {
                                 positions : new _this.Cesium.CallbackProperty(function(){
-  
+
                                     return Ce.ToPoints(startPoint)
-                                },false),
-                                material: Cesium.Color.DEEPSKYBLUE
+                                },false)
                             }
                         })
 

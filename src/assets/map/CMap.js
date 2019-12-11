@@ -52,6 +52,7 @@ export function Init(ele,CONFIG){
     const camera = viewer.camera;
 
     const scene = viewer.scene;
+    scene.faxx=true
 
     const entities = viewer.entities;
 

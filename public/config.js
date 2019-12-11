@@ -1,7 +1,7 @@
 let env = {
     development:'http://127.0.0.1',
     //development:'http://192.168.0.111',
-    production:window.location.hostname
+    production:'http://'+window.location.hostname
 },PORT = '10000';
 
 let currentEnv = 'development';
