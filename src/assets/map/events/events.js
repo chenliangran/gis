@@ -131,11 +131,12 @@ export class Events{
                                 parent : MarkParent,
                                 point : {
                                     pixelSize : 5,
-                                    color : Ce.CssColor('yellow')
+                                    color : Ce.CssColor('red')
                                 },
                                 label : {
                                     text : (Ce.Distance([lastP.lon, lastP.lat, 0],[_gps.lon, _gps.lat, 0]) / 1000).toFixed(2) + ' KM',
-                                    font : '16px',
+                                    font : '20px',
+                                    fillColor:Cesium.Color.RED,
                                     showBackground : true,
                                     verticalOrigin : Cesium.VerticalOrigin.BOTTOM
                                 }
@@ -149,9 +150,10 @@ export class Events{
                             parent : MarkParent,
                             polyline : {
                                 positions : new _this.Cesium.CallbackProperty(function(){
-
+  
                                     return Ce.ToPoints(startPoint)
-                                },false)
+                                },false),
+                                material: Cesium.Color.DEEPSKYBLUE
                             }
                         })
 

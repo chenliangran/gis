@@ -1,4 +1,5 @@
 import Tools from './tools.js';
+import { Message } from 'element-ui';
 
 let Tool = null;
 
@@ -28,15 +29,21 @@ const makeMenuHtml = {
             setRangeClose.innerText = '关闭';
 
             setRangeConfirm.onclick = function(){
-
                 let newValue = Number(setRangeInputer.value);
-
+                 if(newValue <= 0){
+                    Message({
+                        message: '请输入探测范围，不用输入单位(km)',
+                        type: 'error'
+                      });
+                    return
+                 }
                 console.log(newValue)
 
                 cylinder.topRadius = newValue * 1000;
                 cylinder.bottomRadius = newValue * 1000;
 
                 console.log(cylinder)
+                document.body.removeChild( setRangeContainer );
             }
 
             setRangeClose.onclick = function(){
