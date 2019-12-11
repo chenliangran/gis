@@ -256,7 +256,7 @@ export function Init(ele,CONFIG){
     const typeConfig = {
         color : {
             feiji : Ce.CssColor('orange'),
-            qianting : Ce.CssColor('white'),
+            qianting : Ce.CssColor('blue'),
         },
         displayDistance : {
             feiji : Ce.DisplayNF(300000, 100000000),

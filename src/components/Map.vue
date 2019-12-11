@@ -376,6 +376,7 @@ background: none !important;
       @flagType4="flagType4"
       @mapTool="maptool"
     @controller="controller"
+    @events="events"
     :WebSocketData="WebSocketData"
     :FBnum="FBnum"></gis-header>
     <div id="mapElement">
@@ -388,7 +389,7 @@ background: none !important;
         <p style="margin:35px 0 0 35px;color:#ffffff">当前播放倍数：{{getNum()}}</p>
       </div>
     </div>
-    <div class="seamless-warp" id='mySeamless' style="background: rgba(8, 38, 93, 0.5)">
+    <div class="seamless-warp" id='mySeamless' style="background: rgba(8, 38, 93, 0.5)" v-show="eventsF">
       <div class="notifyDiv myMsgList" :data="notifyList"> 
         <div  :style="{'height':item.typeall === 'FBSJ'?'160px':'130px'}" class="notify" v-for="(item, i) in notifyList " :key="i">
           <div   v-if="item.typeall === 'FBSJ'" >
@@ -644,6 +645,7 @@ export default {
       showInfo: false,
       toolF:true,
       controllerF:true,
+      eventsF:true,
       FBnum: 0,
       widthNum:0,
       notifyList:[],
@@ -974,6 +976,9 @@ export default {
     },
     tudeShow(flag){
        this.tudeF = flag;
+    },
+    events(flag3){
+       this.eventsF = flag3
     },
     timeDown() {
       window.Map.FlyCompare.ClearPath();
@@ -2283,8 +2288,6 @@ export default {
                 window.Map.Detector.LinkOn(FbId, link);
               }
             });
-            {
-            }
           }
         }
 

@@ -36,6 +36,7 @@
              <ul>
                 <li @click="controller(flag1)"><i class="icon icon4"></i><span>图层控制</span></li>
                 <li @click="tool(flag)"><i class="icon icon5"></i><span>绘图工具</span></li>
+                 <li @click="events(flag3)"><i class="icon icon7"></i><span>事件悬浮面板</span></li>
                 <!-- <li @click="clip"><i class="icon icon6"></i><span>截屏</span></li> -->
 <!--                <li style="margin-right: 30px;"><i class="icon icon7"></i><span>FPS信息：{{FPS}}</span></li>-->
             </ul>
@@ -115,6 +116,7 @@ export default {
             flag:true,
             flag1:true,
             flag2:false,
+            flag3:true,
             groupNum:'',
             NowTime:'',
             jwdVisible:false,
@@ -264,6 +266,10 @@ export default {
         controller(flag1){
             this.flag1 = !flag1;
             this.$emit("controller",this.flag1)  
+        },
+        events(flag3){
+            this.flag3 = !flag3;
+            this.$emit("events",this.flag3)  
         },
         tudeShow(){
             this.jwdVisible =true;
