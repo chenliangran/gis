@@ -77,14 +77,11 @@
 								<span style="min-width: 100px">探测目标位置偏差</span>
 							</div>
 							<ul>  
-								<li  v-for="(item, i) in ctData" :key="i" >
-									<div v-if="Number(item.mbzxd) > 100"> 
+								<li v-for="(item, i) in ctData" :key="i"  v-if="Number(item['mbzxd']) >= 100">
 										<span style="min-width: 150px" :title="item.mbsj">{{item["mbsj"].split('.')[0]}}</span>
 										<span style="min-width: 50px"  :title="item.mbjd">{{Math.floor(item["mbjd"]*100)/100}}</span>
 										<span style="min-width: 50px"  :title="item.mbwd">{{Math.floor(item["mbwd"]*100)/100}}</span>
-										<span style="min-width: 100px" :title="item.mbwzwc">{{item["mbwzwc"]}}</span>
-									</div>
-									
+										<span style="min-width: 100px" :title="item.mbwzwc">{{item["mbwzwc"]}}</span>																
 								</li>
 							</ul>
 						</div>
