@@ -74,6 +74,7 @@
                 :visible.sync="jwdVisible"
                 width="30%"
                 append-to-body
+                :close-on-click-modal="false"
         >
             <el-button type="primary" @click="addDomain" style="margin-bottom: 10px">新增点</el-button>
             <el-button type="danger" @click="clearLine">清除连线</el-button>
@@ -301,6 +302,42 @@ export default {
                         that.$message.error('纬度不能为空！');
                         flag =false;
                         return
+                    }
+                    if(s.jd.includes("°") && s.jd.includes("'") && s.jd.includes("\"")){
+                        let du = s.jd.indexOf("°");
+                        var x = s.jd.slice(0,du);
+                        let fen = s.jd.indexOf("'");
+                        if(fen > -1){
+                            var y = s.jd.slice(fen-2,fen)
+                        }
+                        let miao = s.jd.indexOf("\"");
+                        if(miao > -1){
+                            var z = s.jd.slice(miao-2,miao)
+                        }
+                        s.jd = parseFloat(x) + parseFloat(y/60)  + parseFloat(z/3600);
+                        if(isNaN(s.jd)){
+                            that.$message.error('经纬度格式错误！');
+                            flag =false;
+                            return
+                        }
+                    }
+                    if(s.wd.includes("°") && s.wd.includes("'") && s.wd.includes("\"")){
+                        let du = s.wd.indexOf("°");
+                        var x = s.wd.slice(0,du);
+                        let fen = s.wd.indexOf("'");
+                        if(fen > -1){
+                            var y = s.wd.slice(fen-2,fen)
+                        }
+                        let miao = s.wd.indexOf("\"");
+                        if(miao > -1){
+                            var z = s.wd.slice(miao-2,miao)
+                        }
+                        s.wd = parseFloat(x) + parseFloat(y/60)  + parseFloat(z/3600);
+                        if(isNaN(s.wd)){
+                            that.$message.error('经纬度格式错误！');
+                            flag =false;
+                            return
+                        }
                     }
                     arr.push(Number(s.jd),Number(s.wd));
                 }
