@@ -360,19 +360,23 @@ background: none !important;
   width: 80%;
   max-width: 80%;
 }
+.cesium-viewer-toolbar{
+  top:65px;
+  right:10px
+}
 </style>
 
 <template>
   <div class="MapContainer">
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
     <gis-header :timeNow="timeNow"
-      @flagType1="flagType1" 
+      @flagType1="flagType1"
       @flagType2="flagType2"
-      @flagType3="flagType3" 
-      @flagType4="flagType4"  
-      @mapTool="maptool" 
-    @controller="controller" 
-    :WebSocketData="WebSocketData" 
+      @flagType3="flagType3"
+      @flagType4="flagType4"
+      @mapTool="maptool"
+    @controller="controller"
+    :WebSocketData="WebSocketData"
     :FBnum="FBnum"></gis-header>
     <div id="mapElement">
       <div class="time_bg">

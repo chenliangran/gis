@@ -632,6 +632,7 @@ export default {
           this.timeLabelF = false
       },
       filterConfirm(data){
+          let that = this
           console.log(data)
           let arrData = []
           data.map(item => {
@@ -647,6 +648,20 @@ export default {
                 $('.vis-box').each((i,v) => {
                     // v.style.top = '22px !important'
                     $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+                })
+                $(".vis-item.vis-box.vis-readonly").mouseout(function(s){
+                    clearTimeout(that.showInterval)
+                    that.showInterval = null;
+                    that.showNumber = 0;
+                    
+                    that.showInterval = setTimeout(()=>{
+                        that.showNumber++;
+                        console.log(that.showNumber);
+                        // if(that.showNumber >=1){
+                            that.timeLabelF = false;
+                            that.showNumber = 0;
+                        //  }
+                    },1000)
                 })
             },1000)
 
@@ -978,16 +993,17 @@ export default {
             
 
             $(".vis-item.vis-box.vis-readonly").mouseout(function(s){
+                clearTimeout(that.showInterval)
                 that.showInterval = null;
                 that.showNumber = 0;
-                clearTimeout(that.showInterval)
+                
                 that.showInterval = setTimeout(()=>{
                     that.showNumber++;
                     console.log(that.showNumber);
-                    if(that.showNumber >=1){
+                    // if(that.showNumber >=1){
                         that.timeLabelF = false;
                         that.showNumber = 0;
-                     }
+                    //  }
                 },1000)
             })
             this.timeline.on('mouseDown',(item) => {
