@@ -5,8 +5,8 @@
     display: inline-block;
     background: url(../../assets/icon1.png) no-repeat;
     background-size: 100% 100%;
-    width: 16px;
-    height: 16px;
+    width: 13px;
+    height: 13px;
 }
 .cesium-timeline-icon16{
     height: 100px;
@@ -19,15 +19,15 @@
     display: inline-block;
     background: url(../../assets/icon2.png) no-repeat;
     background-size: 100% 100%;
-    width: 16px;
-    height: 16px;
+    width: 13px;
+    height: 13px;
 }
 .icon3{
     display: inline-block;
     background: url(../../assets/icon3.png) no-repeat;
     background-size: 100% 100%;
-    width: 16px;
-    height: 16px;
+    width: 13px;
+    height: 13px;
 }
 .vis-item-content{
     padding: 0px !important;

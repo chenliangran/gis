@@ -4,7 +4,7 @@
             <ul>
                 <li style="margin-left: 30px;" @click="dataShow(flag2)"> 
                     <i class="icon icon1"></i>
-                    <span>数据分析</span>
+                    <span>数据统计</span>
                     <i class="icon icon8"></i>
                     <div class="menu" v-show="flag2">
                         <p></p>
@@ -37,7 +37,7 @@
                 <li @click="controller(flag1)"><i class="icon icon4"></i><span>图层控制</span></li>
                 <li @click="tool(flag)"><i class="icon icon5"></i><span>绘图工具</span></li>
                 <!-- <li @click="clip"><i class="icon icon6"></i><span>截屏</span></li> -->
-                <li style="margin-right: 30px;"><i class="icon icon7"></i><span>FPS信息：{{FPS}}</span></li>
+<!--                <li style="margin-right: 30px;"><i class="icon icon7"></i><span>FPS信息：{{FPS}}</span></li>-->
             </ul>
         </div>
         <div id="dv" v-show="dvShow" :style="dvStyle" @dblclick="clipImg"></div>
@@ -266,7 +266,8 @@ export default {
             this.$emit("controller",this.flag1)  
         },
         tudeShow(){
-            this.jwdVisible =true
+            this.jwdVisible =true;
+            this.dynamicValidateForm.domains=[{jd: "", wd:"", key: ""}];
         },
         addDomain() {
             this.dynamicValidateForm.domains.push({
@@ -279,6 +280,10 @@ export default {
             const that =this;
             let flag =true;
             let arr = [];
+            if(!this.dynamicValidateForm.domains.length){
+                that.$message.error('点迹不能为空！');
+                return false
+            }
             this.dynamicValidateForm.domains.map(s=>{
                 if(flag){
                     if(s.jd=== ''){
@@ -294,6 +299,7 @@ export default {
                     arr.push(Number(s.jd),Number(s.wd));
                 }
             })
+            return
             if(flag){
                 this.jwdVisible = false;
                 // window.Map.viewer.entities.add({
@@ -370,7 +376,6 @@ export default {
         },
     },
      mounted() {
-        this.showFPS().go();
         let that = this
         setInterval(function(){
             that.NowTime  = that.CurentTime(that.timeNow);

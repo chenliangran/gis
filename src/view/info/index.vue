@@ -9,20 +9,20 @@
 				{{dataInfo.data.name?dataInfo.data.name:type}}
 			</div>
 			<div v-if="type=='潜艇'">
-				<p>经度：{{dataInfo.gps?dataInfo.gps.lat:dataInfo.data["jd"]}}</p>
-				<p>纬度：{{dataInfo.gps?dataInfo.gps.lon:dataInfo.data["wd"]}}</p>
+				<p>经度：{{dataInfo.gps?dataInfo.gps.lon:dataInfo.data["jd"]}}</p>
+				<p>纬度：{{dataInfo.gps?dataInfo.gps.lat:dataInfo.data["wd"]}}</p>
 			</div>
 			<div v-if="type=='浮标探测器'">
-				<p>经度：{{dataInfo.gps?dataInfo.gps.lat:dataInfo.data["llcrswzjd"]}}</p>
-				<p>纬度：{{dataInfo.gps?dataInfo.gps.lon:dataInfo.data["llcrswzwd"]}}</p>
+				<p>经度：{{dataInfo.gps?dataInfo.gps.lon:dataInfo.data["llcrswzjd"]}}</p>
+				<p>纬度：{{dataInfo.gps?dataInfo.gps.lat:dataInfo.data["llcrswzwd"]}}</p>
 			</div>
 			<div v-if="type=='飞机'">
-				<p>经度：{{dataInfo.gps?dataInfo.gps.lat:dataInfo.data["zjjd"]}}</p>
-				<p>纬度：{{dataInfo.gps?dataInfo.gps.lon:dataInfo.data["zjwd"]}}</p>
+				<p>经度：{{dataInfo.gps?dataInfo.gps.lon:dataInfo.data["zjjd"]}}</p>
+				<p>纬度：{{dataInfo.gps?dataInfo.gps.lat:dataInfo.data["zjwd"]}}</p>
 			</div>
 			<div v-if="type=='民船'">
-				<p>经度：{{dataInfo.gps?dataInfo.gps.lat:dataInfo.data["jd"]}}</p>
-				<p>纬度：{{dataInfo.gps?dataInfo.gps.lon:dataInfo.data["wd"]}}</p>
+				<p>经度：{{dataInfo.gps?dataInfo.gps.lon:dataInfo.data["jd"]}}</p>
+				<p>纬度：{{dataInfo.gps?dataInfo.gps.lat:dataInfo.data["wd"]}}</p>
 			</div>
 			<div class="list" v-if="isMore">
 				<div>
@@ -93,7 +93,7 @@ export default {
 					this.keys = fjInfo
 				}
 				if(this.type == "浮标探测器") {
-					this.keys = fbInfo
+					this.keys = fbInfo;
 				}
 				if(this.type == "潜艇") {
 					this.keys = qtInfo
