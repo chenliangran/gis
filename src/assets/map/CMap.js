@@ -26,23 +26,9 @@ export function Init(ele,CONFIG){
 
         return new Cesium.Viewer(eleid,{
             timeline:true,
-            imageryProvider: new Cesium.UrlTemplateImageryProvider({
-                url : `${mapUrl}/earthview/services/v/get/gxservice/getTile/map/0/{r}/{c}/{m}`,
-                ellipsoid: Cesium.Ellipsoid.WGS84,
-                tilingScheme: new Cesium.GeographicTilingScheme({
-                    numberOfLevelZeroTilesX: 2,
-                    numberOfLevelZeroTilesY: 1,
-                    rectangle: new Cesium.Rectangle(-Cesium.Math.PI, -Cesium.Math.PI * 0.5, Cesium.Math.PI, Cesium.Math.PI *0.5),
-                    ellipsoid:Cesium.Ellipsoid.WGS84
-                }),
-                maximumLevel:14,
-                customTags:{
-                    m : (provider,x,y,level) => level+1,
-                    r : (provider,x,y,level) => y,
-                    c : (provider,x,y,level) => x
-                }
+            imageryProvider: new Cesium.SingleTileImageryProvider({
+                url : '/static/image/Map/single.jpg',
             }),
-            
             navigation:false,
             selectionIndicator : false,
             contextOptions:{
@@ -157,33 +143,8 @@ export function Init(ele,CONFIG){
     $.get(`${globalUrl.host}/find/findGisPath`, {
         
     }).then(data => {
-        debugger
-        var url = data
-        var originResult = {"viewBounds":{"top":35.966639677190145,"left":-38.441075287286836,"bottom":-40.91551089738353,"leftBottom":{"x":-38.441075287286836,"y":-40.91551089738353},"right":38.441075287286836,"rightTop":{"x":38.441075287286836,"y":35.966639677190145}},"viewer":{"leftTop":{"x":0,"y":0},"top":0,"left":0,"bottom":256,"rightBottom":{"x":256,"y":256},"width":256,"right":256,"height":256},"distanceUnit":"METER","minVisibleTextSize":0.1,"coordUnit":"DEGREE","scale":7.914176193429535E-9,"description":"","paintBackground":true,"maxVisibleTextSize":1000,"maxVisibleVertex":3600000,"clipRegionEnabled":false,"antialias":false,"textOrientationFixed":false,"angle":0,"prjCoordSys":{"distanceUnit":"METER","projectionParam":null,"epsgCode":4326,"coordUnit":"DEGREE","name":"GCS_WGS_1984","projection":null,"type":"PCS_EARTH_LONGITUDE_LATITUDE","coordSystem":{"datum":{"name":"D_WGS_1984","type":"DATUM_WGS_1984","spheroid":{"flatten":0.00335281066474748,"name":"WGS_1984","axis":6378137,"type":"SPHEROID_WGS_1984"}},"unit":"DEGREE","spatialRefType":"SPATIALREF_EARTH_LONGITUDE_LATITUDE","name":"GCS_WGS_1984","type":"GCS_WGS_1984","primeMeridian":{"longitudeValue":0,"name":"Greenwich","type":"PRIMEMERIDIAN_GREENWICH"}}},"minScale":0,"markerAngleFixed":false,"overlapDisplayedOptions":{"allowPointWithTextDisplay":true,"horizontalOverlappedSpaceSize":0,"allowPointOverlap":true,"allowThemeGraduatedSymbolOverlap":false,"verticalOverlappedSpaceSize":0,"allowTextOverlap":false,"allowThemeGraphOverlap":false,"allowTextAndPointOverlap":true},"visibleScales":[],"visibleScalesEnabled":false,"customEntireBoundsEnabled":false,"clipRegion":{"center":null,"parts":null,"style":null,"prjCoordSys":null,"id":0,"type":"REGION","partTopo":null,"points":null},"maxScale":1.0E12,"customParams":"","center":{"x":0,"y":-2.474435610096691},"dynamicPrjCoordSyses":[{"distanceUnit":null,"projectionParam":null,"epsgCode":0,"coordUnit":null,"name":null,"projection":null,"type":"PCS_ALL","coordSystem":null}],"colorMode":"DEFAULT","textAngleFixed":false,"overlapDisplayed":false,"userToken":{"userID":""},"cacheEnabled":true,"dynamicProjection":true,"autoAvoidEffectEnabled":true,"customEntireBounds":null,"name":"haituMap","bounds":{"top":85.05112877980662,"left":-180,"bottom":-90,"leftBottom":{"x":-180,"y":-90},"right":180,"rightTop":{"x":180,"y":85.05112877980662}},"backgroundStyle":{"fillGradientOffsetRatioX":0,"markerSize":2.4,"fillForeColor":{"red":255,"green":255,"blue":255,"alpha":255},"fillGradientOffsetRatioY":0,"markerWidth":0,"markerAngle":0,"fillSymbolID":0,"lineColor":{"red":0,"green":0,"blue":0,"alpha":255},"markerSymbolID":0,"lineWidth":0.1,"markerHeight":0,"fillOpaqueRate":100,"fillBackOpaque":true,"fillBackColor":{"red":255,"green":255,"blue":255,"alpha":255},"fillGradientMode":"NONE","lineSymbolID":0,"fillGradientAngle":0}};
-        var bounds = originResult.bounds;
-        var mapName = url.substring(url.lastIndexOf('/')+1);
-        mapName =  decodeURI(mapName);
-
-
-        //利用服务url创建SuperMapImageryProvider实例
-        var provider;
-        if (!originResult.visibleScales || originResult.visibleScales.length == 0) {
-            provider = new Cesium.SuperMapImageryProvider({
-                url : url
-            });
-        } else {
-            var visibleScales = originResult.visibleScales;
-            var min = findNearScale(visibleScales[0]);
-            var max = findNearScale(visibleScales[visibleScales.length-1]);
-            provider = new Cesium.SuperMapImageryProvider({
-                url : url,
-                // 设置最大缩放层级后，到了最大缩放层级，不会去后端请求数据，但是地图还可以继续放大
-                maximumLevel: max,
-                minimumLevel: min
-            });
-        }
+        var url = data;
         imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
-             
             url : url,
             ellipsoid: Cesium.Ellipsoid.WGS84,
             tilingScheme: new Cesium.GeographicTilingScheme({
@@ -198,13 +159,7 @@ export function Init(ele,CONFIG){
                 r : (provider,x,y,level) => y,
                 c : (provider,x,y,level) => x
             }
-        })
-        );
-        if(provider){
-
-            var imagery = imageryLayers.addImageryProvider(provider);
-            imagery.alpha = 1.0;
-        }
+        }))
     });
 
 
