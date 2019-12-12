@@ -127,10 +127,9 @@
 .tl-sm{
 	height:40px;
 	width:300px;
-	
 	margin:auto;
 	margin-top:20px;
-	background: url(../../assets/icon/图例说明.png) no-repeat!important;
+	background: url(../../assets/header/tlsm.png) no-repeat!important;
 	background-size: 100% 100%!important;
 }
 </style>
