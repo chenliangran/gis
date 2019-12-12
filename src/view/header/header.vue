@@ -346,8 +346,24 @@ export default {
             if(flag){
                 this.jwdVisible = false;
                 let id = Math.random().toFixed(10);
-                window.Map.viewer.entities.add({
-                    polyline : {
+                let entity = window.Map.viewer.entities.add({
+                    position:Cesium.Cartesian3.fromDegrees(arr[0],arr[1]),
+                    point: {
+                        color: Cesium.Color.RED,    //点位颜色
+                        pixelSize: 5               //像素点大小
+                    },
+
+                    label:{
+                        show:true,
+                        text:'防空识别区',                  
+                        font:'24px Helvetica',
+                        fillColor:Cesium.Color.BLUE,
+                        style: Cesium.LabelStyle.FILL,        //label样式
+                        horizontalOrigin : Cesium.HorizontalOrigin.LEFT,//水平位置
+                        verticalOrigin : Cesium.VerticalOrigin.CENTER,//垂直位置
+                        pixelOffset:new Cesium.Cartesian2(10,20)  //偏移
+                    },
+                    polyline : { 
                         positions : new Cesium.CallbackProperty(function(){
                             return Cesium.Cartesian3.fromDegreesArray(arr)
                         },false),
@@ -357,11 +373,12 @@ export default {
                     id:id
                 });
                 this.lineId.push(id)
+                window.Map.viewer.zoomTo(entity)//居中显示
             }
         },
         clearLine(){
             this.lineId.map(s=>{
-                window.Map.viewer.entities.removeById(s)
+                window.Map.viewer.entities.removeById(s) //删除
             })
             this.lineId=[]
         },

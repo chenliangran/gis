@@ -57,7 +57,7 @@ export default class Detect{
                     type:'detector',
                     group:'detector',                  
                     label:{
-                        text:target.origin.sptdh,
+                        text:target.origin.sptdh+target.type,
                         // text:target.origin.fbbh.slice(-3)+'/S',
                         font:'15px',
                         fillColor:Cesium.Color.BLUE,
@@ -77,8 +77,8 @@ export default class Detect{
                         bottomRadius:target.R || 2000,
                         fill:false,
                         outline:true,
-                        outlineWidth:2,
-                        outlineColor:Ce.CssColor('aqua')
+                        outlineWidth:4,
+                        outlineColor:Ce.CssColor('red')
                     },
                     origin:target
                 })

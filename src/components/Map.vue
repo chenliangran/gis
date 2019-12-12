@@ -1522,11 +1522,28 @@ export default {
         // console.log(Number(item['fbsswzjd1']),Number(item['fbsswzwd1']))    
         if (item["jcxxid"] != "0") {
            that.FBnum = ++that.FBnum;
+           let FBLX = '';
+            if(item.fblx=="被动全向"){
+              FBLX = '/L'
+            }
+            if(item.fblx=="被动定向"){
+              FBLX = '/D'
+            }
+            if(item.fblx=="主动全向"){
+              FBLX = '/R'
+            }
+            if(item.fblx=="海噪声"){
+              FBLX = '/A'
+            }
+            if(item.fblx=="温深"){
+              FBLX = '/B'
+            }
            window.Map.Detector.Add({
             id: "detector_" + item["fbbh"],
             positions: [Number(item["llcrswzjd"]), Number(item["llcrswzwd"])],
             R: 2000,
-            origin: item
+            origin: item,
+            type:FBLX
           });
 
         }
@@ -2249,6 +2266,22 @@ export default {
           if (item["jcxxid"] != "0") {
             if (Number(item["llcrswzjd"]) && Number(item["llcrswzwd"])) {
               _this.FBnum = ++_this.FBnum;
+              let FBLX = '';
+              if(item.fblx=="被动全向"){
+                FBLX = '/L'
+              }
+              if(item.fblx=="被动定向"){
+                FBLX = '/D'
+              }
+              if(item.fblx=="主动全向"){
+                FBLX = '/R'
+              }
+              if(item.fblx=="海噪声"){
+                FBLX = '/A'
+              }
+              if(item.fblx=="温深"){
+                FBLX = '/B'
+              }
               window.Map.Detector.Add({
                 id: "detector_" + item["fbbh"],
                 positions: [
@@ -2257,6 +2290,7 @@ export default {
                 ],
                 R: 2000,
                 origin: item,
+                type: FBLX,
                 blink:true
               });
             }

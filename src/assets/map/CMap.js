@@ -298,6 +298,10 @@ export function Init(ele,CONFIG){
             },
             origin:target
         }
+        if(type == 'qianting'){
+            shape.billboard.width = 20
+            shape.billboard.height = 50
+        }
         if(type == 'feiji'){
 
             _.merge(shape,{
