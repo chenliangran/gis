@@ -145,16 +145,60 @@ export default class Tools{
 
         if(state){
 
-            imageProvider.addImageryProvider(new Cesium.GridImageryProvider({
+            let gridTile = new Cesium.GridImageryProvider({
                 cells: 4,
                 color: Ce.CssColor('red'),
                 glowColor: Ce.CssColor('transparent'),
                 backgroundColor: Ce.CssColor('transparent'),
-            }))
+            })
+
+            gridTile.requestImage = function(x, y, level){
+
+                var interval = 180.0 / Math.pow(2, level);
+                var lon = ((x) * interval-180).toFixed(2);
+                var lat = (90 - (y) * interval - 45).toFixed(2),
+                    fontsize = 20;
+
+                var labelLon = '';
+                var labelLat = '';
+                if (lon > 0) {
+                    if (lat > 0) {
+                        labelLon = (lon == 0 || lon == 180) ? lon : 'E' + lon;
+                        labelLat = (lat == 0 || lat == 90) ? lat : 'N' + lat;
+                    } else {
+                        labelLon = (lon == 0 || lon == 180) ? lon : 'E' + lon;
+                        labelLat = (lat == 0 || lat == 90) ? -lat : 'S' + -lat;
+                    }
+                } else {
+                    if (lat > 0) {
+                        labelLon = (-lon == 0 || -lon == 180) ? -lon : 'W' + -lon;
+                        labelLat = (lat == 0 || lat == 90) ? lat : 'N' + lat;
+                    } else {
+                        labelLon = (-lon == 0 || -lon == 180) ? -lon : 'W' + -lon;
+                        labelLat = (lat == 0 || lat == 90) ? -lat : 'S' + -lat;
+                    }
+                }
+
+                if(level > 10){
+                    fontsize = 12
+                }
+
+                var canvas = document.createElement('canvas');
+                    canvas.width = 256;
+                    canvas.height = 256;
+                    var context = canvas.getContext('2d');
+                    context.strokeRect(0, 0, 256, 256);
+                    var label = `${labelLon} / ${labelLat}`;
+                    context.font = `bold ${fontsize}px Arial`;
+                    context.textAlign = 'left';
+                    context.fillText(label, 0, 256);
+                    return canvas;
+            }
+
+            imageProvider.addImageryProvider(gridTile)
         }else{
             let _gridLayer = imageProvider.get(imageProvider.length-1)
             imageProvider.remove(_gridLayer)
-            console.log(imageProvider)
         }
     }
 }
