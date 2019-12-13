@@ -49,7 +49,7 @@ export class GroupController{
     SetGroup( gname, state ){
         if(gname == 'detector_sl'){//失联浮标
             GroupRecords['detector']._children.map(s=>{
-                if(s.billboard.image._value.includes("fubiao5")){
+                if(s.billboard.image._value.includes("fubiaosl")){
                     s.show = state;
                 };
             })

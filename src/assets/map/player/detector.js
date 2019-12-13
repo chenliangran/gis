@@ -102,28 +102,34 @@ export default class Detect{
             return
         }
 
-
         _.forEach(sourceData, (single) => {
-
             let id = single.target.id;
-
-            let onShow = _.filter(detectorIds, (tarId) => {
-                return tarId == id
-            })
-
             let detector = Tool.GetId(id);
-
-            if(!detector){
-                return;
-            }
-
-            if(onShow.length){
-                // detector.billboard.color = Ce.CssColor('white')
-                detector.billboard.image = '/static/image/junbiao/fubiao1.png'
-            }else{
-                // detector.billboard.color = Ce.CssColor('grey')
-                detector.billboard.image = '/static/image/junbiao/fubiao5.png'
-            }
+           if(single.target.origin.fbzt == "成活"){
+               detector.billboard.image = '/static/image/junbiao/fubiao1.png'
+           } else if(single.target.origin.fbzt == "死亡"){
+               detector.billboard.image = '/static/image/junbiao/fubiao5.png'
+           } else if(single.target.origin.fbzt == "失联"){
+               detector.billboard.image = '/static/image/junbiao/fubiaosl.png'
+           }
+            // let id = single.target.id;
+            //
+            // let onShow = _.filter(detectorIds, (tarId) => {
+            //     return tarId == id
+            // })
+            //
+            // let detector = Tool.GetId(id);
+            //
+            // if(!detector){
+            //     return;
+            // }
+            // if(onShow.length){
+            //     // detector.billboard.color = Ce.CssColor('white')
+            //     detector.billboard.image = '/static/image/junbiao/fubiao1.png'
+            // }else{
+            //     // detector.billboard.color = Ce.CssColor('grey')
+            //     detector.billboard.image = '/static/image/junbiao/fubiao5.png'
+            // }
         })
         
     }
