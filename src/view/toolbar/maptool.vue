@@ -4,7 +4,7 @@
     flex-direction: column;
     position: fixed;
     right:10px;
-    top:200px;
+    top:180px;
     background-color: rgba(14, 36, 95, 0.7);
     box-shadow: 0px 0px 2px #9a9a9a inset;
 }
@@ -65,8 +65,17 @@ export default {
                label : '测距',
                key : 'line_distance'
            },{
-               label : '清除',
-               key : 'Clear'
+               label : '清除点',
+               key : 'Clear_point'
+           },{
+               label : '清除线',
+               key : 'Clear_line'
+           },{
+               label : '清除文字',
+               key : 'Clear_text'
+           },{
+               label : '清除测距',
+               key : 'Clear_distance'
            },{
                label : '停止',
                key : 'Stop'
@@ -76,8 +85,8 @@ export default {
     },
     methods: {
         useTool(key){
-            if(key == 'Clear' || key == 'Stop'){
-
+            if(key == 'Clear_point' || key == 'Clear_line' ||key == 'Clear_text' || key == 'Clear_distance' || key == 'Stop'){
+               debugger
                 window.Map.MarkTool[key]();
                 return
             }

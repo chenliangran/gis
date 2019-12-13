@@ -375,11 +375,12 @@ background: none !important;
       @flagType3="flagType3"
       @flagType4="flagType4"
       @mapTool="maptool"
-    @controller="controller"
-    @events="events"
-    :WebSocketData="WebSocketData"
-    :FBnum="FBnum"
-    :eventsF="eventsF"></gis-header>
+      @controller="controller"
+      @events="events"
+      @feijiPolygon="feijiPolygon"
+      :WebSocketData="WebSocketData"
+      :FBnum="FBnum"
+      :eventsF="eventsF"></gis-header>
     <div id="mapElement">
       <div class="time_bg">
         <div id="timeDiv"></div>
@@ -992,6 +993,9 @@ export default {
     },
     events(flag3){
        this.eventsF = flag3
+    },
+    feijiPolygon(len){
+     
     },
     timeDown() {
       window.Map.FlyCompare.ClearPath();

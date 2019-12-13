@@ -45,6 +45,7 @@ export default class Player{
     }
 
     Update( id, position, origin, callback ){
+
         // console.log(window.Map.Tool.GetId(id))    
         let target = sourceData[id];
         if( target ){
@@ -60,7 +61,7 @@ export default class Player{
 
                 return;
             }
-
+           
             if(target.path.length > Params.path.len){
                 // console.log((target.path.length - Params.path.len))
                 // _.times( (target.path.length - Params.path.len) ,()=>{
@@ -73,7 +74,6 @@ export default class Player{
             target.path.push(position[0])
             target.path.push(position[1])
             target.path.push(position[2])
-
 
             let _pos = Ce.GetGps(target.entity.position._value);
 
