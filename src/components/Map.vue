@@ -2057,6 +2057,7 @@ export default {
      * ws数据处理事件
      */
     dealMessage(data) {
+
       const _this = this;
       let notifyList = [];
       let id = sessionStorage.getItem("selectEd")
@@ -2264,7 +2265,6 @@ export default {
         
         // 处理浮标数据
         function dealFbSJ(item,_this) {
-          //debugger
           if (window.Map.viewer.entities.getById("detector_" + item["fbbh"]))
             return;
           if (item["jcxxid"] != "0") {
@@ -2411,10 +2411,8 @@ export default {
         // 处理浮标投放数据 12-4
       function dealFbtfsj(item){
           if(item){
-
-              _.forEach(item, (v,k)=>{
+            _.forEach(item, (v,k)=>{
                   if((k.indexOf('fbxh') != -1) && (v !== '0')){
-                      
                       Fbtfs.push(v)
                   }
               })
