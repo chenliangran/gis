@@ -154,13 +154,16 @@ export default class Tools{
 
             gridTile.requestImage = function(x, y, level){
 
-                var interval = 180.0 / Math.pow(2, level);
-                var lon = ((x) * interval-180).toFixed(2);
-                var lat = (90 - (y) * interval - 45).toFixed(2),
+                var intervalX = 180.0 / Math.pow(2, level),
+                    intervalY = 180.0 / Math.pow(2, level);
+                
+                var lon = ((x) * intervalX-180).toFixed(2),
+                    lat = (90 - intervalY * y).toFixed(2),
                     fontsize = 20;
 
                 var labelLon = '';
                 var labelLat = '';
+                
                 if (lon > 0) {
                     if (lat > 0) {
                         labelLon = (lon == 0 || lon == 180) ? lon : 'E' + lon;
@@ -191,7 +194,7 @@ export default class Tools{
                     var label = `${labelLon} / ${labelLat}`;
                     context.font = `bold ${fontsize}px Arial`;
                     context.textAlign = 'left';
-                    context.fillText(label, 0, 256);
+                    context.fillText(label, 0, 20);
                     return canvas;
             }
 
