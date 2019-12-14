@@ -126,7 +126,7 @@
 }
 .tl-sm{
 	height:40px;
-	width:300px;
+	width:425px;
 	margin:auto;
 	margin-top:20px;
 	background: url(../../assets/header/tlsm.png) no-repeat!important;

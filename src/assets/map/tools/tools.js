@@ -130,7 +130,6 @@ export default class Tools{
     }
 
     RemoveByParent( parent ){
-
         _.forEach(parent._children, (ent) => {
 
             this.Remove(ent)

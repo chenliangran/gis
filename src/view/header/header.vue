@@ -7,7 +7,6 @@
                     <span>数据统计</span>
                     <i class="icon icon8"></i>
                     <div class="menu" v-show="flag2">
-                        <p></p>
                         <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='飞行曲线'>✔</span><label>飞行曲线</label></p>
                         <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='浮标投放信息'>✔</span><label>浮标投放信息</label></p>
                         <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='磁探探测目标'>✔</span><label>磁探探测目标</label></p>
@@ -18,9 +17,16 @@
                     <i class="icon icon2"></i>
                     <div class="export" @click="load">报告导出</div>
                 </li>
-                <li @click="tudeShow(tudeShow)">
+                <li @click="optionShow(flag4)">
                     <i class="icon icon3"></i>
-                    <span>经纬度设置</span>
+                    <span>参数设置</span>
+                     <i class="icon icon8"></i>
+                    <div class="menuOption" v-show="flag4">
+                        <p @click="tudeShow(tudeShow)">经纬度设置</p>
+                        <p @click="plane">飞机轨迹</p>
+                        <p @click="submarine">潜艇轨迹</p>
+
+                    </div>
                 </li>
             </ul>
         </div>
@@ -42,40 +48,40 @@
             </ul>
         </div>
         <div id="dv" v-show="dvShow" :style="dvStyle" @dblclick="clipImg"></div>
-        <el-dialog
+            <el-dialog
                 title="设置截取尺寸"
                 :visible.sync="dialogVisible"
                 width="20%"
                 append-to-body
-        >
-            <el-row style="margin: 10px 0">
-                <el-col :span="8"><span style="line-height: 32px">截取框长度</span></el-col>
-                <el-col :span="8">
-                    <el-input-number v-model="imgWidth" :min="100">
-                    </el-input-number>
-                </el-col>
-                <el-col :span="8"></el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="8"><span style="line-height: 32px">截取框宽度</span></el-col>
-                <el-col :span="8">
-                    <el-input-number v-model="imgHeight" :min="100">
-                    </el-input-number>
-                </el-col>
-                <el-col :span="8"></el-col>
-            </el-row>
-            <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="setXy">确 定</el-button>
-          </span>
-        </el-dialog>
-        <el-dialog
+                >
+                <el-row style="margin: 10px 0">
+                    <el-col :span="8"><span style="line-height: 32px">截取框长度</span></el-col>
+                    <el-col :span="8">
+                        <el-input-number v-model="imgWidth" :min="100">
+                        </el-input-number>
+                    </el-col>
+                    <el-col :span="8"></el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8"><span style="line-height: 32px">截取框宽度</span></el-col>
+                    <el-col :span="8">
+                        <el-input-number v-model="imgHeight" :min="100">
+                        </el-input-number>
+                    </el-col>
+                    <el-col :span="8"></el-col>
+                </el-row>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="setXy">确 定</el-button>
+            </span>
+            </el-dialog>
+            <el-dialog
                 title="经纬度设置"
                 :visible.sync="jwdVisible"
                 width="30%"
                 append-to-body
                 :close-on-click-modal="false"
-        >
+            >
             <el-button type="primary" @click="addDomain" style="margin-bottom: 10px">新增点</el-button>
             <el-button type="danger" @click="clearLine">清除连线</el-button>
             <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
@@ -101,12 +107,45 @@
             <el-button type="primary" @click="drawPolygon">确 定</el-button>
           </span>
         </el-dialog>
-   
+        <el-dialog
+                title="飞机轨迹"
+                :visible.sync="feijiVisible"
+                width="30%"
+                append-to-body
+                :close-on-click-modal="false"
+            >
+            <el-form :model="formInline" ref="formInline" label-width="100px" class="demo-dynamic">
+                <el-form-item label="长度">
+                    <el-input  type="number" v-model="formInline.len" placeholder="请输入飞机轨迹长度"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="feijiVisible = false">取 消</el-button>
+            <el-button type="primary" @click="feijiPolygon">确 定</el-button>
+          </span>
+        </el-dialog>
+        <el-dialog
+                title="潜艇轨迹"
+                :visible.sync="dunkerVisible"
+                width="30%"
+                append-to-body
+                :close-on-click-modal="false"
+            >
+            <el-form :model="form" ref="form" label-width="100px" class="demo-dynamic">
+                <el-form-item label="长度">
+                    <el-input  type="number" v-model="form.len" placeholder="请输入潜艇轨迹长度"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="dunkerVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dunkerPolygon">确 定</el-button>
+          </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-
+import Params from "../../assets/map/params.js";
 export default {
     props: ["WebSocketData","FBnum","timeNow","eventsF"],
 	data() {
@@ -118,9 +157,12 @@ export default {
             flag1:true,
             flag2:false,
             flag3:true,
+            flag4:false,
             groupNum:'',
             NowTime:'',
             jwdVisible:false,
+            feijiVisible:false,
+            dunkerVisible:false,
             dvStyle:{
                 width:'300px',
                 height:'300px',
@@ -150,7 +192,13 @@ export default {
             menuDataType1:true,
             menuDataType2:true,
             menuDataType3:true,
-            menuDataType4:true
+            menuDataType4:true,
+            formInline: {
+                len: ''
+            },
+            form: {
+                len: ''
+            }
 		}
 	},
 	methods: {
@@ -259,6 +307,9 @@ export default {
         },
         dataShow(flag2){
            this.flag2 = !flag2;          
+        },
+        optionShow(flag4){
+           this.flag4 = !flag4; 
         },	
         tool(flag){
             this.flag = !flag;
@@ -276,12 +327,42 @@ export default {
             this.jwdVisible =true;
             this.dynamicValidateForm.domains=[{jd: "", wd:"", key: ""}];
         },
+        plane(){
+            this.feijiVisible = true;
+        },
+        submarine(){
+            this.dunkerVisible = true;
+        },
         addDomain() {
             this.dynamicValidateForm.domains.push({
                 jd: "",
                 wd:"",
                 key: Date.now()
             });
+        },
+        feijiPolygon(){
+            if(!Number(this.formInline.len)){
+                this.$message.error('飞机轨迹长度不能为空！');
+                return false
+            }
+            if(!(Number(this.formInline.len) < 5000)){
+                this.$message.error('飞机轨迹长度不能大于5000！');
+                return false
+            }
+            Params.path.len = Number(this.formInline.len)
+            this.feijiVisible = false;
+        },
+        dunkerPolygon(){
+            if(!Number(this.form.len)){
+                this.$message.error('潜艇轨迹长度不能为空！');
+                return false
+            }
+            if(!(Number(this.form.len) < 5000)){
+                this.$message.error('潜艇轨迹长度不能大于5000！');
+                return false
+            }
+            Params.path.len = Number(this.form.len)
+            this.dunkerVisible = false;
         },
         drawPolygon(){
             const that =this;
@@ -604,6 +685,17 @@ export default {
         left: 10px;
         cursor: pointer;
     }
+    .menuOption{
+        position: absolute;
+        width: 134px;
+        height: 157px;
+        top: 53px;
+        left: 323px;
+        background-color: #102d58;
+        display: flex;
+        justify-content: space-around;
+        align-items: center
+    }
     .cms-nav .cms-left span{
         color: #27c1e9;;
         font-size: 12px;
@@ -662,6 +754,7 @@ export default {
         background: url(../../assets/header/headerNav.png) no-repeat;
         background-size: 100% 100%;
         padding: 0 20px;
+        cursor: pointer;
     }
     .cmsNav ul li .icon{
          display: inline-block;

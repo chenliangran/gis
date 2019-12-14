@@ -135,7 +135,8 @@ export class Events{
                                 },
                                 label : {
                                     text : (Ce.Distance([lastP.lon, lastP.lat, 0],[_gps.lon, _gps.lat, 0]) / 1000).toFixed(2) + ' KM',
-                                    font : '16px',
+                                    font : '16px Helvetica',
+                                    fillColor:Cesium.Color.RED,
                                     showBackground : true,
                                     verticalOrigin : Cesium.VerticalOrigin.BOTTOM
                                 }
@@ -152,7 +153,8 @@ export class Events{
                                 positions : new _this.Cesium.CallbackProperty(function(){
 
                                     return Ce.ToPoints(startPoint)
-                                },false)
+                                },false),
+                                material: Cesium.Color.DEEPSKYBLUE
                             }
                         })
 
@@ -361,8 +363,20 @@ export class Mark{
         linePositions = [];
     }
 
-    Clear(){
+    Clear_point(){
 
         Tool.RemoveByParent(MarkParent)
     }
+    Clear_line(){
+
+        Tool.RemoveByParent(MarkParent)
+    }
+    Clear_text(){
+
+        Tool.RemoveByParent(MarkParent)
+    }
+    Clear_distance(){
+
+        Tool.RemoveByParent(MarkParent)
+    }   
 }
