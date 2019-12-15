@@ -1,6 +1,14 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style >
+.select-fs{
+    text-align: center
+}
+.select-fs span{
+    margin: 0 10px;
+    color:#ffffff;
+    cursor: pointer;
+}
 .select-big{
     width: 100%;
     height: 100%;
@@ -74,6 +82,15 @@
 }
 .select-input{
     flex: 1;
+    padding: 8px;
+    color: rgb(0,246,255);
+    background: url(../../assets/login/input_normal.png) no-repeat!important;
+	background-size: 100% 100%!important;
+    border: none;
+}
+.select-inputs{
+    width: 20%;
+    margin:0 5px;
     padding: 8px;
     color: rgb(0,246,255);
     background: url(../../assets/login/input_normal.png) no-repeat!important;
@@ -169,7 +186,11 @@
             <div class="select-event" style="margin:10px 0 0 -20px;">
                 <div @click="selectJWD(jingweiduF)">选择经纬度</div>
             </div>
-            <ul class="select-muens" v-show="jingweiduF">
+            <div class="select-fs" v-show="jingweiduF">
+                <span @click="selectFS('jwd')" :style="{'color':selectFs == 'jwd'?'aqua':'#ffffff'}">经纬度</span>
+                <span @click="selectFS('dfm')" :style="{'color':selectFs == 'dfm'?'aqua':'#ffffff'}">度分秒</span>
+            </div>
+            <ul class="select-muens" v-show="jingweiduF&&selectFs == 'jwd'">
                 <li>
                     <span>经度： </span>
                     <input class="select-input" placeholder="" type='text' v-model="pos.jd"/>
@@ -177,6 +198,21 @@
                 <li>
                     <span>纬度： </span>
                     <input class="select-input" placeholder="" type='text' v-model="pos.wd"/>
+                </li>
+            </ul>
+            <ul class="select-muens" v-show="jingweiduF&&selectFs == 'dfm'">
+                <li>
+                    <span>经度： </span>
+                    
+                    <input class="select-inputs" placeholder="" type='text' v-model="dfmPos.jd.d"/>°
+                    <input class="select-inputs" placeholder="" type='text' v-model="dfmPos.jd.f"/>′
+                    <input class="select-inputs" placeholder="" type='text' v-model="dfmPos.jd.m"/>″
+                </li>
+                <li>
+                    <span>纬度： </span>
+                    <input class="select-inputs" placeholder="" type='text' v-model="dfmPos.wd.d"/>°
+                    <input class="select-inputs" placeholder="" type='text' v-model="dfmPos.wd.f"/>′
+                    <input class="select-inputs" placeholder="" type='text' v-model="dfmPos.wd.m"/>″
                 </li>
             </ul>
             <div class="select-event">
@@ -202,6 +238,7 @@ export default {
   data:function(){
 
       return {
+          selectFs:'jwd',
           groupData:[
 
           ],
@@ -210,11 +247,23 @@ export default {
           loaddingF:false,
           jingweiduF:false,
           pos:{
-              jd:'122',
-              wd:'22'
+              jd:122.0,
+              wd:22.0
           },
           ptData:[],
-          setId:''
+          setId:'',
+          dfmPos:{
+              jd:{
+                  d:0,
+                  f:0,
+                  m:0
+              },
+              wd:{
+                  d:0,
+                  f:0,
+                  m:0
+              }
+          }
       }    
   },
 
@@ -234,6 +283,57 @@ export default {
   },
 
   methods: {
+      formatDegree() {
+            ///<summary>将度转换成为度分秒</summary>
+            var value = this.pos.jd  
+            var values = this.pos.wd 
+            value = Math.abs(value);
+            var v1 = Math.floor(value);//度
+            var v2 = Math.floor((value - v1) * 60);//分
+            var v3 = Math.round((value - v1) * 3600 % 60);//秒
+
+             values = Math.abs(values);
+            var v1s = Math.floor(values);//度
+            var v2s = Math.floor((values - v1s) * 60);//分
+            var v3s = Math.round((values - v1s) * 3600 % 60);//秒
+
+            // console.log(v1,v2,v3,v1s,v2s,v3s)
+
+            this.dfmPos.jd.d = v1
+            this.dfmPos.jd.f = v2
+            this.dfmPos.jd.m = v3
+            this.dfmPos.wd.d = v1s
+            this.dfmPos.wd.f = v2s
+            this.dfmPos.wd.m = v3s
+            // return v1 + '°' + v2 + '\'' + v3 + '"';
+        },
+        DegreeConvertBack(){ ///<summary>度分秒转换成为度</summary>
+            
+            var du = this.dfmPos.jd.d
+            var fen = this.dfmPos.jd.f
+            var miao = this.dfmPos.jd.m
+
+            var dus = this.dfmPos.wd.d
+            var fens = this.dfmPos.wd.f
+            var miaos = this.dfmPos.wd.m
+
+            this.pos.jd = Number(Number(Math.abs(du)) + Number(Math.abs(fen)/60 + Math.abs(miao)/3600));
+            this.pos.wd = Number(Number(Math.abs(dus)) + Number(Math.abs(fens)/60 + Math.abs(miaos)/3600));
+
+            
+
+        },
+      selectFS(str){
+          
+          if(str == 'jwd'&&this.selectFs != 'jwd'){
+              this.selectFs = str
+              this.DegreeConvertBack()
+          }else if(str == 'dfm'&&this.selectFs != 'dfm'){
+              this.selectFs = str
+              this.formatDegree()
+          }
+          
+      },
       addGroup(){
           this.roundFlag = true
       },
@@ -253,6 +353,9 @@ export default {
       },
 	  confirm(){
           let that = this
+          if(this.selectFs == 'dfm'){
+              this.DegreeConvertBack()
+          }
             if(!this.roundFlag){
                 if(!sessionStorage.getItem('selectEd')){
                     alert('请选择组')

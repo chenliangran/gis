@@ -2661,12 +2661,14 @@ export default {
         window.Map.viewer.scene.canvas
       );
       handler.setInputAction(function(click) {
+          $(".rangeSetterContainer").remove()
         _this.visible = false;
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
       window.Map.Event.Listen("EntityClick", function(e) {
         _this.dataInfo = e;
         setTimeout(() => {
-          console.log(e)
+         
+         
           switch (e.type) {
             case "detector":
               //浮标探测器
