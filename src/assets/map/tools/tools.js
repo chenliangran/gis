@@ -136,6 +136,8 @@ export default class Tools{
         })
 
         parent._children = [];
+
+        this.viewer.entities.remove(ent)
     }
 
     Grid( state ){

@@ -193,26 +193,26 @@
             <ul class="select-muens" v-show="jingweiduF&&selectFs == 'jwd'">
                 <li>
                     <span>经度： </span>
-                    <input class="select-input" placeholder="" type='text' v-model="pos.jd"/>
+                    <input type='number' class="select-input" placeholder=""  v-model="pos.jd"/>
                 </li>
                 <li>
                     <span>纬度： </span>
-                    <input class="select-input" placeholder="" type='text' v-model="pos.wd"/>
+                    <input type='number' class="select-input" placeholder=""  v-model="pos.wd"/>
                 </li>
             </ul>
             <ul class="select-muens" v-show="jingweiduF&&selectFs == 'dfm'">
                 <li>
                     <span>经度： </span>
                     
-                    <input class="select-inputs" placeholder="" type='text' v-model="dfmPos.jd.d"/>°
-                    <input class="select-inputs" placeholder="" type='text' v-model="dfmPos.jd.f"/>′
-                    <input class="select-inputs" placeholder="" type='text' v-model="dfmPos.jd.m"/>″
+                    <input type='number' class="select-inputs" placeholder=""  v-model="dfmPos.jd.d"/>°
+                    <input type='number' class="select-inputs" placeholder=""  v-model="dfmPos.jd.f"/>′
+                    <input type='number' class="select-inputs" placeholder=""  v-model="dfmPos.jd.m"/>″
                 </li>
                 <li>
                     <span>纬度： </span>
-                    <input class="select-inputs" placeholder="" type='text' v-model="dfmPos.wd.d"/>°
-                    <input class="select-inputs" placeholder="" type='text' v-model="dfmPos.wd.f"/>′
-                    <input class="select-inputs" placeholder="" type='text' v-model="dfmPos.wd.m"/>″
+                    <input type='number' class="select-inputs" placeholder=""  v-model="dfmPos.wd.d"/>°
+                    <input type='number' class="select-inputs" placeholder=""  v-model="dfmPos.wd.f"/>′
+                    <input type='number' class="select-inputs" placeholder=""  v-model="dfmPos.wd.m"/>″
                 </li>
             </ul>
             <div class="select-event">
@@ -285,8 +285,11 @@ export default {
   methods: {
       formatDegree() {
             ///<summary>将度转换成为度分秒</summary>
+
             var value = this.pos.jd  
             var values = this.pos.wd 
+
+
             value = Math.abs(value);
             var v1 = Math.floor(value);//度
             var v2 = Math.floor((value - v1) * 60);//分
@@ -298,13 +301,15 @@ export default {
             var v3s = Math.round((values - v1s) * 3600 % 60);//秒
 
             // console.log(v1,v2,v3,v1s,v2s,v3s)
-
-            this.dfmPos.jd.d = v1
+            this.pos.jd  < 0 ?this.dfmPos.jd.d = -v1:this.dfmPos.jd.d = v1
+            this.pos.wd  < 0 ?this.dfmPos.wd.d = -v1s:this.dfmPos.wd.d = v1s
+            // this.dfmPos.jd.d = v1
             this.dfmPos.jd.f = v2
             this.dfmPos.jd.m = v3
-            this.dfmPos.wd.d = v1s
+            // this.dfmPos.wd.d = v1s
             this.dfmPos.wd.f = v2s
             this.dfmPos.wd.m = v3s
+   
             // return v1 + '°' + v2 + '\'' + v3 + '"';
         },
         DegreeConvertBack(){ ///<summary>度分秒转换成为度</summary>
@@ -317,9 +322,11 @@ export default {
             var fens = this.dfmPos.wd.f
             var miaos = this.dfmPos.wd.m
 
-            this.pos.jd = Number(Number(Math.abs(du)) + Number(Math.abs(fen)/60 + Math.abs(miao)/3600));
-            this.pos.wd = Number(Number(Math.abs(dus)) + Number(Math.abs(fens)/60 + Math.abs(miaos)/3600));
-
+            this.dfmPos.jd.d < 0 ? this.pos.jd = -(Number(Number(Math.abs(du)) + Number(Math.abs(fen)/60 + Math.abs(miao)/3600))):this.pos.jd = Number(Number(Math.abs(du)) + Number(Math.abs(fen)/60 + Math.abs(miao)/3600));
+            this.dfmPos.wd.d < 0 ? this.pos.wd = -(Number(Number(Math.abs(dus)) + Number(Math.abs(fens)/60 + Math.abs(miaos)/3600))):this.pos.wd = Number(Number(Math.abs(dus)) + Number(Math.abs(fens)/60 + Math.abs(miaos)/3600))
+            
+            
+     
             
 
         },

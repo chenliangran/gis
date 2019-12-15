@@ -799,7 +799,8 @@ export default {
                   that.closeSocket();
                 }
                 if (data.yxzt == 2) {
-                  that.gdFlag = true
+                  // that.gdFlag = true
+                  that.notifyList = []
                   that.num = data.fps
                   that.$refs.timeLine.playFlag = false;
                   that.playFLAG = false;
@@ -1948,6 +1949,7 @@ export default {
     init() {
       let that = this;
       window["Map"] = CMap.Init("mapElement", {});
+      console.log('window.Map',window.Map)
       this.bindEvents();
       
 
