@@ -4,7 +4,7 @@
     flex-direction: column;
     position: fixed;
     right:10px;
-    bottom:110px;
+    bottom:85px;
     background-color: rgba(14, 36, 95, 0.7);
     box-shadow: 0px 0px 2px #9a9a9a inset;
 }
@@ -99,9 +99,8 @@ export default {
     },
     methods: {
         display(tool){
-
             tool.state = !tool.state;
-            window.Map.Groups.SetGroup(tool.key, tool.state);
+            window.Map.Group.SetGroup(tool.key, tool.state);
         }
     },
     watch: {
