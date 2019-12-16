@@ -174,7 +174,7 @@ export default class Detect{
                 group:'detector_mb',
                 label:{
                     font:'15px',
-                    text:link.fbbh+'S',
+                    text:`${link.fbbh}S'\n'${(Ce.Distance([detecPosition.lon, detecPosition.lat], link.positions)).toFixed(2)/1000} km`,
                     fillColor:Cesium.Color.BLUE,
                     verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                     pixelOffset:Ce.XY2D(0,-10)
@@ -235,6 +235,16 @@ export default class Detect{
                 this.NotIn(detector.entity)
             }
 
+        })
+    }
+
+    SetRange(range = 2){
+
+        if(range < 0) return;
+        
+        _.forEach(sourceData, (item) => {
+            item.entity.cylinder.topRadius = range * 1000;
+            item.entity.cylinder.bottomRadius = range * 1000;
         })
     }
 

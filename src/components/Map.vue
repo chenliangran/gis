@@ -799,7 +799,8 @@ export default {
                   that.closeSocket();
                 }
                 if (data.yxzt == 2) {
-                  that.gdFlag = true
+                  // that.gdFlag = true
+                  that.notifyList = []
                   that.num = data.fps
                   that.$refs.timeLine.playFlag = false;
                   that.playFLAG = false;
@@ -1948,6 +1949,7 @@ export default {
     init() {
       let that = this;
       window["Map"] = CMap.Init("mapElement", {});
+      console.log('window.Map',window.Map)
       this.bindEvents();
       
 
@@ -2661,12 +2663,14 @@ export default {
         window.Map.viewer.scene.canvas
       );
       handler.setInputAction(function(click) {
+          $(".rangeSetterContainer").remove()
         _this.visible = false;
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
       window.Map.Event.Listen("EntityClick", function(e) {
         _this.dataInfo = e;
         setTimeout(() => {
-          console.log(e)
+         
+         
           switch (e.type) {
             case "detector":
               //浮标探测器

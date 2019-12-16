@@ -160,7 +160,28 @@ export default {
                 name: now.toString(),
                 value: [now, Math.random() * 100]
             };
-        }
+		}
+		// function colorsa(){
+		// 	let arr = []
+		// 	let r=0;
+		// 	let g=0;
+		// 	let b=0;
+		// 	for(var i=0;i<10;i++){
+		// 			arr.push("rgb("+r+","+g+","+b+")")
+		// 			r+=15;
+		// 			g+=25;
+		// 			b+=35;
+		// 	}
+		// 	return arr
+		// }
+		let myareaStyle={
+			color:['#295aa5', '#52bdbd', '#ffad6b', '#f784a5', '#ceb55a', '#31b5d6', '#bd2119', '#ffe608', '#d69419', '#737bb5'],//分隔区域颜色。分隔区域会按数组中颜色的顺序依次循环设置颜色。默认是一个深浅的间隔色。
+			// shadowColor:"red",          //阴影颜色
+			// shadowOffsetX:0,            //阴影水平方向上的偏移距离。
+			// shadowOffsetY:0,            //阴影垂直方向上的偏移距离
+			// shadowBlur:10,              //图形阴影的模糊大小。
+			opacity:0.3,                  //图形透明度。支持从 0 到 1 的数字，为 0 时不绘制该图形
+		}
 
         var data = [];
         var now = +0;
@@ -208,7 +229,12 @@ export default {
                     lineStyle: {
                         color: '#87CEFA'
                     }
-                },
+				},
+				splitArea:{                 //坐标轴在 grid 区域中的分隔区域，默认不显示。
+					interval:"auto",
+					show:true,             //是否显示分隔区域
+					areaStyle:myareaStyle
+				}
             },
             series: [
                 {
@@ -218,9 +244,23 @@ export default {
                     //stack: '总量',
                     data: that.chartData
                 }
-            ]
-        };
-        this.myChart.setOption(option);
+			],
+			
+			// visualMap: {
+			// 	show: false,
+			// 	dimension: 1,
+			// 	pieces: [],  //pieces的值由动态数据决定
+			// 	outOfRange: {
+			// 		color: '#00FF00'
+			// 	}
+			// }	
+		};
+		// option.visualMap.pieces[0] = {gte: 200, lte: 300, color: '#008B00'};
+		// option.visualMap.pieces[1] = {gte: 300, lte: 400, color: '#698B22'};
+		// option.visualMap.pieces[2] = {gte: 400, lte: 500, color: '#8B864E'};
+		// option.visualMap.pieces[3] = {gte: 400, lte: 500, color: '#8B814C'};
+		this.myChart.setOption(option);
+		
     },
 	methods: {
 		updtea(data){
@@ -267,7 +307,7 @@ export default {
                         data: that.chartData
                     }
                 ]
-            });
+			});
         },
         uploading(data, type) {
             let index = data.indexOf(".")

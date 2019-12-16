@@ -1,7 +1,6 @@
 import Tools from '../tools/tools.js';
-import { DrawEntity } from '../drawer/Draw.js'; 
+import { DrawEntity, GroupController } from '../drawer/Draw.js'; 
 import Calculater from '../tools/calculater.js';
-
 
 const _ = require('lodash');
 
@@ -88,6 +87,7 @@ export class Events{
                 if(MarkConfig.shape == 'point' || MarkConfig.shape.indexOf('line') != -1){
 
                     Drawer.Draw({
+                        group:  MarkConfig.shape,
                         position : Ce.ToPoint([_gps.lon, _gps.lat, 0]),
                         parent : MarkParent,
                         point : {
@@ -127,6 +127,7 @@ export class Events{
                             let midP = Tool.GetCenter([lastP.lon, lastP.lat], [_gps.lon, _gps.lat] )
 
                             Drawer.Draw({
+                                group:  MarkConfig.shape,
                                 position : Ce.ToPoint(midP),
                                 parent : MarkParent,
                                 point : {
@@ -148,6 +149,7 @@ export class Events{
                         let startPoint = [_gps.lon, _gps.lat, _gps.lon+0.01, _gps.lat+0.01]
 
                         currentLine = Drawer.Draw({
+                            group:  MarkConfig.shape,
                             parent : MarkParent,
                             polyline : {
                                 positions : new _this.Cesium.CallbackProperty(function(){
@@ -170,6 +172,7 @@ export class Events{
                     }
 
                     currentText = Drawer.Draw({
+                        group:  MarkConfig.shape,
                         position : Ce.ToPoint([_gps.lon, _gps.lat, 0]),
                         parent : MarkParent,
                         point : {
@@ -340,12 +343,15 @@ export class Events{
 
 }
 
+let Groups = null;
+
 export class Mark{
 
     constructor(Cesium,viewer){
 
         this.Cesium = Cesium;
         this.viewer = viewer;
+        Groups = new GroupController(Cesium,viewer)
     }
  
     Start(config){
@@ -365,18 +371,22 @@ export class Mark{
 
     Clear_point(){
 
-        Tool.RemoveByParent(MarkParent)
+        // Tool.RemoveByParent(MarkParent)
+        Groups.RemoveByGroup('point')
     }
     Clear_line(){
 
-        Tool.RemoveByParent(MarkParent)
+        // Tool.RemoveByParent(MarkParent)
+        Groups.RemoveByGroup('line')
     }
     Clear_text(){
 
-        Tool.RemoveByParent(MarkParent)
+        // Tool.RemoveByParent(MarkParent)
+        Groups.RemoveByGroup('text')
     }
     Clear_distance(){
 
-        Tool.RemoveByParent(MarkParent)
+        // Tool.RemoveByParent(MarkParent)
+        Groups.RemoveByGroup('line_distance')
     }   
 }

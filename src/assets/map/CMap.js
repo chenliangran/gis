@@ -199,7 +199,7 @@ export function Init(ele,CONFIG){
 
     const DrawEntity = new Drawer.DrawEntity(Cesium,viewer);
 
-    const GroupController = new Drawer.GroupController();
+    const GroupController = new Drawer.GroupController(Cesium,viewer);
 
     const DrawPrimitive = new Drawer.DrawPrimitive(Cesium,viewer);
 
@@ -444,7 +444,7 @@ export function Init(ele,CONFIG){
         ImageLayersHandler,
         Menu,
         MarkTool,
-        Groups:GroupController,
+        // Groups:GroupController,
     }
 
 }
