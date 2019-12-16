@@ -347,7 +347,7 @@ export class Mark{
         this.Cesium = Cesium;
         this.viewer = viewer;
     }
-
+ 
     Start(config){
 
         MarkingState = true;
