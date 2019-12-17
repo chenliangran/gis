@@ -28,6 +28,16 @@
 
                     </div>
                 </li>
+                <li @click="geshi(flag5)">
+                     <i class="icon icon9"></i>
+                    <span>地图格式</span>
+                     <i class="icon icon8"></i>
+                    <div class="menuOption" v-show="flag5" style="left:478px">
+                        <p @click="haitu()">海图格式</p>
+                        <p @click="shp()">shp格式</p>
+                        <p @click="geoTiff()">GeoTiff格式</p>
+                    </div>
+                </li>
             </ul>
         </div>
         <div class="cms-middle">
@@ -158,6 +168,7 @@ export default {
             flag2:false,
             flag3:true,
             flag4:false,
+            flag5:false,
             groupNum:'',
             NowTime:'',
             jwdVisible:false,
@@ -311,6 +322,9 @@ export default {
         optionShow(flag4){
            this.flag4 = !flag4; 
         },	
+        geshi(flag5){
+           this.flag5 = !flag5
+        },
         tool(flag){
             this.flag = !flag;
             this.$emit("mapTool",this.flag)  
@@ -790,6 +804,11 @@ export default {
     }
     .cmsNav ul li .icon7{
         background: url(../../assets/header/xinxi.png);      
+    }
+    .cmsNav ul li .icon9{
+        background: url(../../assets/header/diqiu.png);      
+        width: 17px;
+        height: 17px;
     }
     .cms-middle ul li .feiji{
         background: url(../../assets/header/feiji.png);   
