@@ -7,7 +7,6 @@ const makeMenuHtml = {
 
     setRange : function(cylinder, position){
 
-        console.log(cylinder, position)
         let hasExit = document.querySelector('.rangeSetterContainer');
 
         if(hasExit){
@@ -37,12 +36,10 @@ const makeMenuHtml = {
                       });
                     return
                  }
-                console.log(newValue)
 
                 cylinder.topRadius = newValue * 1000;
                 cylinder.bottomRadius = newValue * 1000;
 
-                console.log(cylinder)
                 document.body.removeChild( setRangeContainer );
             }
 

@@ -1,6 +1,5 @@
-import de from "element-ui/src/locale/lang/de";
-
 let GroupRecords = {}
+
 
 export class DrawEntity{
 
@@ -37,8 +36,10 @@ export class DrawEntity{
 
 export class GroupController{
 
-    constructor(){
-        
+    constructor(Cesium,viewer){
+
+        this.Cesium = Cesium;
+        this.entities = viewer.entities;
     }
 
     GetGroup( gname ){
@@ -49,7 +50,7 @@ export class GroupController{
     SetGroup( gname, state ){
         if(gname == 'detector_sl'){//失联浮标
             GroupRecords['detector']._children.map(s=>{
-                if(s.billboard.image._value.includes("fubiao5")){
+                if(s.billboard.image._value.includes("fubiaosl")){
                     s.show = state;
                 };
             })
@@ -73,6 +74,25 @@ export class GroupController{
     Remove( gname ){
 
 
+    }
+
+    RemoveByGroup( gname ){
+
+        let parent = GroupRecords[gname];
+        
+        if(!parent){
+            return;
+        }
+        _.forEach(parent._children, (ent) => {
+
+            this.entities.remove(ent)
+        })
+
+        parent._children = [];
+
+        this.entities.remove(parent);
+
+        delete GroupRecords[gname]
     }
 }
 

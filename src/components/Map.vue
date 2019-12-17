@@ -799,7 +799,8 @@ export default {
                   that.closeSocket();
                 }
                 if (data.yxzt == 2) {
-                  that.gdFlag = true
+                  // that.gdFlag = true
+                  that.notifyList = []
                   that.num = data.fps
                   that.$refs.timeLine.playFlag = false;
                   that.playFLAG = false;
@@ -1948,6 +1949,7 @@ export default {
     init() {
       let that = this;
       window["Map"] = CMap.Init("mapElement", {});
+      console.log('window.Map',window.Map)
       this.bindEvents();
       
 
@@ -2057,6 +2059,7 @@ export default {
      * ws数据处理事件
      */
     dealMessage(data) {
+
       const _this = this;
       let notifyList = [];
       let id = sessionStorage.getItem("selectEd")
@@ -2264,7 +2267,6 @@ export default {
         
         // 处理浮标数据
         function dealFbSJ(item,_this) {
-          //debugger
           if (window.Map.viewer.entities.getById("detector_" + item["fbbh"]))
             return;
           if (item["jcxxid"] != "0") {
@@ -2411,10 +2413,8 @@ export default {
         // 处理浮标投放数据 12-4
       function dealFbtfsj(item){
           if(item){
-
-              _.forEach(item, (v,k)=>{
+            _.forEach(item, (v,k)=>{
                   if((k.indexOf('fbxh') != -1) && (v !== '0')){
-                      
                       Fbtfs.push(v)
                   }
               })
@@ -2663,12 +2663,14 @@ export default {
         window.Map.viewer.scene.canvas
       );
       handler.setInputAction(function(click) {
+          $(".rangeSetterContainer").remove()
         _this.visible = false;
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
       window.Map.Event.Listen("EntityClick", function(e) {
         _this.dataInfo = e;
         setTimeout(() => {
-          console.log(e)
+         
+         
           switch (e.type) {
             case "detector":
               //浮标探测器
