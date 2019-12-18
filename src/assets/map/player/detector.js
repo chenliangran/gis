@@ -59,7 +59,7 @@ export default class Detect{
                     label:{
                         text:target.origin.sptdh+target.type,
                         // text:target.origin.fbbh.slice(-3)+'/S',
-                        font:'15px',
+                        font:'16px',
                         fillColor:Cesium.Color.BLUE,
                         verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                         pixelOffset:Ce.XY2D(0,-20)
@@ -173,7 +173,7 @@ export default class Detect{
                 type:'detector_mb',
                 group:'detector_mb',
                 label:{
-                    font:'15px',
+                    font:'16px',
                     text:`${link.fbbh}S'\n'${(Ce.Distance([detecPosition.lon, detecPosition.lat], link.positions)).toFixed(2)/1000} km`,
                     fillColor:Cesium.Color.BLUE,
                     verticalOrigin:Cesium.VerticalOrigin.BOTTOM,

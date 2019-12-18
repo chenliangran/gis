@@ -1,6 +1,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style >
+.cesium-viewer-toolbar{
+  top:80px !important
+}
 #hinge-msg {
   display: none;
   position: fixed;
@@ -886,87 +889,120 @@ export default {
 
     },
     eventConfirm(){
-        let that = this
-        let params = {
+      let that = this
+      window.onresize = function() {
+          // that.visWidth = viewer.timeline.lastWidth
+          setTimeout(() => {
+            that.setZZ()
+            that.$refs["timeLine"].timeLabelF = false;
+            that.$refs["timeLine"].timeline.redraw();
+            that.$refs["timeLine"].startXd();
+            setTimeout(() => {
+                  $('.vis-box').each((i,v) => {
+                      // v.style.top = '22px !important'
+                      $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+                  })
+              },1000)
+          }, 300);
+          
+        };
+        that.eventType =false;
+        that.$refs["timeLine"].eventConfirm({
             nr:that.eventVal,
             sj:new Date(that.newEventDate),
             sjid:sessionStorage.getItem('selectEd')
-        }
-        $.ajax({
-        type: "post",
-        dataType: "json",
-        url: `${globalUrl.host}/find/addSDSJ`,
-        contentType: "application/json;charset=UTF-8",//指定消息请求类型
-        data: JSON.stringify(params),//将js对象转成json对象
-        success: function (data) {
-            that.timeLabelF = false
-                $.get(`${globalUrl.host}/find/findEventListForRex`, {
-                sjid: sessionStorage.getItem('selectEd')
-            }).then(data => {
-                sessionStorage.setItem('allData',JSON.stringify(data))
-                let dataArr = [];
-                let viewer = window["Map"].viewer;
-                for (let item of data.FBSJ) {
-                    dataArr.push({
-                        data: item,
-                        // id: item["jcxxid"],
-                        content: "<span class='icon1'></span>",
-                        start: item["sb"].split(".")[0],
-                        types: "浮标投放"
-                    });
-                }
-                for (let item of data.CTMBSJ) {
-                    dataArr.push({
-                        data: item,
-                        // id: item["mbsj"],
-                        content: "<span class='icon2'></span>",
-                        start: item["mbsj"].split(".")[0],
-                        types: "目标探测"
-                    });
-                }
-                for (let item of data.FBMBSJ) {
-                    dataArr.push({
-                        data: item,
-                        // id: item["mbsj"],
-                        content: "<span class='icon2'></span>",
-                        start: item["mbsj"].split(".")[0],
-                        types: "目标探测"
-                    });
-                }
-                for (let item of data.SDSJ) {
-                    // console.log(that.toDate(item["sj"]));
-                    dataArr.push({
-                        data: item,
-                        // id: item["mbsj"],
-                        content: "<span class='icon3'></span>",
-                        start: that.toDate(item["sjs"]),
-                        types: "手动事件"
-                    });
-                }
+        })
 
-                that.timeItemArr = dataArr;  
+        
+        // let params = {
+        //     nr:that.eventVal,
+        //     sj:new Date(that.newEventDate),
+        //     sjid:sessionStorage.getItem('selectEd')
+        // }
+    //     $.ajax({
+    //     type: "post",
+    //     dataType: "json",
+    //     url: `${globalUrl.host}/find/addSDSJ`,
+    //     contentType: "application/json;charset=UTF-8",//指定消息请求类型
+    //     data: JSON.stringify(params),//将js对象转成json对象
+    //     success: function (data) {
+    //         that.timeLabelF = false
+    //             $.get(`${globalUrl.host}/find/findEventListForRex`, {
+    //             sjid: sessionStorage.getItem('selectEd')
+    //         }).then(data => {
+    //             sessionStorage.setItem('allData',JSON.stringify(data))
+    //             let dataArr = [];
+    //             let viewer = window["Map"].viewer;
+    //             for (let item of data.FBSJ) {
+    //                 dataArr.push({
+    //                     data: item,
+    //                     // id: item["jcxxid"],
+    //                     content: "<span class='icon1'></span>",
+    //                     start: item["sb"].split(".")[0],
+    //                     types: "浮标投放"
+    //                 });
+    //             }
+    //             for (let item of data.CTMBSJ) {
+    //                 dataArr.push({
+    //                     data: item,
+    //                     // id: item["mbsj"],
+    //                     content: "<span class='icon2'></span>",
+    //                     start: item["mbsj"].split(".")[0],
+    //                     types: "目标探测"
+    //                 });
+    //             }
+    //             for (let item of data.FBMBSJ) {
+    //                 dataArr.push({
+    //                     data: item,
+    //                     // id: item["mbsj"],
+    //                     content: "<span class='icon2'></span>",
+    //                     start: item["mbsj"].split(".")[0],
+    //                     types: "目标探测"
+    //                 });
+    //             }
+    //             for (let item of data.SDSJ) {
+    //                 // console.log(that.toDate(item["sj"]));
+    //                 dataArr.push({
+    //                     data: item,
+    //                     // id: item["mbsj"],
+    //                     content: "<span class='icon3'></span>",
+    //                     start: that.toDate(item["sjs"]),
+    //                     types: "手动事件"
+    //                 });
+    //             }
 
-                window.onresize = function() {
-                  // that.visWidth = viewer.timeline.lastWidth
-                  setTimeout(() => {
-                    that.setZZ()
-                    that.$refs["timeLine"].timeLabelF = false;
-                    that.$refs["timeLine"].timeline.redraw();
-                    that.$refs["timeLine"].startXd();
-                    setTimeout(() => {
-                          $('.vis-box').each((i,v) => {
-                              // v.style.top = '22px !important'
-                              $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
-                          })
-                      },1000)
-                  }, 300);
+  
+    //             that.$refs["timeLine"].timeItemArr = dataArr;  
+    //             // console.log(that.timeItemArr)
+    //             that.$refs["timeLine"].timeline.setItems(that.$refs["timeLine"].timeItemArr)  
+    //             setTimeout(() => {
+    //                 $('.vis-box').each((i,v) => {
+    //                     // v.style.top = '22px !important'
+    //                     $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+    //                 })
+    //             },1000)
+
+    //             window.onresize = function() {
+    //               // that.visWidth = viewer.timeline.lastWidth
+    //               setTimeout(() => {
+    //                 that.setZZ()
+    //                 that.$refs["timeLine"].timeLabelF = false;
+    //                 that.$refs["timeLine"].timeline.redraw();
+    //                 that.$refs["timeLine"].startXd();
+    //                 setTimeout(() => {
+    //                       $('.vis-box').each((i,v) => {
+    //                           // v.style.top = '22px !important'
+    //                           $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+    //                       })
+    //                   },1000)
+    //               }, 300);
                  
-                };
-                that.eventType =false;
+    //             };
+    //             that.eventType =false;
 
-            })
-        }
-    });
+    //         })
+    //     }
+    // });
     },
     eventCancel(){
        this.eventType =false;
@@ -1424,7 +1460,7 @@ export default {
         }, 300);
       };
 
-     $(".cesium-viewer-timelineContainer").dblclick(function(){
+     $(".cesium-viewer-timelineContainer").contextmenu(function(){
         that.eventType = true;
         that.getMousePos(event,that);
      })
@@ -1660,7 +1696,7 @@ export default {
             // that.progress(that.formatSeconds(dfTime),totleTime)
             // console.log(viewer.clock)
             
-
+            that.eventType = false
           
           window.Map.FlyCompare.ClearPath();
           that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);

@@ -21,7 +21,7 @@
 }
 .select-msg{
     width: 700px;
-    height: 500px;
+    height: 400px;
     background: url(../../assets/login/窗体.png) no-repeat!important;
 	background-size: 100% 100%!important;
 
@@ -184,7 +184,7 @@
                 
             </div>
             <div class="select-event" style="margin:10px 0 0 -20px;">
-                <div @click="selectJWD(jingweiduF)">选择经纬度</div>
+                <!-- <div @click="selectJWD(jingweiduF)">选择经纬度</div> -->
             </div>
             <div class="select-fs" v-show="jingweiduF">
                 <span @click="selectFS('jwd')" :style="{'color':selectFs == 'jwd'?'aqua':'#ffffff'}">经纬度</span>

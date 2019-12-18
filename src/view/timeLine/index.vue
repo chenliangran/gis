@@ -552,15 +552,15 @@ export default {
             go          :  function(){step();} 
         } 
     },
-    eventConfirm(){
+    eventConfirm(params){
         let that = this
-        let params = {
-        // sdtjsj:{
-            nr:this.eventVal,
-            sj:new Date(this.newEventDate),
-            sjid:sessionStorage.getItem('selectEd')
-        // }
-    }
+    //     let params = {
+    //     // sdtjsj:{
+    //         nr:this.eventVal,
+    //         sj:new Date(this.newEventDate),
+    //         sjid:sessionStorage.getItem('selectEd')
+    //     // }
+    // }
     $.ajax({
         type: "post",
         dataType: "json",
@@ -613,12 +613,17 @@ export default {
                     });
                 }
                 that.timeItemArr = dataArr;  
-                console.log(that.timeItemArr)
+
                 that.timeline.setItems(that.timeItemArr)   
+                
                 setTimeout(() => {
                     $('.vis-box').each((i,v) => {
                         // v.style.top = '22px !important'
                         $(v).css('cssText','top:22px !important;left:'+$(v).css('left'))
+                    })
+                    $(".vis-item.vis-box.vis-readonly").mouseout(function(s){
+                                that.timeLabelF = false;
+
                     })
                 },1000) 
 
@@ -654,14 +659,14 @@ export default {
                     that.showInterval = null;
                     that.showNumber = 0;
                     
-                    that.showInterval = setTimeout(()=>{
+                    // that.showInterval = setTimeout(()=>{
                         that.showNumber++;
                         console.log(that.showNumber);
                         // if(that.showNumber >=1){
                             that.timeLabelF = false;
                             that.showNumber = 0;
                         //  }
-                    },1000)
+                    // },1000)
                 })
             },1000)
 
@@ -997,14 +1002,14 @@ export default {
                 that.showInterval = null;
                 that.showNumber = 0;
                 
-                that.showInterval = setTimeout(()=>{
+                // that.showInterval = setTimeout(()=>{
                     that.showNumber++;
                     console.log(that.showNumber);
                     // if(that.showNumber >=1){
                         that.timeLabelF = false;
                         that.showNumber = 0;
                     //  }
-                },1000)
+                // },1000)
             })
             this.timeline.on('mouseDown',(item) => {
 

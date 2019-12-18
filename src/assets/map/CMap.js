@@ -25,6 +25,7 @@ export function Init(ele,CONFIG){
     function _create(eleid){
 
         return new Cesium.Viewer(eleid,{
+            selectionIndicator:false,
             timeline:true,
             imageryProvider: new Cesium.SingleTileImageryProvider({
                 url : '/static/image/Map/single.jpg',
@@ -47,6 +48,7 @@ export function Init(ele,CONFIG){
     }
 
     const viewer = _create(ele);
+    viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     var viewerImagery = {}
     const camera = viewer.camera;
@@ -266,7 +268,7 @@ export function Init(ele,CONFIG){
             position:Ce.ToPoint([120,30,500]),
             label:{
                 text:'模型名字',
-                font:'15px',
+                font:'16px',
                 verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                 pixelOffset:Ce.XY2D(0,-20)
             },
@@ -294,7 +296,7 @@ export function Init(ele,CONFIG){
     const typeConfig = {
         color : {
             feiji : Ce.CssColor('orange'),
-            qianting : Ce.CssColor('blue'),
+            qianting : Ce.CssColor('#06a9e9'),
         },
         displayDistance : {
             feiji : Ce.DisplayNF(300000, 100000000),
@@ -314,7 +316,7 @@ export function Init(ele,CONFIG){
             position:Ce.ToPoint(target.position),
             label:{
                 text:target.name,
-                font:'15px',
+                font:'16px',
                 fillColor:Cesium.Color.BLUE,
                 verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                 pixelOffset:Ce.XY2D(0,-20)
@@ -407,7 +409,7 @@ export function Init(ele,CONFIG){
 
                 label:{
                     text:'核潜艇',
-                    font:'15px',
+                    font:'16px',
                     fillColor:Cesium.Color.BLUE,
                     verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                     pixelOffset:Ce.XY2D(0,-20)
@@ -443,7 +445,7 @@ export function Init(ele,CONFIG){
 
             label:{
                 text:target.name+'/M',
-                font:'15px',
+                font:'16px',
                 fillColor:Cesium.Color.BLUE,
                 verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                 pixelOffset:Ce.XY2D(0,-20)
