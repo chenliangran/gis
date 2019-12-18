@@ -32,10 +32,15 @@
                      <i class="icon icon9"></i>
                     <span>地图格式</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag5" style="left:478px">
-                        <p @click="haitu()">海图格式</p>
-                        <p @click="shp()">shp格式</p>
-                        <p @click="geoTiff()">GeoTiff格式</p>
+                    <div class="menuOption" v-show="flag5" style="left:478px;height:260px;">
+                        <el-radio-group v-model="mapType" size="small" @change="mapType1(mapType)">
+                            <el-radio label="haitu">海图格式</el-radio>
+                            <!-- <el-radio label="shp格式">shp格式</el-radio> -->
+                            <el-radio label="GeoTiff">GeoTiff格式</el-radio>
+                            <el-radio label="png格式">png格式</el-radio>
+                            <el-radio label="jysl格式">军用矢量格式</el-radio>
+                        </el-radio-group>
+                        
                     </div>
                 </li>
             </ul>
@@ -50,13 +55,27 @@
         </div>
         <div class="cmsNav cms-right">
              <ul>
+                <li @click="planeLine"><i class="icon icon10"></i><span>飞行包线</span></li>
                 <li @click="controller(flag1)"><i class="icon icon4"></i><span>图层控制</span></li>
                 <li @click="tool(flag)"><i class="icon icon5"></i><span>绘图工具</span></li>
-                 <li @click="events(flag3)"><i class="icon icon7"></i><span>事件悬浮面板</span></li>
+                <li @click="events(flag3)"><i class="icon icon7"></i><span>事件悬浮面板</span></li>
                 <!-- <li @click="clip"><i class="icon icon6"></i><span>截屏</span></li> -->
-<!--                <li style="margin-right: 30px;"><i class="icon icon7"></i><span>FPS信息：{{FPS}}</span></li>-->
+                <!--<li style="margin-right: 30px;"><i class="icon icon7"></i><span>FPS信息：{{FPS}}</span></li>-->
             </ul>
         </div>
+        <el-dialog
+            :visible.sync="planeVisible"
+            width="60%"
+            append-to-body
+            top="21vh"
+            class="planeDiv"
+            >
+            <div class="planeLine">
+               <img src="../../assets/header/planeLine1.png" width="350px" height="200px" alt="1">
+               <img src="../../assets/header/planeLine2.png" width="350px" height="200px" alt="2">
+               <img src="../../assets/header/planeLine3.png" width="350px" height="200px" alt="3">
+            </div>
+        </el-dialog>
         <div id="dv" v-show="dvShow" :style="dvStyle" @dblclick="clipImg"></div>
             <el-dialog
                 title="设置截取尺寸"
@@ -156,6 +175,7 @@
 
 <script>
 import Params from "../../assets/map/params.js";
+import CMap from "../../assets/map/CMap.js"
 export default {
     props: ["WebSocketData","FBnum","timeNow","eventsF"],
 	data() {
@@ -174,6 +194,7 @@ export default {
             jwdVisible:false,
             feijiVisible:false,
             dunkerVisible:false,
+            planeVisible:false,
             dvStyle:{
                 width:'300px',
                 height:'300px',
@@ -209,43 +230,18 @@ export default {
             },
             form: {
                 len: ''
-            }
+            },
+            mapType:'haitu'
 		}
 	},
 	methods: {
-        groupNow(){
-            let that = this
-            let groupNowNum = JSON.parse(sessionStorage.getItem('groupNum'))
-            let id = sessionStorage.getItem("selectEd")
-            if(groupNowNum){
-                that.groupNum = groupNowNum
-                setTimeout(function(){
-                    let id = sessionStorage.getItem("selectEd")
-                    let ptData = JSON.parse(sessionStorage.getItem("ptData"))
-                    ptData.map(item => {
-                        if(item.id == id) {
-                            that.name = item.ptmc
-                        }
-                    })
-                },500)
-            }else{
-                $.get(`${globalUrl.host}/find/findAllGroupName`).then(data => {
-                    if(data){
-                        data.map(item=>{
-                            if(groupNowNum == item.groupNum){
-                                that.groupNum = item.groupNum
-                                that.name = item.ptmc+"架次" 
-                            }else{
-                                that.isShow = false 
-                            }     
-                        })
-                    }else{
-                        that.isShow = false 
-                    }
-                });
-            }
-
-
+        mapType1(mapType){
+            window.Map.viewerImagery['haitu'].show = false
+            // window.Map.viewerImagery['shp格式'].show = false
+            window.Map.viewerImagery['GeoTiff'].show = false
+            window.Map.viewerImagery['png格式'].show = false
+            window.Map.viewerImagery['jysl格式'].show = false
+            window.Map.viewerImagery[mapType].show = true
         },
         CurentTime(time){
             var now = new Date(time);
@@ -281,7 +277,6 @@ export default {
             clock += ss; 
             return(clock); 
         },
-       
 		getDataInfo() {
             let id = sessionStorage.getItem("selectEd")
             $.get(globalUrl.host+'/find/getWordIOFromServer',{id: id}).then(data => {
@@ -315,6 +310,9 @@ export default {
                     clipScreenshots("bg_canvas",this.imgWidth,this.imgHeight);
                 })
                 this.dvShow = false
+        },
+        planeLine(){
+          this.planeVisible = !this.planeVisible
         },
         dataShow(flag2){
            this.flag2 = !flag2;          
@@ -621,26 +619,20 @@ export default {
 
         FBnum: {
            handler:function(v){
-               //debugger
                this.FBnum = v
            },
            deep: true
         },
         eventsF:{
             handler:function(v){
-               //debugger
                this.flag3 = v
            },
            deep: true
         }
-    
-        //   this.getAllDate()
-
      }, 
     created() {
        this.getDataInfo();
-       this.groupNow();
-      
+       window.Map
     }
 
 }
@@ -810,6 +802,11 @@ export default {
         width: 17px;
         height: 17px;
     }
+    .cmsNav ul li .icon10{
+        background: url(../../assets/header/zhinanzhen.png);      
+        width: 19px;
+        height: 19px;
+    }
     .cms-middle ul li .feiji{
         background: url(../../assets/header/feiji.png);   
         display: inline-block;
@@ -866,5 +863,17 @@ export default {
     }
     .cmsNav li{
         cursor: pointer;
+    }
+    .planeDiv .el-dialog{
+        background: rgba(8, 38, 93, 0.6);
+    }
+    .planeLine{
+        margin-bottom: 30px
+    }
+    .planeLine img{
+       margin-right: 20px;
+    }
+    .el-radio__input{
+       display:inline-flex !important;
     }
 </style>

@@ -34,7 +34,7 @@
 							<span></span>
 							<span>浮标目标</span>
 						</div> -->
-						<div class="list" v-show="gdFlag">
+						<div class="list">
 							<div>
 								<span style="min-width: 60px">浮标编号</span>
 								<span style="min-width: 40px">经度</span>
@@ -44,7 +44,7 @@
 								<span style="min-width: 30px">状态</span>
 								<span style="min-width: 40px">阵型</span>
 							</div>
-							<ul>
+							<ul v-show="gdFlag">
 								<li :class="{curFb: curFbBh == item.fbbh}" v-for="(item, i) in detectorData" :key="i">
 									<span style="min-width: 60px">{{item["fbbh"].slice(-3)}}</span>
 									<span style="min-width: 40px">{{Math.floor(item["llcrswzjd"]*100)/100}}</span>
@@ -69,14 +69,14 @@
 					</div> -->
 					<div class="nav">磁探探测目标</div>
 					<div class="terrace-item" v-if="ctData.length > 0">
-						<div class="list" v-show="gdFlag">
+						<div class="list">
 							<div>
 								<span style="min-width: 150px">发现时间</span>
 								<span style="min-width: 50px">经度</span>
 								<span style="min-width: 50px">纬度</span>
 								<span style="min-width: 100px">探测目标位置偏差</span>
 							</div>
-							<ul>  
+							<ul v-show="gdFlag">  
 								<li v-for="(item, i) in ctData" :key="i"  v-if="Number(item['mbzxd']) >= 100">
 										<span style="min-width: 150px" :title="item.mbsj">{{item["mbsj"].split('.')[0]}}</span>
 										<span style="min-width: 50px"  :title="item.mbjd">{{Math.floor(item["mbjd"]*100)/100}}</span>
@@ -98,14 +98,14 @@
 					</div> -->
 					<div class="nav">浮标探测目标</div>
 					<div class="terrace-item" v-if="events['mbtcsj'].length > 0">
-						<div class="list" v-show="gdFlag">
+						<div class="list">
 							<div>
 								<span style="min-width: 60px">浮标编号</span>
 								<span style="min-width: 60px">经度</span>
 								<span style="min-width: 60px">纬度</span>
 								<span style="min-width: 100px">距离</span>
 							</div>
-							<ul>
+							<ul v-show="gdFlag">
 								<li v-for="(item, i) in events['mbtcsj']" :key="i">
 									<span style="min-width: 60px">{{item["mbbh"]}}</span>
 									<span style="min-width: 60px">{{Math.floor(item["mbwzjd"]*100)/100}}</span>

@@ -48,7 +48,7 @@ export function Init(ele,CONFIG){
 
     const viewer = _create(ele);
 
-
+    var viewerImagery = {}
     const camera = viewer.camera;
 
     const scene = viewer.scene;
@@ -146,71 +146,59 @@ export function Init(ele,CONFIG){
         crossDomain: true, 
         dataType:'jsonp',
     }).then(data => {
-        var url = data;
-        //海图
-        let haitu = new Cesium.UrlTemplateImageryProvider({
-            url : url,
-            ellipsoid: Cesium.Ellipsoid.WGS84,
-            tilingScheme: new Cesium.GeographicTilingScheme({
-                numberOfLevelZeroTilesX : 2,
-                numberOfLevelZeroTilesY : 1,
-                rectangle : new Cesium.Rectangle(-Cesium.Math.PI, -Cesium.Math.PI * 0.5, Cesium.Math.PI, Cesium.Math.PI * 0.5),
-                ellipsoid : Cesium.Ellipsoid.WGS84
-            }),
-            maximumLevel:14,
-            customTags:{
-                m : (provider,x,y,level) => level+1,
-                r : (provider,x,y,level) => y,
-                c : (provider,x,y,level) => x
+        var arrAll = data;
+        arrAll.map(item =>{
+            if(!viewerImagery[item.name]){
+                if(item.type == 'haitu'){
+                    //海图
+                    let haitu = new Cesium.UrlTemplateImageryProvider({
+                        url : item.url,
+                        ellipsoid: Cesium.Ellipsoid.WGS84,
+                        tilingScheme: new Cesium.GeographicTilingScheme({
+                            numberOfLevelZeroTilesX : 2,
+                            numberOfLevelZeroTilesY : 1,
+                            rectangle : new Cesium.Rectangle(-Cesium.Math.PI, -Cesium.Math.PI * 0.5, Cesium.Math.PI, Cesium.Math.PI * 0.5),
+                            ellipsoid : Cesium.Ellipsoid.WGS84
+                        }),
+                        maximumLevel:14,
+                        customTags:{
+                            m : (provider,x,y,level) => level+1,
+                            r : (provider,x,y,level) => y,
+                            c : (provider,x,y,level) => x
+                        }
+                    })
+                    viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(haitu)
+                    viewerImagery[item.name].show = true
+                }else if(item.type == 'qita'){
+                    let wmts = new Cesium.UrlTemplateImageryProvider({
+                        url : item.url,
+                        tilingScheme: new Cesium.GeographicTilingScheme({
+                            numberOfLevelZeroTilesX : 2,
+                            numberOfLevelZeroTilesY : 1,
+                            ellipsoid : Cesium.Ellipsoid.WGS84
+                        }),
+                        ellipsoid: Cesium.Ellipsoid.WGS84,
+                        tileWidth: 512,
+                        tilHeight: 512,
+                        maximumLevel: 10,
+                        enablePickFeatures: false,
+                        customTags: {
+                            matrix: function(imageryProvider,x,y,level) {
+                                return (Array(2).join(0) + level).slice(-2)
+                            },
+                            row:function(imageryProvider, x, y,level){
+                                return (Array(8).join(0) + ((1<<level)- y-1)).slice(-8)
+                            },
+                            col: function(imageryProvider,x,y,level) {
+                                return (Array(8).join(0)+x).slice(-8)
+                            }
+                        }
+                    })
+                    viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(wmts)
+                    viewerImagery[item.name].show = false
+                }
             }
         })
-        viewer.imageryLayers.addImageryProvider(haitu)
-        // imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
-        //     url : url,
-        //     ellipsoid: Cesium.Ellipsoid.WGS84,
-        //     tilingScheme: new Cesium.GeographicTilingScheme({
-        //         numberOfLevelZeroTilesX : 2,
-        //         numberOfLevelZeroTilesY : 1,
-        //         rectangle : new Cesium.Rectangle(-Cesium.Math.PI, -Cesium.Math.PI * 0.5, Cesium.Math.PI, Cesium.Math.PI * 0.5),
-        //         ellipsoid : Cesium.Ellipsoid.WGS84
-        //     }),
-        //     maximumLevel:14,
-        //     customTags:{
-        //         m : (provider,x,y,level) => level+1,
-        //         r : (provider,x,y,level) => y,
-        //         c : (provider,x,y,level) => x
-        //     }
-        // }))
-
-
-
-        //GeoTiff   'http://127.0.0.1:8080/earthview/services/file/GetFileData/EV_Image_L00-06/EV_Image_L00-06/{matrix}/{row}/{row}-{col}.png',
-        //shp格式   'http://127.0.0.1:8080/earthview/services/file/GetFileData/新地图1/新地图1/{matrix}/{row}/{row}-{col}.png'
-        // let wmts = new Cesium.UrlTemplateImageryProvider({
-        //     url : 'http://127.0.0.1:8080/earthview/services/file/GetFileData/新地图1/新地图1/{matrix}/{row}/{row}-{col}.png',
-        //     tilingScheme: new Cesium.GeographicTilingScheme({
-        //         numberOfLevelZeroTilesX : 2,
-        //         numberOfLevelZeroTilesY : 1,
-        //         ellipsoid : Cesium.Ellipsoid.WGS84
-        //     }),
-        //     ellipsoid: Cesium.Ellipsoid.WGS84,
-        //     tileWidth: 512,
-        //     tilHeight: 512,
-        //     maximumLevel: 5,
-        //     enablePickFeatures: false,
-        //     customTags: {
-        //         matrix: function(imageryProvider,x,y,level) {
-        //             return (Array(2).join(0) + level).slice(-2)
-        //         },
-        //         row:function(imageryProvider, x, y,level){
-        //             return (Array(8).join(0) + ((1<<level)- y-1)).slice(-8)
-        //         },
-        //         col: function(imageryProvider,x,y,level) {
-        //             return (Array(8).join(0)+x).slice(-8)
-        //         }
-        //     }
-        // })
-        //  viewer.imageryLayers.addImageryProvider(wmts)
     });
 
 
@@ -480,6 +468,7 @@ export function Init(ele,CONFIG){
 
 
     return {
+        viewerImagery,
         viewer,
         Tool,
         Event,
