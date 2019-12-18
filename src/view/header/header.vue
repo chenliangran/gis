@@ -92,26 +92,54 @@
                 append-to-body
                 :close-on-click-modal="false"
             >
-            <el-button type="primary" @click="addDomain" style="margin-bottom: 10px">新增点</el-button>
-            <el-button type="danger" @click="clearLine">清除连线</el-button>
-            <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
-                <el-col>
-                    <el-form-item
-                            v-for="(domain, index) in dynamicValidateForm.domains"
-                            :label="`点迹${index+1}`"
-                            :key="'点迹' + index"
-                            :prop="'domains.' + index + '.value'"
-                    >
-                        <el-input style="width: 35%;margin-right: 10px" v-model="domain.jd">
-                            <i slot="suffix">经度</i>
-                        </el-input>
-                        <el-input style="width: 35%;margin-right: 10px" v-model="domain.wd">
-                            <i slot="suffix">纬度</i>
-                        </el-input>
-                        <el-button type="danger" @click.prevent="removeDomain(domain)">删除</el-button>
-                    </el-form-item>
-                </el-col>
-            </el-form>
+                <div class="select-fs">
+                    <span @click="selectFS('jwd')" :style="{'color':selectFs == 'jwd'?'red':'#eee','fontSize':'20px'}">经纬度格式（度）</span>
+                    <span @click="selectFS('dfm')" :style="{'color':selectFs == 'dfm'?'red':'#eee','fontSize':'20px'}">经纬度格式（度分秒）</span>
+                </div>
+                <el-button style="margin-bottom: 15px" size="mini" type="danger" @click="clearLine">清除连线</el-button>
+                <div v-if="jwdType" style="max-height: 600px;overflow: auto">
+                    <el-button size="mini" type="primary" @click="addDomain" style="margin-bottom: 10px">新增点</el-button>
+                    <el-form v-if :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+                        <el-col>
+                            <el-form-item
+                                    v-for="(domain, index) in dynamicValidateForm.domains"
+                                    :label="`点迹${index+1}`"
+                                    :key="'点迹' + index"
+                                    :prop="'domains.' + index + '.value'"
+                            >
+                                <el-input type='number' style="width: 35%;margin-right: 10px" v-model="domain.jd">
+                                    <i slot="suffix">经度</i>
+                                </el-input>
+                                <el-input type='number' style="width: 35%;margin-right: 10px" v-model="domain.wd">
+                                    <i slot="suffix">纬度</i>
+                                </el-input>
+                                <el-button type="danger" @click.prevent="removeDomain(domain)">删除</el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-form>
+                </div>
+                <div v-if="dfmType">
+                    <el-button size="mini" type="primary" @click="addDomain2" style="margin-bottom: 10px">新增点</el-button>
+                    <el-form :model="dynamicValidateForm2" ref="dynamicValidateForm2" label-width="100px" class="demo-dynamic">
+                        <el-col>
+                            <li v-for="(domain, index) in dynamicValidateForm2.domains">
+                                <div style="margin: 5px 0">
+                                    <span style="font-size: 16px;margin-right: 5px">经度:{{index+1}}</span>
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd1"/>°
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd2"/>′
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd3"/>″
+                                </div>
+                                <div style="margin: 5px 0">
+                                    <span style="font-size: 16px;margin-right: 5px">纬度:{{index+1}}</span>
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.wd1"/>°
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.wd2"/>′
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.wd3"/>″
+                                    <el-button size="small" type="danger" @click.prevent="removeDomain2(domain)">删除</el-button>
+                                </div>
+                            </li>
+                        </el-col>
+                    </el-form>
+                </div>
             <span slot="footer" class="dialog-footer">
             <el-button @click="jwdVisible = false">取 消</el-button>
             <el-button type="primary" @click="drawPolygon">确 定</el-button>
@@ -193,6 +221,17 @@ export default {
                     key: ""
                 }],
             },
+            dynamicValidateForm2: {
+                domains: [{
+                    jd1: "",
+                    jd2: "",
+                    jd3: "",
+                    wd1:"",
+                    wd2:"",
+                    wd3:"",
+                    key: ""
+                }],
+            },
             lineId:[],
             menuData:{
 			  '飞行曲线':'',
@@ -209,7 +248,10 @@ export default {
             },
             form: {
                 len: ''
-            }
+            },
+            selectFs:'jwd',
+            jwdType:true,
+            dfmType:false
 		}
 	},
 	methods: {
@@ -354,6 +396,17 @@ export default {
                 key: Date.now()
             });
         },
+        addDomain2(){
+            this.dynamicValidateForm2.domains.push({
+                jd1: "",
+                jd2: "",
+                jd3: "",
+                wd1:"",
+                wd2:"",
+                wd3:"",
+                key: Date.now()
+            });
+        },
         feijiPolygon(){
             if(!Number(this.formInline.len)){
                 this.$message.error('飞机轨迹长度不能为空！');
@@ -380,96 +433,118 @@ export default {
         },
         drawPolygon(){
             const that =this;
-            let flag =true;
-            let arr = [];
-            if(!this.dynamicValidateForm.domains.length){
-                that.$message.error('点迹不能为空！');
-                return false
-            }
-            this.dynamicValidateForm.domains.map(s=>{
-                if(flag){
-                    if(s.jd=== ''){
-                        that.$message.error('经度不能为空！');
-                        flag =false;
-                        return
-                    }
-                    if(s.wd=== ''){
-                        that.$message.error('纬度不能为空！');
-                        flag =false;
-                        return
-                    }
-                    if(s.jd.includes("°") && s.jd.includes("'") && s.jd.includes("\"")){
-                        let du = s.jd.indexOf("°");
-                        var x = s.jd.slice(0,du);
-                        let fen = s.jd.indexOf("'");
-                        if(fen > -1){
-                            var y = s.jd.slice(fen-2,fen)
-                        }
-                        let miao = s.jd.indexOf("\"");
-                        if(miao > -1){
-                            var z = s.jd.slice(miao-2,miao)
-                        }
-                        s.jd = parseFloat(x) + parseFloat(y/60)  + parseFloat(z/3600);
-                        if(isNaN(s.jd)){
-                            that.$message.error('经纬度格式错误！');
-                            flag =false;
-                            return
-                        }
-                    }
-                    if(s.wd.includes("°") && s.wd.includes("'") && s.wd.includes("\"")){
-                        let du = s.wd.indexOf("°");
-                        var x = s.wd.slice(0,du);
-                        let fen = s.wd.indexOf("'");
-                        if(fen > -1){
-                            var y = s.wd.slice(fen-2,fen)
-                        }
-                        let miao = s.wd.indexOf("\"");
-                        if(miao > -1){
-                            var z = s.wd.slice(miao-2,miao)
-                        }
-                        s.wd = parseFloat(x) + parseFloat(y/60)  + parseFloat(z/3600);
-                        if(isNaN(s.wd)){
-                            that.$message.error('经纬度格式错误！');
-                            flag =false;
-                            return
-                        }
-                    }
-                    arr.push(Number(s.jd),Number(s.wd));
+            if(this.jwdType){
+                let flag =true;
+                let arr = [];
+                if(!this.dynamicValidateForm.domains.length){
+                    that.$message.error('点迹不能为空！');
+                    return false
                 }
-            })
-            arr.push(Number(this.dynamicValidateForm.domains[0].jd),Number(this.dynamicValidateForm.domains[0].wd))
-            if(flag){
-                this.jwdVisible = false;
-                let id = Math.random().toFixed(10);
-                let entity = window.Map.viewer.entities.add({
-                    position:Cesium.Cartesian3.fromDegrees(arr[0],arr[1]),
-                    point: {
-                        color: Cesium.Color.RED,    //点位颜色
-                        pixelSize: 5               //像素点大小
-                    },
+                this.dynamicValidateForm.domains.map(s=>{
+                    if(flag){
+                        if(s.jd=== ''){
+                            that.$message.error('经度不能为空！');
+                            flag =false;
+                            return
+                        }
+                        if(s.wd=== ''){
+                            that.$message.error('纬度不能为空！');
+                            flag =false;
+                            return
+                        }
+                        arr.push(Number(s.jd),Number(s.wd));
+                    }
+                })
+                arr.push(Number(this.dynamicValidateForm.domains[0].jd),Number(this.dynamicValidateForm.domains[0].wd))
+                if(flag){
+                    this.jwdVisible = false;
+                    let id = Math.random().toFixed(10);
+                    let entity = window.Map.viewer.entities.add({
+                        position:Cesium.Cartesian3.fromDegrees(arr[0],arr[1]),
+                        point: {
+                            color: Cesium.Color.RED,    //点位颜色
+                            pixelSize: 5               //像素点大小
+                        },
+                        label:{
+                            show:true,
+                            text:'防空识别区',
+                            font:'24px Helvetica',
+                            fillColor:Cesium.Color.BLUE,
+                            style: Cesium.LabelStyle.FILL,        //label样式
+                            horizontalOrigin : Cesium.HorizontalOrigin.LEFT,//水平位置
+                            verticalOrigin : Cesium.VerticalOrigin.CENTER,//垂直位置
+                            pixelOffset:new Cesium.Cartesian2(10,20)  //偏移
+                        },
+                        polyline : {
+                            positions : new Cesium.CallbackProperty(function(){
+                                return Cesium.Cartesian3.fromDegreesArray(arr)
+                            },false),
+                            width : 5,
+                            material : Cesium.Color.AQUAMARINE,
+                        },
+                        id:id
+                    });
+                    this.lineId.push(id)
+                    window.Map.viewer.zoomTo(entity)//居中显示
+                }
+            } else if(this.dfmType){
+                let flag2 =true;
+                let arr2 = [];
+                if(!this.dynamicValidateForm2.domains.length){
+                    that.$message.error('点迹不能为空！');
+                    return false
+                }
+                this.dynamicValidateForm2.domains.map(s=>{
+                    if(flag2){
+                        if(s.jd1 === '' || s.jd2 === '' || s.jd3 === ''){
+                            that.$message.error('经度不能为空！');
+                            flag2 =false;
+                            return
+                        }
+                        if(s.wd1 === '' || s.wd2 === '' || s.wd3 === ''){
+                            that.$message.error('纬度不能为空！');
+                            flag2 =false;
+                            return
+                        }
+                        arr2.push(Number(s.jd1)  + Number(s.jd2/60) + Number(s.jd3/3600),Number(s.wd1) + Number(s.wd2/60) + Number(s.wd3/3600));
+                    }
+                })
 
-                    label:{
-                        show:true,
-                        text:'防空识别区',                  
-                        font:'24px Helvetica',
-                        fillColor:Cesium.Color.BLUE,
-                        style: Cesium.LabelStyle.FILL,        //label样式
-                        horizontalOrigin : Cesium.HorizontalOrigin.LEFT,//水平位置
-                        verticalOrigin : Cesium.VerticalOrigin.CENTER,//垂直位置
-                        pixelOffset:new Cesium.Cartesian2(10,20)  //偏移
-                    },
-                    polyline : { 
-                        positions : new Cesium.CallbackProperty(function(){
-                            return Cesium.Cartesian3.fromDegreesArray(arr)
-                        },false),
-                        width : 5,
-                        material : Cesium.Color.AQUAMARINE,
-                    },
-                    id:id
-                });
-                this.lineId.push(id)
-                window.Map.viewer.zoomTo(entity)//居中显示
+                let qd = this.dynamicValidateForm2.domains[0];
+                arr2.push(Number(qd.jd1) + Number(qd.jd2/60) + Number(qd.jd3/3600),Number(qd.wd1) + Number(qd.wd2/60) + Number(qd.wd3/3600));
+                if(flag2){
+                    this.jwdVisible = false;
+                    let id = Math.random().toFixed(10);
+                    let entity = window.Map.viewer.entities.add({
+                        position:Cesium.Cartesian3.fromDegrees(arr2[0],arr2[1]),
+                        point: {
+                            color: Cesium.Color.RED,    //点位颜色
+                            pixelSize: 5               //像素点大小
+                        },
+                        label:{
+                            show:true,
+                            text:'防空识别区',
+                            font:'24px Helvetica',
+                            fillColor:Cesium.Color.BLUE,
+                            style: Cesium.LabelStyle.FILL,        //label样式
+                            horizontalOrigin : Cesium.HorizontalOrigin.LEFT,//水平位置
+                            verticalOrigin : Cesium.VerticalOrigin.CENTER,//垂直位置
+                            pixelOffset:new Cesium.Cartesian2(10,20)  //偏移
+                        },
+                        polyline : {
+                            positions : new Cesium.CallbackProperty(function(){
+                                return Cesium.Cartesian3.fromDegreesArray(arr2)
+                            },false),
+                            width : 5,
+                            material : Cesium.Color.AQUAMARINE,
+                        },
+                        id:id
+                    });
+                    this.lineId.push(id)
+                    window.Map.viewer.zoomTo(entity)//居中显示
+                }
             }
+
         },
         clearLine(){
             this.lineId.map(s=>{
@@ -521,6 +596,23 @@ export default {
             var index = this.dynamicValidateForm.domains.indexOf(item)
             if (index !== -1) {
                 this.dynamicValidateForm.domains.splice(index, 1)
+            }
+        },
+        removeDomain2(item) {
+            var index = this.dynamicValidateForm2.domains.indexOf(item)
+            if (index !== -1) {
+                this.dynamicValidateForm2.domains.splice(index, 1)
+            }
+        },
+        selectFS(str){
+            this.selectFs = str;
+            if(str == 'jwd'){
+                this.jwdType = true;
+                this.dfmType = false;
+            }
+            if(str == 'dfm'){
+                this.jwdType = false;
+                this.dfmType = true;
             }
         },
     },
@@ -866,5 +958,8 @@ export default {
     }
     .cmsNav li{
         cursor: pointer;
+    }
+    li{
+        list-style: none;
     }
 </style>
