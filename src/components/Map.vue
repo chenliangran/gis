@@ -1562,19 +1562,19 @@ export default {
            that.FBnum = ++that.FBnum;
            let FBLX = '';
             if(item.fblx=="被动全向"){
-              FBLX = '/L'
+              FBLX = 'L'
             }
             if(item.fblx=="被动定向"){
-              FBLX = '/D'
+              FBLX = 'D'
             }
             if(item.fblx=="主动全向"){
-              FBLX = '/R'
+              FBLX = 'R'
             }
             if(item.fblx=="海噪声"){
-              FBLX = '/A'
+              FBLX = 'A'
             }
             if(item.fblx=="温深"){
-              FBLX = '/B'
+              FBLX = 'B'
             }
            window.Map.Detector.Add({
             id: "detector_" + item["fbbh"],
@@ -2307,19 +2307,19 @@ export default {
               _this.FBnum = ++_this.FBnum;
               let FBLX = '';
               if(item.fblx=="被动全向"){
-                FBLX = '/L'
+                FBLX = 'L'
               }
               if(item.fblx=="被动定向"){
-                FBLX = '/D'
+                FBLX = 'D'
               }
               if(item.fblx=="主动全向"){
-                FBLX = '/R'
+                FBLX = 'R'
               }
               if(item.fblx=="海噪声"){
-                FBLX = '/A'
+                FBLX = 'A'
               }
               if(item.fblx=="温深"){
-                FBLX = '/B'
+                FBLX = 'B'
               }
               window.Map.Detector.Add({
                 id: "detector_" + item["fbbh"],
