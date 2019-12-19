@@ -1,9 +1,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style >
-.cesium-viewer-toolbar{
-  top:80px !important
-}
 #hinge-msg {
   display: none;
   position: fixed;
@@ -364,7 +361,7 @@ background: none !important;
   max-width: 80%;
 }
 .cesium-viewer-toolbar{
-  top:57px;
+  top:60px;
   right:10px
 }
 </style>
