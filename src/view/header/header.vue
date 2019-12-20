@@ -35,7 +35,7 @@
                     <div class="menuOption" v-show="flag5" style="left:478px;height:260px;">
                         <el-radio-group v-model="mapType" size="small" @change="mapType1(mapType)">
                             <el-radio label="haitu">海图格式</el-radio>
-                            <!-- <el-radio label="shp格式">shp格式</el-radio> -->
+                            <el-radio label="shp格式">shp格式</el-radio>
                             <el-radio label="GeoTiff">GeoTiff格式</el-radio>
                             <el-radio label="png格式">png格式</el-radio>
                             <el-radio label="jysl格式">军用矢量格式</el-radio>
@@ -279,7 +279,7 @@ export default {
 	methods: {
         mapType1(mapType){
             window.Map.viewerImagery['haitu'].show = false
-            // window.Map.viewerImagery['shp格式'].show = false
+            window.Map.viewerImagery['shp格式'].show = false
             window.Map.viewerImagery['GeoTiff'].show = false
             window.Map.viewerImagery['png格式'].show = false
             window.Map.viewerImagery['jysl格式'].show = false

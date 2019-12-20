@@ -182,7 +182,7 @@ export function Init(ele,CONFIG){
                         ellipsoid: Cesium.Ellipsoid.WGS84,
                         tileWidth: 512,
                         tilHeight: 512,
-                        maximumLevel: 10,
+                        maximumLevel: 5,
                         enablePickFeatures: false,
                         customTags: {
                             matrix: function(imageryProvider,x,y,level) {

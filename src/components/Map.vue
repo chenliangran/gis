@@ -1265,7 +1265,7 @@ export default {
       if (socketController == null) {
         // this.buildSocket(true);
       } else {
-        // console.log(new Date(that.allDate.startT))
+       console.log(new Date(that.allDate.startT))
         this.$refs.timeLine.playFlag = true;
         this.playFLAG = true;
         $.get(`${globalUrl.host}/find/triggerSocket`, {

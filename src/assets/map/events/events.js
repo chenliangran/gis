@@ -181,7 +181,8 @@ export class Events{
                         },
                         label : {
                             text : '标注',
-                            font : '20px',
+                            font : '20px  Helvetica',
+                            fillColor:Cesium.Color.RED,
                             verticalOrigin : Cesium.VerticalOrigin.TOP
                         },
                         isMarkLabel : true
