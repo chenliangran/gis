@@ -57,9 +57,9 @@ export default class Detect{
                     type:'detector',
                     group:'detector',                  
                     label:{
-                        text:target.origin.sptdh+target.type,
+                        text:target.type+target.origin.sptdh,
                         // text:target.origin.fbbh.slice(-3)+'/S',
-                        font:'16px',
+                        font:'12px bold',
                         fillColor:Cesium.Color.BLUE,
                         verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                         pixelOffset:Ce.XY2D(0,-20)
@@ -145,7 +145,9 @@ export default class Detect{
             return (item).toFixed(2)
         })
 
+
         let detecPosition = Tool.GetGps(detector.position._value);
+        // let ToName = Ce.ToName(linePosition)
 
         let linePosition = [detecPosition.lon, detecPosition.lat].concat(link.positions);
 
@@ -160,12 +162,24 @@ export default class Detect{
             }
 
             let _lpos = Ce.ToPoints(linePosition)
+            
 
             linked.polyline.positions = new Cesium.CallbackProperty(function(){
 
                 return _lpos
             },false) 
         }else{
+            var name = ''
+            for(let key in link.origin){
+                
+                if(key.indexOf('dwfbxh') != -1){
+                    if(Tool.GetId('detector_'+link.origin[key])){
+                        name += Tool.GetId('detector_'+link.origin[key])._origin.origin.sptdh+'/'
+                        console.log(Tool.GetId('detector_'+link.origin[key])._origin.origin.sptdh)
+                    }
+                    
+                }
+            }
             DrawEntity.Draw({
                 id:link.id,
                 name:'浮标目标',
@@ -173,14 +187,14 @@ export default class Detect{
                 type:'detector_mb',
                 group:'detector_mb',
                 label:{
-                    font:'16px',
-                    text:`${link.fbbh}S'\n'${(Ce.Distance([detecPosition.lon, detecPosition.lat], link.positions)).toFixed(2)/1000} km`,
+                    font:'12px bold',
+                    text:`${name}S\n${(Ce.Distance([detecPosition.lon, detecPosition.lat], link.positions)).toFixed(2)/1000} km`,
                     fillColor:Cesium.Color.BLUE,
                     verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                     pixelOffset:Ce.XY2D(0,-10)
                 },
                 billboard:{
-                    image:'/static/image/junbiao/wofang.png',
+                    image:'/static/image/junbiao/wofangss.png',
                     width:30,
                     height:30,
                     // scaleByDistance:Ce.ScaleNF(2000,2,50000,1)
