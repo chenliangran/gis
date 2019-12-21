@@ -245,11 +245,11 @@ export default {
             dynamicValidateForm2: {
                 domains: [{
                     jd1: "",
-                    jd2: "",
-                    jd3: "",
+                    jd2: "0",
+                    jd3: "0",
                     wd1:"",
-                    wd2:"",
-                    wd3:"",
+                    wd2:"0",
+                    wd3:"0",
                     key: ""
                 }],
             },
@@ -397,11 +397,11 @@ export default {
         addDomain2(){
             this.dynamicValidateForm2.domains.push({
                 jd1: "",
-                jd2: "",
-                jd3: "",
+                jd2: "0",
+                jd3: "0",
                 wd1:"",
-                wd2:"",
-                wd3:"",
+                wd2:"0",
+                wd3:"0",
                 key: Date.now()
             });
         },
