@@ -31,7 +31,6 @@ export function Init(ele,CONFIG){
                 url : '/static/image/Map/single.jpg',
             }),
             navigation:false,
-            selectionIndicator : false,
             sceneModePicker:true,
             contextOptions:{
                 webgl:{
