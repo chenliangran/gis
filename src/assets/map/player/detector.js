@@ -59,10 +59,10 @@ export default class Detect{
                     label:{
                         text:target.type+target.origin.sptdh,
                         // text:target.origin.fbbh.slice(-3)+'/S',
-                        font:'12px bold',
+                        font:'16px bold',
                         fillColor:Cesium.Color.BLUE,
                         verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
-                        pixelOffset:Ce.XY2D(0,-20)
+                        pixelOffset:Ce.XY2D(0,40)
                     },
                     billboard:{
                         image:'/static/image/junbiao/fubiao1.png',

@@ -1500,7 +1500,19 @@ export default {
       let notifyList = [];
       that.notifyType = '';
       // debugger
-      window["Map"].viewer.entities.removeAll();
+      // window["Map"].viewer.entities.removeAll();
+      let arr = [];
+      if(window["Map"].viewer.entities.values.length){
+        window["Map"].viewer.entities.values.map(s=>{
+          if(s.type != "fksbq"){
+            arr.push(s.id)
+          }
+        })
+      }
+      arr.map(t=>{
+        window["Map"].viewer.entities.removeById(t)
+      })
+
       window.Map.AddCompare("feiji", {
         id: "plane_1",
         name: "平台飞机",
@@ -1676,7 +1688,7 @@ export default {
         "mouseup",
         function(e) {
           // console.log()
-          
+
           let end = new Date(that.allDate.endT),
             start = new Date(that.allDate.startT),
             s = end.getTime() - start.getTime()

@@ -480,7 +480,8 @@ export default {
                             width : 5,
                             material : Cesium.Color.AQUAMARINE,
                         },
-                        id:id
+                        id:id,
+                        type:"fksbq"
                     });
                     this.lineId.push(id)
                     window.Map.viewer.zoomTo(entity)//居中显示
