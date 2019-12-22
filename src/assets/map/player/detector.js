@@ -59,7 +59,7 @@ export default class Detect{
                     label:{
                         text:target.type+target.origin.sptdh,
                         // text:target.origin.fbbh.slice(-3)+'/S',
-                        font:'12px bold',
+                        font:'500 16px Helvetica',
                         fillColor:Cesium.Color.BLUE,
                         verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                         pixelOffset:Ce.XY2D(0,-20)

@@ -116,8 +116,14 @@
                     <span @click="selectFS('dfm')" :style="{'color':selectFs == 'dfm'?'red':'#eee','fontSize':'20px'}">经纬度格式（度分秒）</span>
                 </div>
                 <el-button style="margin-bottom: 15px" size="mini" type="danger" @click="clearLine">清除连线</el-button>
+                <el-button style="margin-bottom: 15px" size="mini" type="danger" @click="deleteHJX">删除航迹线</el-button>
+                <el-button style="margin-bottom: 15px" size="mini" type="danger" @click="query">查询</el-button>
                 <div v-if="jwdType" style="max-height: 600px;overflow: auto">
                     <el-button size="mini" type="primary" @click="addDomain" style="margin-bottom: 10px">新增点</el-button>
+                    <div class="demo-input-suffix">
+                        航迹名称：
+                        <el-input placeholder="请输入航迹名称"  v-model="hjName" style="width:40%"> </el-input>
+                    </div>
                     <el-form v-model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
                         <el-col>
                             <el-form-item
@@ -138,6 +144,10 @@
                     </el-form>
                 </div>
                 <div v-if="dfmType">
+                    <div class="demo-input-suffix">
+                        航迹名称：
+                        <el-input placeholder="请输入航迹名称"  v-model="hjName" style="width:40%"> </el-input>
+                    </div>
                     <el-button size="mini" type="primary" @click="addDomain2" style="margin-bottom: 10px">新增点</el-button>
                     <el-form :model="dynamicValidateForm2" ref="dynamicValidateForm2" label-width="100px" class="demo-dynamic">
                         <el-col>
@@ -162,6 +172,7 @@
             <span slot="footer" class="dialog-footer">
             <el-button @click="jwdVisible = false">取 消</el-button>
             <el-button type="primary" @click="drawPolygon">确 定</el-button>
+            <el-button type="primary" @click="addHJX">添加航迹线</el-button>
           </span>
         </el-dialog>
         <el-dialog
@@ -273,7 +284,8 @@ export default {
             mapType:'haitu',
             selectFs:'jwd',
             jwdType:true,
-            dfmType:false
+            dfmType:false,
+            hjName:''
 		}
 	},
 	methods: {
@@ -542,6 +554,102 @@ export default {
                     window.Map.viewer.zoomTo(entity)//居中显示
                 }
             }
+
+        },
+        addHJX(){
+            const that =this;
+            if(that.hjName == ""){
+                that.$message.error('航迹线名称不能为空！');
+                    return false
+            }
+             if(that.jwdType){
+                 debugger
+                let flag =true;
+                let arrhjds= [];
+                if(!this.dynamicValidateForm.domains.length){
+                    that.$message.error('点迹不能为空！');
+                    return false
+                }
+                this.dynamicValidateForm.domains.map((s,index)=>{
+                    if(flag){
+                        debugger
+                        if(s.jd=== ''){
+                            that.$message.error('经度不能为空！');
+                            flag =false;
+                            return
+                        }
+                        if(s.wd=== ''){
+                            that.$message.error('纬度不能为空！');
+                            flag =false;
+                            return
+                        }
+                        //arr.push(Number(s.jd),Number(s.wd));
+                        let hjjwd = {
+                            hjxid:null,
+                            jd:Number(s.jd),
+                            sx:index,
+                            wd:Number(s.wd)
+                        }
+                        arrhjds.push(hjjwd)
+                    }
+                })
+                console.log(arrhjds)
+                let params = {
+                    hjx:{
+                        hjds:arrhjds,
+                        hjmc:that.hjName,
+                        id:null
+                    }
+                }
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: `${globalUrl.host}/hjx/addHJX`,
+                    contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                    data:JSON.stringify(params),//将js对象转成json对象
+                    success: function (data) {
+                       console.log(data)
+                        
+                    }
+                })
+                arr.push(Number(this.dynamicValidateForm.domains[0].jd),Number(this.dynamicValidateForm.domains[0].wd))
+                if(flag){
+                    let hjx = {}
+
+
+                }
+             }else if(this.dfmType){
+                let flag2 =true;
+                let arr2 = [];
+                if(!this.dynamicValidateForm2.domains.length){
+                    that.$message.error('点迹不能为空！');
+                    return false
+                }
+                this.dynamicValidateForm2.domains.map(s=>{
+                    if(flag2){
+                        if(s.jd1 === '' || s.jd2 === '' || s.jd3 === ''){
+                            that.$message.error('经度不能为空！');
+                            flag2 =false;
+                            return
+                        }
+                        if(s.wd1 === '' || s.wd2 === '' || s.wd3 === ''){
+                            that.$message.error('纬度不能为空！');
+                            flag2 =false;
+                            return
+                        }
+                        arr2.push(Number(s.jd1)  + Number(s.jd2/60) + Number(s.jd3/3600),Number(s.wd1) + Number(s.wd2/60) + Number(s.wd3/3600));
+                    }
+                })
+
+                let qd = this.dynamicValidateForm2.domains[0];
+                arr2.push(Number(qd.jd1) + Number(qd.jd2/60) + Number(qd.jd3/3600),Number(qd.wd1) + Number(qd.wd2/60) + Number(qd.wd3/3600));   
+             }
+
+        },
+        deleteHJX(){
+
+        },
+        query(){
 
         },
         clearLine(){
