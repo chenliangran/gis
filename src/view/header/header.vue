@@ -191,16 +191,17 @@
                 <el-table-column type="expand">
                     <template slot-scope="props">
                         <el-form :model="props.row" label-position="left" inline class="demo-table-expand" v-for="(item,i) in props.row.hjds" >
-                            <el-form-item label="序号" style="width:10%">
+                            <!-- <el-form-item label="序号" style="width:10%">
                                 <span>{{ item.sx}}</span>
+                            </el-form-item> -->
                              <el-form-item label="航迹点" style="width:10%">
                                 <span>{{item.sx+1}}</span>
                             </el-form-item>
-                            <el-form-item label="经度" style="width:35%">
+                            <el-form-item label="经度" style="width:30%">
                                 <el-input v-if="item.isOK" v-model="item.jd" style="width:100%;hight:100%"></el-input>
                                 <span v-else @click="dbclick(item)">{{ item.jd }}</span>
                             </el-form-item>
-                            <el-form-item label="纬度" style="width:35%">
+                            <el-form-item label="纬度" style="width:30%">
                                 <el-input v-if="item.isOK" v-model="item.wd" style="width:100%;hight:100%"></el-input>
                                 <span v-else @click="dbclick(item)">{{ item.wd}}</span>
                                 <span></span>
@@ -764,7 +765,6 @@ export default {
                     }
                 })
              }else if(this.dfmType){
-                 debugger
                 let flag2 =true;
                 let arr2hjds = [];
                 if(!this.dynamicValidateForm2.domains.length){
@@ -915,7 +915,6 @@ export default {
             this.handleCurrentData = val
         },
         dbclick(row){
-            debugger
             row.isOK =!row.isOK
         },
         clearLine(){
