@@ -116,14 +116,13 @@
                     <span @click="selectFS('dfm')" :style="{'color':selectFs == 'dfm'?'red':'#eee','fontSize':'20px'}">经纬度格式（度分秒）</span>
                 </div>
                 <el-button style="margin-bottom: 15px" size="mini" type="danger" @click="clearLine">清除连线</el-button>
-                <!-- <el-button style="margin-bottom: 15px" size="mini" type="danger" @click="deleteHJX">删除航迹线</el-button> -->
                 <el-button style="margin-bottom: 15px" size="mini" type="danger" @click="query">查询</el-button>
                 <div v-if="jwdType" style="max-height: 600px;overflow: auto">
                     <el-button size="mini" type="primary" @click="addDomain" style="margin-bottom: 10px">新增点</el-button>
-                    <!-- <div class="demo-input-suffix">
+                    <div class="demo-input-suffix">
                         航迹名称：
                         <el-input placeholder="请输入航迹名称"  v-model="hjName" style="width:40%"> </el-input>
-                    </div> -->
+                    </div>
                     <el-form v-model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
                         <el-col>
                             <el-form-item
@@ -144,10 +143,10 @@
                     </el-form>
                 </div>
                 <div v-if="dfmType">
-                    <!-- <div class="demo-input-suffix">
+                    <div class="demo-input-suffix">
                         航迹名称：
                         <el-input placeholder="请输入航迹名称"  v-model="hjName" style="width:40%"> </el-input>
-                    </div> -->
+                    </div>
                     <el-button size="mini" type="primary" @click="addDomain2" style="margin-bottom: 10px">新增点</el-button>
                     <el-form :model="dynamicValidateForm2" ref="dynamicValidateForm2" label-width="100px" class="demo-dynamic">
                         <el-col>
@@ -172,8 +171,57 @@
             <span slot="footer" class="dialog-footer">
             <el-button @click="jwdVisible = false">取 消</el-button>
             <el-button type="primary" @click="drawPolygon">确 定</el-button>
-            <!-- <el-button type="primary" @click="addHJX">添加航迹线</el-button> -->
+            <el-button type="primary" @click="addHJX">添加航迹线</el-button>
           </span>
+        </el-dialog>
+         <el-dialog
+                title="经纬度设置"
+                :visible.sync="jingweiduVisible"
+                width="40%"
+                append-to-body
+                :close-on-click-modal="false"
+               
+            >
+             <el-table
+                ref="singleTable"
+                :data="tableData"
+                border
+                stripe
+                highlight-current-row
+                 @current-change="handleCurrentChange"
+                style="width: 100%">
+                <el-table-column type="expand">
+                <template scope="props">
+                    <el-form label-position="left" inline class="demo-table-expand" v-for="(item,i) in props.row.hjds" >
+                         <el-form-item label="序号">
+                            <span>{{ item.sx}}</span>
+                        </el-form-item>
+                        <el-form-item label="经度">
+                            <span>{{ item.jd }}</span>
+                        </el-form-item>
+                        <el-form-item label="纬度">
+                            <span>{{ item.wd}}</span>
+                        </el-form-item>                   
+                    </el-form>
+                </template>
+                </el-table-column>
+                <el-table-column
+                label="航迹名称"
+                prop="hjmc">
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template scope="scope">
+                        <el-button
+                        size="small"
+                        type="danger"
+                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                    </template>
+                    </el-table-column>
+            </el-table>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="jingweiduVisible = false">取 消</el-button>
+                <el-button type="primary" @click="jingweiduPolygon">确 定</el-button>
+            </span>
         </el-dialog>
         <el-dialog
                 title="飞机轨迹"
@@ -285,7 +333,10 @@ export default {
             selectFs:'jwd',
             jwdType:true,
             dfmType:false,
-            hjName:''
+            hjName:'',
+            tableData:[],
+            jingweiduVisible:false,
+            handleCurrentData:{}
 		}
 	},
 	methods: {
@@ -564,7 +615,7 @@ export default {
                     return false
             }
              if(that.jwdType){
-                 debugger
+
                 let flag =true;
                 let arrhjds= [];
                 if(!this.dynamicValidateForm.domains.length){
@@ -572,8 +623,7 @@ export default {
                     return false
                 }
                 this.dynamicValidateForm.domains.map((s,index)=>{
-                    if(flag){
-                        debugger
+                    if(flag){                  
                         if(s.jd=== ''){
                             that.$message.error('经度不能为空！');
                             flag =false;
@@ -595,38 +645,38 @@ export default {
                     }
                 })
                 console.log(arrhjds)
-                let params = {
-                    hjx:{
-                        hjds:arrhjds,
-                        hjmc:that.hjName,
-                        id:null
-                    }
+                let hjx = {
+                    hjds:arrhjds,
+                    hjmc:that.hjName,
+                    id:null                  
                 }
                 $.ajax({
                     type: "POST",
                     dataType: "json",
                     url: `${globalUrl.host}/hjx/addHJX`,
                     contentType: "application/json;charset=UTF-8",//指定消息请求类型
-                    data:JSON.stringify(params),//将js对象转成json对象
+                    data:JSON.stringify(hjx),//将js对象转成json对象
                     success: function (data) {
-                       console.log(data)
-                        
+                       if(data == 0){
+                            that.$message.error('保存航迹线失败！');
+                        }
+                        if(data == 1){
+                            that.$message.success('保存航迹线成功！')
+                        }
+                        if(data == 2){
+                            that.$message.error('航迹线名称重复！');
+                        }
                     }
                 })
-                arr.push(Number(this.dynamicValidateForm.domains[0].jd),Number(this.dynamicValidateForm.domains[0].wd))
-                if(flag){
-                    let hjx = {}
-
-
-                }
              }else if(this.dfmType){
+                 debugger
                 let flag2 =true;
-                let arr2 = [];
+                let arr2hjds = [];
                 if(!this.dynamicValidateForm2.domains.length){
                     that.$message.error('点迹不能为空！');
                     return false
                 }
-                this.dynamicValidateForm2.domains.map(s=>{
+                this.dynamicValidateForm2.domains.map((s,index)=>{
                     if(flag2){
                         if(s.jd1 === '' || s.jd2 === '' || s.jd3 === ''){
                             that.$message.error('经度不能为空！');
@@ -638,20 +688,121 @@ export default {
                             flag2 =false;
                             return
                         }
-                        arr2.push(Number(s.jd1)  + Number(s.jd2/60) + Number(s.jd3/3600),Number(s.wd1) + Number(s.wd2/60) + Number(s.wd3/3600));
+                        //arr2.push(Number(s.jd1)  + Number(s.jd2/60) + Number(s.jd3/3600),Number(s.wd1) + Number(s.wd2/60) + Number(s.wd3/3600));
+                        let hjjwd = {
+                            hjxid:null,
+                            jd:Number(s.jd1)  + Number(s.jd2/60) + Number(s.jd3/3600),
+                            sx:index,
+                            wd:Number(s.wd1) + Number(s.wd2/60) + Number(s.wd3/3600)
+                        }
+                        arr2hjds.push(hjjwd)
                     }
                 })
-
-                let qd = this.dynamicValidateForm2.domains[0];
-                arr2.push(Number(qd.jd1) + Number(qd.jd2/60) + Number(qd.jd3/3600),Number(qd.wd1) + Number(qd.wd2/60) + Number(qd.wd3/3600));   
+                 let hjx = {
+                    hjds:arr2hjds,
+                    hjmc:that.hjName,
+                    id:null                  
+                }
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: `${globalUrl.host}/hjx/addHJX`,
+                    contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                    data:JSON.stringify(hjx),//将js对象转成json对象
+                    success: function (data) {
+                       if(data == 0){
+                            that.$message.error('保存航迹线失败！');
+                        }
+                        if(data == 1){
+                            that.$message.success('保存航迹线成功！')
+                        }
+                        if(data == 2){
+                            that.$message.error('航迹线名称重复！');
+                        }
+                    }
+                }) 
              }
 
         },
-        deleteHJX(){
-
+        jingweiduPolygon(){
+            if(this.handleCurrentData.id != ""){
+                if(this.handleCurrentData.hjds.length >0){
+                    let arr = []
+                    this.handleCurrentData.hjds.map(item=>{
+                        arr.push(Number(item.jd),Number(item.wd))
+                    }) 
+                    arr.push(Number(this.handleCurrentData.hjds[0].jd),Number(this.handleCurrentData.hjds[0].wd))
+                    this.jwdVisible = false;
+                    this.jingweiduVisible = false;
+                    let id = Math.random().toFixed(10);
+                    let entity = window.Map.viewer.entities.add({
+                        position:Cesium.Cartesian3.fromDegrees(arr[0],arr[1]),
+                        point: {
+                            color: Cesium.Color.RED,    //点位颜色
+                            pixelSize: 5               //像素点大小
+                        },
+                        label:{
+                            show:true,
+                            text:this.handleCurrentData.hjmc,
+                            font:'24px Helvetica',
+                            fillColor:Cesium.Color.BLUE,
+                            style: Cesium.LabelStyle.FILL,        //label样式
+                            horizontalOrigin : Cesium.HorizontalOrigin.LEFT,//水平位置
+                            verticalOrigin : Cesium.VerticalOrigin.CENTER,//垂直位置
+                            pixelOffset:new Cesium.Cartesian2(10,20)  //偏移
+                        },
+                        polyline : {
+                            positions : new Cesium.CallbackProperty(function(){
+                                return Cesium.Cartesian3.fromDegreesArray(arr)
+                            },false),
+                            width : 5,
+                            material : Cesium.Color.AQUAMARINE,
+                        },
+                        id:id,
+                        type:"fksbq"
+                    });
+                    this.lineId.push(id)
+                    window.Map.viewer.zoomTo(entity)//居中显示     
+                }
+                
+            }
+        },
+        handleDelete(val,row){
+            console.log(val,row)
+            let that =this
+            $.ajax({
+                type: "get",
+                dataType: "json",
+                url: `${globalUrl.host}/hjx/deleteHJX`,
+                contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                data:{
+                    hjxid:row.id
+                },
+                success: function (data) {
+                    if(data){
+                        that.query();
+                    }else{
+                        that.$message.error('删除失败！');
+                    }
+                   
+                }
+            })
         },
         query(){
-
+            let that =this
+            $.ajax({
+                type: "get",
+                dataType: "json",
+                url: `${globalUrl.host}/hjx/findHJX`,
+                contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                success: function (data) {
+                    that.jingweiduVisible = true
+                    that.tableData = data
+                }
+            })
+        },
+        handleCurrentChange(val){
+            this.handleCurrentData = val
         },
         clearLine(){
             this.lineId.map(s=>{
@@ -1079,5 +1230,12 @@ export default {
      }
     li{
         list-style: none;
+    }
+    .el-form--inline .el-form-item {
+        display: inline-block;
+        margin-right: 10px;
+        vertical-align: middle !important;
+        width: 30%;
+        margin-bottom:0px !important;
     }
 </style>
