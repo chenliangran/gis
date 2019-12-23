@@ -177,10 +177,9 @@
          <el-dialog
                 title="经纬度设置"
                 :visible.sync="jingweiduVisible"
-                width="40%"
+                width="50%"
                 append-to-body
                 :close-on-click-modal="false"
-               
             >
              <el-table
                 ref="singleTable"
@@ -188,20 +187,26 @@
                 border
                 stripe
                 highlight-current-row
-                 @current-change="handleCurrentChange"
+                @current-change="handleCurrentChange"
                 style="width: 100%">
                 <el-table-column type="expand">
-                <template scope="props">
-                    <el-form label-position="left" inline class="demo-table-expand" v-for="(item,i) in props.row.hjds" >
-                         <el-form-item label="序号">
+                <template slot-scope="props">
+                    <el-form :model="props.row" label-position="left" inline class="demo-table-expand" v-for="(item,i) in props.row.hjds" >
+                         <el-form-item label="序号" style="width:10%">
                             <span>{{ item.sx}}</span>
                         </el-form-item>
-                        <el-form-item label="经度">
-                            <span>{{ item.jd }}</span>
+                        <el-form-item label="经度" style="width:35%">
+                            <el-input v-if="item.isOK" v-model="item.jd" style="width:100%;hight:100%"></el-input>
+                            <span v-else @click="dbclick(item)">{{ item.jd }}</span>
                         </el-form-item>
-                        <el-form-item label="纬度">
-                            <span>{{ item.wd}}</span>
-                        </el-form-item>                   
+                        <el-form-item label="纬度" style="width:35%">
+                            <el-input v-if="item.isOK" v-model="item.wd" style="width:100%;hight:100%"></el-input>
+                            <span v-else @click="dbclick(item)">{{ item.wd}}</span>
+                            <span></span>
+                        </el-form-item>   
+                        <el-form-item style="width:15%">                           
+                           <el-button type="primary" size="small" @click="drawPolygon">修改</el-button>
+                        </el-form-item>                 
                     </el-form>
                 </template>
                 </el-table-column>
@@ -797,12 +802,23 @@ export default {
                 contentType: "application/json;charset=UTF-8",//指定消息请求类型
                 success: function (data) {
                     that.jingweiduVisible = true
+                    data.map(item=>{
+                        item.hjds.map(index=>{
+                            that.$set(index, 'isOK', false)
+                        })
+                        
+                    })
                     that.tableData = data
+                    console.log( that.tableData )
                 }
             })
         },
         handleCurrentChange(val){
             this.handleCurrentData = val
+        },
+        dbclick(row){
+            debugger
+            row.isOK =!row.isOK
         },
         clearLine(){
             this.lineId.map(s=>{
@@ -1235,7 +1251,7 @@ export default {
         display: inline-block;
         margin-right: 10px;
         vertical-align: middle !important;
-        width: 30%;
+        width: 25%;
         margin-bottom:0px !important;
     }
 </style>
