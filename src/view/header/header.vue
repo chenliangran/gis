@@ -190,25 +190,25 @@
                 @current-change="handleCurrentChange"
                 style="width: 100%">
                 <el-table-column type="expand">
-                <template slot-scope="props">
-                    <el-form :model="props.row" label-position="left" inline class="demo-table-expand" v-for="(item,i) in props.row.hjds" >
-                         <el-form-item label="序号" style="width:10%">
-                            <span>{{ item.sx}}</span>
-                        </el-form-item>
-                        <el-form-item label="经度" style="width:35%">
-                            <el-input v-if="item.isOK" v-model="item.jd" style="width:100%;hight:100%"></el-input>
-                            <span v-else @click="dbclick(item)">{{ item.jd }}</span>
-                        </el-form-item>
-                        <el-form-item label="纬度" style="width:35%">
-                            <el-input v-if="item.isOK" v-model="item.wd" style="width:100%;hight:100%"></el-input>
-                            <span v-else @click="dbclick(item)">{{ item.wd}}</span>
-                            <span></span>
-                        </el-form-item>   
-                        <el-form-item style="width:15%">                           
-                           <el-button type="primary" size="small" @click="drawPolygon1(props)">修改</el-button>
-                        </el-form-item>                 
-                    </el-form>
-                </template>
+                    <template slot-scope="props">
+                        <el-form :model="props.row" label-position="left" inline class="demo-table-expand" v-for="(item,i) in props.row.hjds" >
+                            <el-form-item label="序号" style="width:10%">
+                                <span>{{ item.sx}}</span>
+                            </el-form-item>
+                            <el-form-item label="经度" style="width:35%">
+                                <el-input v-if="item.isOK" v-model="item.jd" style="width:100%;hight:100%"></el-input>
+                                <span v-else @click="dbclick(item)">{{ item.jd }}</span>
+                            </el-form-item>
+                            <el-form-item label="纬度" style="width:35%">
+                                <el-input v-if="item.isOK" v-model="item.wd" style="width:100%;hight:100%"></el-input>
+                                <span v-else @click="dbclick(item)">{{ item.wd}}</span>
+                                <span></span>
+                            </el-form-item>   
+                            <el-form-item style="width:15%">                           
+                                <el-button type="primary" size="small" @click="drawPolygon1(props)">修改</el-button>
+                            </el-form-item>                 
+                        </el-form>
+                    </template>
                 </el-table-column>
                 <el-table-column
                 label="航迹名称"
