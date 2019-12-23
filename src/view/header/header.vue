@@ -204,7 +204,7 @@
                                 <span></span>
                             </el-form-item>
                             <el-form-item style="width:15%">
-                               <el-button type="primary" size="small" @click="drawPolygon">修改</el-button>
+                               <el-button type="primary" size="small" @click="drawPolygon1(props)">修改</el-button>
                             </el-form-item>
                         </el-form>
                     </template>
@@ -678,6 +678,28 @@ export default {
                     })
                 }
             }
+        },
+        drawPolygon1(data){
+            console.log(data.row)
+            let that = this
+           $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: `${globalUrl.host}/hjx/addHJX`,
+                contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                data:JSON.stringify(data.row),//将js对象转成json对象
+                success: function (data) {
+                    if(data == 0){
+                        that.$message.error('保存航迹线失败！');
+                    }
+                    if(data == 1){
+                        that.$message.success('保存航迹线成功！')
+                    }
+                    if(data == 2){
+                        that.$message.error('航迹线名称重复！');
+                    }
+                }
+            })
         },
         addHJX(){
             const that =this;
