@@ -116,14 +116,14 @@
                     <span @click="selectFS('dfm')" :style="{'color':selectFs == 'dfm'?'red':'#eee','fontSize':'20px'}">经纬度格式（度分秒）</span>
                 </div>
                 <el-button style="margin-bottom: 15px" size="mini" type="danger" @click="clearLine">清除连线</el-button>
-                <!-- <el-button style="margin-bottom: 15px" size="mini" type="danger" @click="deleteHJX">删除航迹线</el-button> -->
+                <el-button style="margin-bottom: 15px" size="mini" type="danger" @click="deleteHJX">删除航迹线</el-button>
                 <el-button style="margin-bottom: 15px" size="mini" type="danger" @click="query">查询</el-button>
                 <div v-if="jwdType" style="max-height: 600px;overflow: auto">
                     <el-button size="mini" type="primary" @click="addDomain" style="margin-bottom: 10px">新增点</el-button>
-                    <!-- <div class="demo-input-suffix">
+                    <div class="demo-input-suffix">
                         航迹名称：
                         <el-input placeholder="请输入航迹名称"  v-model="hjName" style="width:40%"> </el-input>
-                    </div> -->
+                    </div>
                     <el-form v-model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
                         <el-col>
                             <el-form-item
@@ -144,10 +144,10 @@
                     </el-form>
                 </div>
                 <div v-if="dfmType">
-                    <!-- <div class="demo-input-suffix">
+                    <div class="demo-input-suffix">
                         航迹名称：
                         <el-input placeholder="请输入航迹名称"  v-model="hjName" style="width:40%"> </el-input>
-                    </div> -->
+                    </div>
                     <el-button size="mini" type="primary" @click="addDomain2" style="margin-bottom: 10px">新增点</el-button>
                     <el-form :model="dynamicValidateForm2" ref="dynamicValidateForm2" label-width="100px" class="demo-dynamic">
                         <el-col>
@@ -172,7 +172,7 @@
             <span slot="footer" class="dialog-footer">
             <el-button @click="jwdVisible = false">取 消</el-button>
             <el-button type="primary" @click="drawPolygon">确 定</el-button>
-            <!-- <el-button type="primary" @click="addHJX">添加航迹线</el-button> -->
+            <el-button type="primary" @click="addHJX">添加航迹线</el-button>
           </span>
         </el-dialog>
         <el-dialog
@@ -586,36 +586,34 @@ export default {
                         }
                         //arr.push(Number(s.jd),Number(s.wd));
                         let hjjwd = {
-                            hjxid:null,
-                            jd:Number(s.jd),
+                            jd:s.jd,
                             sx:index,
-                            wd:Number(s.wd)
+                            wd:s.wd
                         }
                         arrhjds.push(hjjwd)
                     }
                 })
                 console.log(arrhjds)
-                let params = {
-                    hjx:{
+                let hjx= {
                         hjds:arrhjds,
                         hjmc:that.hjName,
                         id:null
                     }
-                }
+                console.log(hjx)
                 $.ajax({
                     type: "POST",
                     dataType: "json",
                     url: `${globalUrl.host}/hjx/addHJX`,
-                    contentType: "application/json;charset=UTF-8",//指定消息请求类型
-                    data:JSON.stringify(params),//将js对象转成json对象
+                    contentType: 'application/json;charset=UTF-8',//指定消息请求类型
+                    data:JSON.stringify(hjx),//将js对象转成json对象
                     success: function (data) {
                        console.log(data)
                         
                     }
                 })
-                arr.push(Number(this.dynamicValidateForm.domains[0].jd),Number(this.dynamicValidateForm.domains[0].wd))
+            
                 if(flag){
-                    let hjx = {}
+
 
 
                 }
