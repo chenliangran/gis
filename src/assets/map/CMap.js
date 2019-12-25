@@ -27,11 +27,11 @@ export function Init(ele,CONFIG){
         return new Cesium.Viewer(eleid,{
             selectionIndicator:false,
             timeline:true,
+            sceneMode : Cesium.SceneMode.SCENE2D,  //初始场景模式 为二维
             imageryProvider: new Cesium.SingleTileImageryProvider({
                 url : '/static/image/Map/single.jpg',
             }),
             navigation:false,
-            selectionIndicator : false,
             sceneModePicker:true,
             contextOptions:{
                 webgl:{
@@ -182,7 +182,7 @@ export function Init(ele,CONFIG){
                         ellipsoid: Cesium.Ellipsoid.WGS84,
                         tileWidth: 512,
                         tilHeight: 512,
-                        maximumLevel: 10,
+                        maximumLevel: 5,
                         enablePickFeatures: false,
                         customTags: {
                             matrix: function(imageryProvider,x,y,level) {
