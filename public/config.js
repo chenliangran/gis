@@ -4,7 +4,7 @@ let env = {
     production:'http://'+window.location.hostname
 },PORT = '10000';
 
-let currentEnv = 'development';
+let currentEnv = 'production';
 
 var globalUrl = {
     host:`${env[currentEnv]}:${PORT}`,
