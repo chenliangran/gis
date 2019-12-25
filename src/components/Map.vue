@@ -2291,6 +2291,7 @@ export default {
 
         // 处理浮标目标数据
         function dealFbSJMb(item) {
+
           //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
           if (window.Map.viewer.entities.getById("detector_" + item["fbbh"]))
           return;
@@ -2353,7 +2354,7 @@ export default {
       /**------------------------------------------------------------------------------------------- */
          let Fbtfs = [];//浮标发布数据缓存 12-4
       _.forEach(data, item => {
-        // console.log( item )
+        //console.log( item )
         switch (item.type) {
           // 飞机
           case "FJ":
@@ -2399,9 +2400,20 @@ export default {
         // 处理浮标投放数据 12-4
       function dealFbtfsj(item){
           if(item){
+            let ent = window.Map.viewer.entities;
             _.forEach(item, (v,k)=>{
                   if((k.indexOf('fbxh') != -1) && (v !== '0')){
                       Fbtfs.push(v)
+                    ent.values.map(s=>{
+                      if(s.id == ("detector_" + v)){
+                        let index = k.slice(4)
+                        let jd = item["fbsswzjd" + index];
+                        let wd = item["fbsswzwd" + index];
+                        s.position =new Cesium.CallbackProperty(function(){
+                          return Cesium.Cartesian3.fromDegrees(Number(jd),Number(wd))
+                        },false)
+                      }
+                    })
                   }
               })
           }
@@ -2412,6 +2424,14 @@ export default {
       })
 
         window.Map.Detector.Lights(Fbtfs)
+
+
+
+
+
+
+
+
 
       //   刘川修改
       //   处理飞机
