@@ -27,6 +27,7 @@ export function Init(ele,CONFIG){
         return new Cesium.Viewer(eleid,{
             selectionIndicator:false,
             timeline:true,
+            sceneMode : Cesium.SceneMode.SCENE2D,  //初始场景模式 为二维
             imageryProvider: new Cesium.SingleTileImageryProvider({
                 url : '/static/image/Map/single.jpg',
             }),

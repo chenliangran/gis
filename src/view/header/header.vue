@@ -185,9 +185,10 @@
                 :data="tableData"
                 border
                 stripe
+                 height="350"
                 highlight-current-row
                 @current-change="handleCurrentChange"
-                style="width: 100%">
+                style="width: 100%"> 
                 <el-table-column type="expand">
                     <template slot-scope="props">
                         <el-form :model="props.row" label-position="left" inline class="demo-table-expand" v-for="(item,i) in props.row.hjds" >
@@ -206,7 +207,7 @@
                                 <span v-else @click="dbclick(item)">{{ item.wd}}</span>
                                 <span></span>
                             </el-form-item>
-                            <el-form-item style="width:15%">
+                            <el-form-item style="width:15%" v-if="i===props.row.hjds.length-1">
                                <el-button type="primary" size="small" @click="drawPolygon1(props)">修改</el-button>
                             </el-form-item>
                         </el-form>
@@ -683,6 +684,7 @@ export default {
             }
         },
         drawPolygon1(data){
+            
             console.log(data.row)
             let that = this
            $.ajax({
@@ -732,10 +734,9 @@ export default {
                         }
                         //arr.push(Number(s.jd),Number(s.wd));
                         let hjjwd = {
-                            hjxid:null,
-                            jd:Number(s.jd),
+                            jd:s.jd,
                             sx:index,
-                            wd:Number(s.wd)
+                            wd:s.wd
                         }
                         arrhjds.push(hjjwd)
                     }
@@ -914,6 +915,7 @@ export default {
         handleCurrentChange(val){
             this.handleCurrentData = val
         },
+        
         dbclick(row){
             row.isOK =!row.isOK
         },

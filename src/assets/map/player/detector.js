@@ -35,7 +35,7 @@ export default class Detect{
     }
 
     Add( target ){
-
+        //  debugger
         if(!target.id){
             return;
         }
