@@ -35,14 +35,14 @@ export default class Detect{
     }
 
     Add( target ){
-
+        //  debugger
         if(!target.id){
             return;
         }
 
-        target.positions = _.map(target.positions, (item) => {
-            return (item).toFixed(2)
-        })
+        // target.positions = _.map(target.positions, (item) => {
+        //     return (item).toFixed(2)
+        // })
 
         if(Tool.GetId(target.id)){
 

@@ -2049,29 +2049,12 @@ export default {
         if (_this.wsF) {
           _this.wsName = e.data;
           sessionStorage.setItem("name", e.data);
-          // if (type) {
-          //   $.get(`${globalUrl.host}/find/triggerSocket`, {
-          //     startTime: new Date(_this.allDate.startT),
-          //     name: sessionStorage.getItem('groupNum'),
-          //     id: _this.selectId
-          //   }).then(data => {
-          //     $.get(`${globalUrl.host}/find/fastAndSlow`, {
-          //       multiple: 0,
-          //       name: sessionStorage.getItem('groupNum')
-          //     }).then(data => {
-          //       // window.Map.viewer.clock.shouldAnimate = true;
-          //       _this.action = "暂停";
-          //       _this.num = 0;
-          //       _this.$refs["timeLine"].num = _this.num;
-          //     });
-          //   });
-          // }
           _this.wsF = false;
         } else {
           //  window.Map.viewer.clock.shouldAnimate = true;
           _this.WebSocketData = JSON.parse(e.data);
 
-        //   console.log(JSON.parse(e.data)[0].LKR);
+          //console.log(JSON.parse(e.data)[0].LKR);
           let data = JSON.parse(e.data)[0].LKR;
           if (data) {
             _this.num = data.fps;
@@ -2095,6 +2078,7 @@ export default {
             }
           } else {
             _this.dealMessage(JSON.parse(e.data));
+            console.log(JSON.parse(e.data))
           }
         }
       };
@@ -2104,7 +2088,6 @@ export default {
      * ws数据处理事件
      */
     dealMessage(data) {
-
       const _this = this;
       let notifyList = [];
       let id = sessionStorage.getItem("selectEd")
@@ -2115,11 +2098,7 @@ export default {
               sessionStorage.setItem('jiaciName',_this.jiaciName)
           }
       })
-      // _this.notifyType = '';
       if (data.length == 0) return;
-     // debugger
-    //   console.log(data)
-    // console.log(data)
 
       //--------------比对出当前播放时间
       let date = "";
@@ -2142,22 +2121,9 @@ export default {
         ];
 
         window.Map.Tool.FlyTo([datas[0], datas[1], 2000000]);
-        // window.Map.AddCompare("feiji", {
-        // 	id: "plane_1",
-        // 	name: _this.FeijiName,
-        // 	position:datas,
-        // 	zjjd: datas[0],
-        // 	zjwd:datas[1],
-        // });
         this.fjlnglat = false;
       }
       let newDate = date;
-      //console.log(date)
-      
-      // arrTime.push(1)
-
-      //  if(arrTime.length == 12){
-          // console.log(arrTime)
           arrTime = []
           window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
             new Date(date)
@@ -2180,15 +2146,6 @@ export default {
       if (this.newDate != newDate) {
         
         this.dqsjd = newDate
-        // console.log(arr)
-       
-        // setTimeout(_ => {
-        //   window["Map"].viewer.clock.currentTime = Cesium.JulianDate.fromDate(
-        //     new Date(this.dqsjd)
-        //   );
-        // },500)
-        // console.log(this.newDate,newDate)
-        
         try {
             _this.$refs["myreplay"].$refs['myterrace'].setLineOption(data[0].data);
         } catch (e){
@@ -2196,22 +2153,6 @@ export default {
         }
 
         let y = [];
-
-        //--------------------------比对当前播放时间是否到达标绘时间点
-        // if (_this.$refs["timeLine"].timeItemArr.length > 0) {
-        //   y = _this.$refs["timeLine"].timeItemArr.filter(item => {
-        //     return (
-        //       new Date(item.start).getTime() == new Date(newDate).getTime()
-        //     );
-        //   });
-        // }
-        //--------------------------
-
-        // if (y.length > 0) {
-        //   this.hingeMsgEvent(y[0].data.nr);
-        //   _this.$refs["timeLine"].timeline.focus(y[0].id);
-        //   _this.$refs["timeLine"].timeline.setSelection(y[0].id);
-        // }
         this.newDate = newDate;
         //--------------------------比对当前播放时间之前所有数据
         let a = this.dataBH.CTMBSJ.filter(item => {
