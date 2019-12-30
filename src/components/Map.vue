@@ -377,6 +377,7 @@ background: none !important;
       @mapTool="maptool"
       @controller="controller"
       @events="events"
+      @focus="focus"
       @feijiPolygon="feijiPolygon"
       :WebSocketData="WebSocketData"
       :FBnum="FBnum"
@@ -442,58 +443,6 @@ background: none !important;
         </div> 
       </div>
     </div>
-
-     <!-- <vue-seamless-scroll  id='mySeamless'  style="background: rgba(8, 38, 93, 0.5)"  :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
-        <div  class="notifyDiv myMsgList" > 
-          <div  :style="{'height':item.typeall === 'FBSJ'?'160px':'130px'}" class="notify" v-for="(item, i) in notifyList " :key="i">
-            <div   v-if="item.typeall === 'FBSJ'" >
-              <p>
-                <span>事件</span><span style="color:#ffd400">浮标投放</span>
-              </p>
-              <p>
-                <span>时间</span><span>{{item["sb"]?item["sb"].split('.')[0]:item["sb"]}}</span>
-              </p>
-              <p>
-                <span>编号</span><span>{{item["fbbh"]}}</span>
-              </p>
-              <p>
-                <span>经度</span><span>{{item["llcrswzjd"]}}</span>
-              </p>
-              <p>
-                <span>纬度</span><span>{{item["llcrswzwd"]}}</span>
-              </p>
-            </div>
-            <div  v-if="item.typeall === 'CTMBSJ'">
-              <p>
-                <span>事件</span><span style="color:#ffd400">磁探发现目标</span>
-              </p>
-              <p>
-                <span>时间</span><span>{{item["mbsj"]?item["mbsj"].split('.')[0]:item["mbsj"]}}</span>
-              </p>
-              <p>
-                <span>经度</span><span>{{item["mbjd"]}}</span>
-              </p>
-              <p>
-                <span>纬度</span><span>{{item["mbwd"]}}</span>
-              </p>
-            </div>
-            <div  v-if="item.typeall === 'FBMBSJ'">
-              <p>
-                <span>事件</span><span style="color:#ffd400">浮标发现目标</span>
-              </p>
-              <p>
-                <span>时间</span><span>{{item["mbsj"]?item["mbsj"].split('.')[0]:item["mbsj"]}}</span>
-              </p>
-              <p>
-                <span>经度</span><span>{{item["mbwzjd"]}}</span>
-              </p>
-              <p>
-                <span>纬度</span><span>{{item["mbwzwd"]}}</span>
-              </p>
-            </div>
-          </div> 
-        </div>
-      </vue-seamless-scroll> -->
       <div v-show='eventType' class="time-label"  :style="{top: topNum + 'px', left: leftNum + 'px'}">
          <ul>
             <li style="color:#ffffff">事件时间：<input type='text' v-model="newEventDate"/></li>
@@ -505,26 +454,6 @@ background: none !important;
             </li>
          </ul>
       </div>
-    <!-- <div class="MBCS" v-show='isShow'>
-        <div class="mbfj">
-          <div style="width: 300px;height: 237px;">
-            <div class="head-hidden"  @mousedown="draggerStart($event)"></div> 
-            <div class="close" @click="isShow=false">
-              x
-            </div>
-            <div class="nav">目标参数</div>
-            <div class="cont">
-                 <ul >
-                    <li><span>经度</span><span>{{feijiCout['zjjd']}}</span></li>
-                    <li><span>纬度</span><span> {{feijiCout['zjwd']}}</span></li>
-                    <li><span>高度</span><span>{{feijiCout['gxqyg']}} 米</span></li>
-                    <li><span>速度</span><span>{{feijiCout['ds']}} km/h</span></li>
-                    <li><span>武器清单</span><span></span></li>
-                 </ul>
-            </div>
-          </div>
-        </div>
-    </div> -->
     <time-line
       @hingeMsgEvent="hingeMsgEvent"
       @timeDown="timeDown"
@@ -2398,9 +2327,10 @@ export default {
         }
       });
 
-        // 处理浮标投放数据 12-4
+        // 处理浮标投放数据 12-4 
       function dealFbtfsj(item){
           if(item){
+            window.Map.Detector.Update(item)
             let ent = window.Map.viewer.entities;
             _.forEach(item, (v,k)=>{
                   if((k.indexOf('fbxh') != -1) && (v !== '0')){

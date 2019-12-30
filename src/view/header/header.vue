@@ -21,11 +21,11 @@
                     <i class="icon icon3"></i>
                     <span>参数设置</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag4">
+                    <div class="menuOption" v-show="flag4" style="height:208px">
                         <p @click="tudeShow(tudeShow)">经纬度设置</p>
                         <p @click="plane">飞机轨迹</p>
                         <p @click="submarine">潜艇轨迹</p>
-
+                        <p @click="tiles">高程模型</p>
                     </div>
                 </li>
                 <li @click="geshi(flag5)">
@@ -344,7 +344,8 @@ export default {
             hjName:'',
             tableData:[],
             jingweiduVisible:false,
-            handleCurrentData:{}
+            handleCurrentData:{},
+            tilesShow:false
 		}
 	},
 	methods: {
@@ -457,6 +458,18 @@ export default {
         },
         submarine(){
             this.dunkerVisible = true;
+        },
+        tiles(){
+            this.tilesShow = !this.tilesShow;
+            if(this.tilesShow){
+                // window.Map.viewer.scene.primitives.add(Tileset)
+                window.Map.viewer.zoomTo(window.Map.Tileset)
+                window.Map.Tileset.show = this.tilesShow
+            }else{
+                this.tilesShow = !this.tilesShow;
+                this.$emit('focus',!this.tilesShow)
+            }
+           
         },
         addDomain() {
             this.dynamicValidateForm.domains.push({
