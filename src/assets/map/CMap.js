@@ -27,6 +27,7 @@ export function Init(ele,CONFIG){
         return new Cesium.Viewer(eleid,{
             selectionIndicator:false,
             timeline:true,
+            animation:false,
             sceneMode : Cesium.SceneMode.SCENE2D,  //初始场景模式 为二维
             imageryProvider: new Cesium.SingleTileImageryProvider({
                 url : '/static/image/Map/single.jpg',
@@ -71,7 +72,11 @@ export function Init(ele,CONFIG){
 
     const Tool = new Tools(Cesium,viewer);
 
-
+    var tileset = new Cesium.Cesium3DTileset({
+        url:"http://192.168.0.111:8080/earthview/services/file/GetFileData/tileset/tileset.json"
+    })
+    viewer.scene.primitives.add(tileset)
+    viewer.zoomTo(tileset)
     // let landMap = imageryLayers.addImageryProvider(new Cesium.ArcGisMapServerImageryProvider({
     //     url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
     //     enablePickFeatures: false

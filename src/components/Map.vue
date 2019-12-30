@@ -1601,6 +1601,7 @@ export default {
 
       // 处理浮标目标数据
       function dealFbSJMb(item) {
+        console.log(item);
         //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
           let FbId = "detector_" + item["jcxxid"];
           let fbbhName = ''
@@ -1994,6 +1995,7 @@ export default {
     init() {
       let that = this;
       window["Map"] = CMap.Init("mapElement", {});
+
       console.log('window.Map',window.Map)
       this.bindEvents();
       
@@ -2078,7 +2080,7 @@ export default {
             }
           } else {
             _this.dealMessage(JSON.parse(e.data));
-            console.log(JSON.parse(e.data))
+            // console.log(JSON.parse(e.data))
           }
         }
       };
@@ -2291,7 +2293,6 @@ export default {
 
         // 处理浮标目标数据
         function dealFbSJMb(item) {
-
           //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
           if (window.Map.viewer.entities.getById("detector_" + item["fbbh"]))
           return;
@@ -2410,8 +2411,10 @@ export default {
                         let jd = item["fbsswzjd" + index];
                         let wd = item["fbsswzwd" + index];
                         s.position =new Cesium.CallbackProperty(function(){
-                          return Cesium.Cartesian3.fromDegrees(Number(jd),Number(wd))
+                          return Cesium.Cartesian3.fromDegrees(Number(jd),Number(wd),0)
                         },false)
+                        // s.position =Cesium.Cartesian3.fromDegrees(Number(jd),Number(wd),0)
+
                       }
                     })
                   }
@@ -2531,41 +2534,42 @@ export default {
       }
 
       // 处理浮标目标数据
-      function dealFbSJMb(item) {
-        //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
-        if(item.zxd >0){
-        let FbId = "detector_" + item["jcxxid"];
-        if (item["mbwzjd"] && item["mbwzwd"]) {
-            let fbbhName = ''
-            if(item.dwfbxh1 != '0'){
-              fbbhName = item.dwfbxh1.slice(-3)+'/'
-            }
-            if(item.dwfbxh2 != '0'){
-              fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
-            }
-            if(item.dwfbxh3 != '0'){
-              fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
-            }
-            if(item.dwfbxh4 != '0'){
-              fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
-            }
-            if(item.dwfbxh5 != '0'){
-              fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
-            }
-            if(item.dwfbxh6 != '0'){
-              fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
-            }
-
-            let link = {
-              id: item.jcxxid,
-              positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
-              origin: item,
-              fbbh:fbbhName
-            };
-            window.Map.Detector.LinkOn(FbId, link);
-          }
-        }
-      }
+      // function dealFbSJMb(item) {
+      //   console.log(item,"++++++++++++++++++++++++++");
+      //   //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
+      //   if(item.zxd >0){
+      //   let FbId = "detector_" + item["jcxxid"];
+      //   if (item["mbwzjd"] && item["mbwzwd"]) {
+      //       let fbbhName = ''
+      //       if(item.dwfbxh1 != '0'){
+      //         fbbhName = item.dwfbxh1.slice(-3)+'/'
+      //       }
+      //       if(item.dwfbxh2 != '0'){
+      //         fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
+      //       }
+      //       if(item.dwfbxh3 != '0'){
+      //         fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
+      //       }
+      //       if(item.dwfbxh4 != '0'){
+      //         fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
+      //       }
+      //       if(item.dwfbxh5 != '0'){
+      //         fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
+      //       }
+      //       if(item.dwfbxh6 != '0'){
+      //         fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
+      //       }
+      //
+      //       let link = {
+      //         id: item.jcxxid,
+      //         positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
+      //         origin: item,
+      //         fbbh:fbbhName
+      //       };
+      //       window.Map.Detector.LinkOn(FbId, link);
+      //     }
+      //   }
+      // }
     },
     sendCommond(param) {
       console.log(this.fjlnglat);

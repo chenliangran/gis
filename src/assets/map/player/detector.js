@@ -175,7 +175,7 @@ export default class Detect{
                 if(key.indexOf('dwfbxh') != -1){
                     if(Tool.GetId('detector_'+link.origin[key])){
                         name += Tool.GetId('detector_'+link.origin[key])._origin.origin.sptdh+'/'
-                        console.log(Tool.GetId('detector_'+link.origin[key])._origin.origin.sptdh)
+                        // console.log(Tool.GetId('detector_'+link.origin[key])._origin.origin.sptdh)
                     }
                     
                 }
