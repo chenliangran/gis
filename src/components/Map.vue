@@ -377,7 +377,6 @@ background: none !important;
       @mapTool="maptool"
       @controller="controller"
       @events="events"
-      @focus="focus"
       @feijiPolygon="feijiPolygon"
       :WebSocketData="WebSocketData"
       :FBnum="FBnum"
@@ -1955,6 +1954,8 @@ export default {
 
       setTimeout(() => {
         this.initTimeLine();
+        let pos = window.Map.viewer.entities.getById("plane_1")._origin;
+        window.Map.Tool.FlyTo([pos.zjjd, pos.zjwd, 2000000]);
       }, 300);
     },
 

@@ -452,6 +452,7 @@ export default {
         tudeShow(){
             this.jwdVisible =true;
             this.dynamicValidateForm.domains=[{jd: "", wd:"", key: ""}];
+            this. dynamicValidateForm2.domains=[{jd1: "",jd2: "0",jd3: "0",wd1:"",wd2:"0",wd3:"0",key: ""}];           
         },
         plane(){
             this.feijiVisible = true;
@@ -460,14 +461,11 @@ export default {
             this.dunkerVisible = true;
         },
         tiles(){
-            this.tilesShow = !this.tilesShow;
+            this.tilesShow = true;
             if(this.tilesShow){
                 // window.Map.viewer.scene.primitives.add(Tileset)
                 window.Map.viewer.zoomTo(window.Map.Tileset)
                 window.Map.Tileset.show = this.tilesShow
-            }else{
-                this.tilesShow = !this.tilesShow;
-                this.$emit('focus',!this.tilesShow)
             }
            
         },
@@ -823,7 +821,8 @@ export default {
                             that.$message.error('保存航迹线失败！');
                         }
                         if(data == 1){
-                            that.$message.success('保存航迹线成功！')
+                            that.$message.success('保存航迹线成功！');
+
                         }
                         if(data == 2){
                             that.$message.error('航迹线名称重复！');
