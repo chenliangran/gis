@@ -429,13 +429,19 @@ export default {
           this.planeVisible = !this.planeVisible
         },
         dataShow(flag2){
-           this.flag2 = !flag2;          
+           this.flag2 = !flag2;   
+           this.flag4 = false;     
+           this.flag5 = false;    
         },
         optionShow(flag4){
            this.flag4 = !flag4; 
+           this.flag2 = false;     
+           this.flag5 = false; 
         },	
         geshi(flag5){
            this.flag5 = !flag5
+           this.flag2 = false;     
+           this.flag4 = false; 
         },
         tool(flag){
             this.flag = !flag;
@@ -464,8 +470,8 @@ export default {
             this.tilesShow = true;
             if(this.tilesShow){
                 // window.Map.viewer.scene.primitives.add(Tileset)
-                window.Map.viewer.zoomTo(window.Map.Tileset)
-                window.Map.Tileset.show = this.tilesShow
+                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[1])
+                window.Map.Tileset._primitives[1].show = this.tilesShow
             }
            
         },
@@ -1352,6 +1358,9 @@ export default {
     .planeLine img{
        margin-right: 20px;
     }
+    .planeDiv .el-dialog__body {
+        padding: 30px 10px 30px 20px;
+   }
     .el-radio__input{
        display:inline-flex !important;
      }

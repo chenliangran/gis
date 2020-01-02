@@ -77,11 +77,21 @@ export function Init(ele,CONFIG){
 
     const Tool = new Tools(Cesium,viewer);
 
-    const Tileset = new Cesium.Cesium3DTileset({
-        url:"http://192.168.0.111:8080/earthview/services/file/GetFileData/tileset/tileset.json",
-        show:false
+    // const Tileset = new Cesium.Cesium3DTileset({
+    //     url:"http://192.168.0.111:8080/earthview/services/file/GetFileData/tileset/tileset.json",
+    //     show:false
+    // })
+    // viewer.scene.primitives.add(Tileset)
+    var Tileset = viewer.scene.primitives
+    $.get(`${globalUrl.host}/find/findHypsographicMap`, {
+        crossDomain: true, 
+        dataType:'jsonp',
+    }).then(data=>{
+        Tileset.add(new Cesium.Cesium3DTileset({
+            url:data,
+            show:false
+        }))
     })
-    viewer.scene.primitives.add(Tileset)
     // viewer.zoomTo(Tileset)
     // let landMap = imageryLayers.addImageryProvider(new Cesium.ArcGisMapServerImageryProvider({
     //     url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
