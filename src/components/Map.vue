@@ -1428,7 +1428,7 @@ export default {
       let notifyList = [];
       that.notifyType = '';
       // debugger
-      // window["Map"].viewer.entities.removeAll();
+      //window["Map"].viewer.entities.removeAll();
       let arr = [];
       if(window["Map"].viewer.entities.values.length){
         window["Map"].viewer.entities.values.map(s=>{
