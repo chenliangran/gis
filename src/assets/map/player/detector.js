@@ -105,9 +105,10 @@ export default class Detect{
         _.forEach(sourceData, (single) => {
             let id = single.target.id;
             let detector = Tool.GetId(id);
-           if(single.target.origin.fbzt == "成活"){
-               detector.billboard.image = '/static/image/junbiao/fubiao1.png'
-           } else if(single.target.origin.fbzt == "死亡"){
+        //    if(single.target.origin.fbzt == "成活"){
+        //        detector.billboard.image = '/static/image/junbiao/fubiao1.png'
+        //    } else
+            if(single.target.origin.fbzt == "死亡"){
                detector.billboard.image = '/static/image/junbiao/fubiao5.png'
            } else if(single.target.origin.fbzt == "失联"){
                detector.billboard.image = '/static/image/junbiao/fubiaosl.png'

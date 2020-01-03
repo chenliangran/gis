@@ -1954,9 +1954,8 @@ export default {
 
       setTimeout(() => {
         this.initTimeLine();
-        let pos = window.Map.viewer.entities.getById("plane_1")._origin;
-        window.Map.Tool.FlyTo([pos.zjjd, pos.zjwd, 2000000]);
-      }, 500);
+        window.Map.Tool.FlyTo([110.468746, 17.076428, 2000000]);
+      }, 300);
     },
 
     /**

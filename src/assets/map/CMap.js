@@ -192,7 +192,8 @@ export function Init(ele,CONFIG){
                     })
                     viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(haitu)
                     viewerImagery[item.name].show = true
-                }else if(item.type == 'qita'){
+                }else if(item.type == 'qita' && item.name !="jysl格式"){
+                    debugger
                     let wmts = new Cesium.UrlTemplateImageryProvider({
                         url : item.url,
                         tilingScheme: new Cesium.GeographicTilingScheme({
@@ -217,6 +218,36 @@ export function Init(ele,CONFIG){
                             }
                         }
                     })
+                    
+                    viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(wmts)
+                    viewerImagery[item.name].show = false
+                }else if(item.type == 'qita' && item.name =="jysl格式"){
+                    debugger
+                    let wmts = new Cesium.UrlTemplateImageryProvider({
+                        url : item.url,
+                        tilingScheme: new Cesium.GeographicTilingScheme({
+                            numberOfLevelZeroTilesX : 2,
+                            numberOfLevelZeroTilesY : 1,
+                            ellipsoid : Cesium.Ellipsoid.WGS84
+                        }),
+                        ellipsoid: Cesium.Ellipsoid.WGS84,
+                        tileWidth: 512,
+                        tilHeight: 512,
+                        maximumLevel: 10,
+                        enablePickFeatures: false,
+                        customTags: {
+                            matrix: function(imageryProvider,x,y,level) {
+                                return (Array(2).join(0) + level).slice(-2)
+                            },
+                            row:function(imageryProvider, x, y,level){
+                                return (Array(8).join(0) + ((1<<level)- y-1)).slice(-8)
+                            },
+                            col: function(imageryProvider,x,y,level) {
+                                return (Array(8).join(0)+x).slice(-8)
+                            }
+                        }
+                    })
+                    
                     viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(wmts)
                     viewerImagery[item.name].show = false
                 }
