@@ -193,7 +193,6 @@ export function Init(ele,CONFIG){
                     viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(haitu)
                     viewerImagery[item.name].show = true
                 }else if(item.type == 'qita' && item.name !="jysl格式"){
-                    debugger
                     let wmts = new Cesium.UrlTemplateImageryProvider({
                         url : item.url,
                         tilingScheme: new Cesium.GeographicTilingScheme({
@@ -222,7 +221,6 @@ export function Init(ele,CONFIG){
                     viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(wmts)
                     viewerImagery[item.name].show = false
                 }else if(item.type == 'qita' && item.name =="jysl格式"){
-                    debugger
                     let wmts = new Cesium.UrlTemplateImageryProvider({
                         url : item.url,
                         tilingScheme: new Cesium.GeographicTilingScheme({
