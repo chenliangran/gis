@@ -1639,18 +1639,52 @@ export default {
           window.Map.FlyCompare.ClearPath();
           that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
           that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
-          $.get(`${globalUrl.host}/find/triggerSocket`, {
-            startTime: zhTime,
-            name: sessionStorage.getItem("groupNum"),
-            id: that.selectId
-          }).then(data => {
-            that.playFLAG = true;
-            that.$refs.timeLine.playFlag = true;
-            that.setZZTime()
-            that.diffTime(zhTime);
-            // that.num = 0;
-            // that.$refs["timeLine"].num = that.num;
-          });
+           $.ajax({
+              type: "get",
+              // dataType: "json",
+              url: `${globalUrl.host}/find/findSystemStatus`,
+              // contentType: "application/json;charset=UTF-8",//指定消息请求类型
+              data: {
+                groupNum: sessionStorage.getItem("groupNum")
+              }, //将js对象转成json对象
+              success: function(data) {
+                if(data.yxzt == 1){
+                  $.get(`${globalUrl.host}/find/triggerSocket`, {
+                    startTime: zhTime,
+                    name: sessionStorage.getItem("groupNum"),
+                    id: that.selectId
+                  }).then(data => {
+                    that.playFLAG = true;
+                    that.$refs.timeLine.playFlag = true;
+                    that.setZZTime()
+                    that.diffTime(zhTime);
+                    // that.num = 0;
+                    // that.$refs["timeLine"].num = that.num;
+                  });
+                }else if(data.yxzt == 2){
+                  $.get(`${globalUrl.host}/find/triggerSocket`, {
+                    startTime: zhTime,
+                    name: sessionStorage.getItem("groupNum"),
+                    id: that.selectId
+                  }).then(data => {
+                    that.playFLAG = true;
+                    that.$refs.timeLine.playFlag = true;
+                    that.setZZTime()
+                    that.diffTime(zhTime);
+                    $.get(`${globalUrl.host}/find/pauseAndStart`, {
+                      name: sessionStorage.getItem("groupNum")
+                    }).then(data => {
+                      window.Map.viewer.clock.shouldAnimate = false;
+                    });
+                    // that.num = 0;
+                    // that.$refs["timeLine"].num = that.num;
+                  });
+                }
+              }
+           })
+
+
+          
         },
         false
       );
