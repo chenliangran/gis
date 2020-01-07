@@ -1609,18 +1609,49 @@ export default {
                     window.Map.FlyCompare.ClearPath();
                     that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
                     that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
-                    $.get(`${globalUrl.host}/find/triggerSocket`, {
-                        startTime: zhTime,
-                        name: sessionStorage.getItem("groupNum"),
-                        id: that.selectId
-                    }).then(data => {
-                        that.playFLAG = true;
-                        that.$refs.timeLine.playFlag = true;
-                        that.setZZTime()
-                        that.diffTime(zhTime);
-                        // that.num = 0;
-                        // that.$refs["timeLine"].num = that.num;
-                    }); 
+                     $.ajax({
+                        type: "get",
+                        // dataType: "json",
+                        url: `${globalUrl.host}/find/findSystemStatus`,
+                        // contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                        data: {
+                            groupNum: sessionStorage.getItem("groupNum")
+                        }, //将js对象转成json对象
+                        success: function(data) {
+                            if(data.yxzt == 1){
+                            $.get(`${globalUrl.host}/find/triggerSocket`, {
+                                startTime: zhTime,
+                                name: sessionStorage.getItem("groupNum"),
+                                id: that.selectId
+                            }).then(data => {
+                                that.playFLAG = true;
+                                that.$refs.timeLine.playFlag = true;
+                                that.setZZTime()
+                                that.diffTime(zhTime);
+                                // that.num = 0;
+                                // that.$refs["timeLine"].num = that.num;
+                            });
+                            }else if(data.yxzt == 2){
+                            $.get(`${globalUrl.host}/find/triggerSocket`, {
+                                startTime: zhTime,
+                                name: sessionStorage.getItem("groupNum"),
+                                id: that.selectId
+                            }).then(data => {
+                                that.playFLAG = true;
+                                that.$refs.timeLine.playFlag = true;
+                                that.setZZTime()
+                                that.diffTime(zhTime);
+                                $.get(`${globalUrl.host}/find/pauseAndStart`, {
+                                name: sessionStorage.getItem("groupNum")
+                                }).then(data => {
+                                window.Map.viewer.clock.shouldAnimate = false;
+                                });
+                                // that.num = 0;
+                                // that.$refs["timeLine"].num = that.num;
+                            });
+                            }
+                        }
+                    })
                     wait = 3;
             }else{ 
                 setInterval(()=>{
@@ -1631,6 +1662,59 @@ export default {
                 that.$message('请不要频繁点击跳转！')
                 
             }
+
+        //   let end = new Date(that.allDate.endT),
+        //     start = new Date(that.allDate.startT),
+        //     s = end.getTime() - start.getTime()
+        //   let a = e.pageX-Number($("#visualization").css('margin-left').split('px')[0]).toFixed(2),
+        //       b = $(".cesium-timeline-bar").css('width').split('px')[0],
+        //       zhTime = new Date(start.getTime()+(parseInt((a/b).toFixed(3)*s)))
+        //     console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime),zhTime)
+        //     that.newEventDate = zhTime
+            
+        //     that.eventType = false
+          
+        //   window.Map.FlyCompare.ClearPath();
+        //   that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+        //   that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+        //    $.ajax({
+        //       type: "get",
+        //       url: `${globalUrl.host}/find/findSystemStatus`,
+        //       data: {
+        //         groupNum: sessionStorage.getItem("groupNum")
+        //       }, //将js对象转成json对象
+        //       success: function(data) {
+        //         if(data.yxzt == 1){
+        //           $.get(`${globalUrl.host}/find/triggerSocket`, {
+        //             startTime: zhTime,
+        //             name: sessionStorage.getItem("groupNum"),
+        //             id: that.selectId
+        //           }).then(data => {
+        //             that.playFLAG = true;
+        //             that.$refs.timeLine.playFlag = true;
+        //             that.setZZTime()
+        //             that.diffTime(zhTime);
+        //           });
+        //         }else if(data.yxzt == 2){
+        //           $.get(`${globalUrl.host}/find/triggerSocket`, {
+        //             startTime: zhTime,
+        //             name: sessionStorage.getItem("groupNum"),
+        //             id: that.selectId
+        //           }).then(data => {
+        //             that.playFLAG = true;
+        //             that.$refs.timeLine.playFlag = true;
+        //             that.setZZTime()
+        //             that.diffTime(zhTime);
+        //             $.get(`${globalUrl.host}/find/pauseAndStart`, {
+        //               name: sessionStorage.getItem("groupNum")
+        //             }).then(data => {
+        //               window.Map.viewer.clock.shouldAnimate = false;
+        //             });
+        //           });
+        //         }
+        //       }
+        //    })
+
         },
         false
       );
