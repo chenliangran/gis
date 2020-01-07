@@ -7,10 +7,12 @@
                     <span>数据统计</span>
                     <i class="icon icon8"></i>
                     <div class="menu" v-show="flag2">
-                        <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='飞行曲线'>✔</span><label>飞行曲线</label></p>
-                        <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='浮标投放信息'>✔</span><label>浮标投放信息</label></p>
-                        <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='磁探探测目标'>✔</span><label>磁探探测目标</label></p>
-                        <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='浮标探测目标'>✔</span><label>浮标探测目标</label></p>
+                        <el-checkbox-group v-model="menuData" @change="handleChecked"> 
+                            <el-checkbox label="飞行曲线"></el-checkbox>
+                            <el-checkbox label="浮标投放信息"></el-checkbox>
+                            <el-checkbox label="磁探探测目标"></el-checkbox>
+                            <el-checkbox label="浮标探测目标"></el-checkbox>
+                        </el-checkbox-group>
                     </div>
                 </li>
                 <li>
@@ -321,16 +323,13 @@ export default {
                 }],
             },
             lineId:[],
-            menuData:{
-			  '飞行曲线':'',
-			  '浮标投放信息':'',
-              '磁探探测目标':'',
-              '浮标探测目标':''
-           },
-            menuDataType1:true,
-            menuDataType2:true,
-            menuDataType3:true,
-            menuDataType4:true,
+        //     menuData:{
+		// 	  '飞行曲线':'',
+		// 	  '浮标投放信息':'',
+        //       '磁探探测目标':'',
+        //       '浮标探测目标':''
+        //    },
+            menuData:['飞行曲线','浮标投放信息','磁探探测目标','浮标探测目标'],
             formInline: {
                 len: ''
             },
@@ -349,6 +348,9 @@ export default {
 		}
 	},
 	methods: {
+        handleChecked(menuData){
+            this.$emit('flagType',this.menuData)
+        },
         mapType1(mapType){
             window.Map.viewerImagery['haitu'].show = false
             window.Map.viewerImagery['shp格式'].show = false
@@ -1053,52 +1055,6 @@ export default {
              isDown = false;
              dv.style.cursor = 'default';
          }
-        $(".event-menu-checkbox[type=checkbox]+span").click((e) => {
-            console.log($(e.target).html())
-            if($(e.target).html()){
-                    $(e.target).html('')
-                    if($(e.target).data('type') == "飞行曲线"){
-                        this.menuDataType1 = false
-                        delete this.menuData[$(e.target).data('type')]
-                        this.$emit('flagType1',this.menuDataType1)
-                    }
-                   if($(e.target).data('type') == "浮标投放信息"){
-                        this.menuDataType2 = false
-                        delete this.menuData[$(e.target).data('type')]
-                        this.$emit('flagType2',this.menuDataType2)
-                    }
-                    if($(e.target).data('type') == "磁探探测目标"){
-                        this.menuDataType3 = false
-                        delete this.menuData[$(e.target).data('type')]
-                        this.$emit('flagType3',this.menuDataType3)
-                    }
-                    if($(e.target).data('type') == "浮标探测目标"){
-                        this.menuDataType4 = false
-                        delete this.menuData[$(e.target).data('type')]
-                        this.$emit('flagType4',this.menuDataType4)
-                    }
-                    
-            }else{
-                    this.menuData[$(e.target).data('type')] = ''
-                    $(e.target).html('✔')
-                     if($(e.target).data('type') == "飞行曲线"){
-                        this.menuDataType1 = true
-                        this.$emit('flagType1',this.menuDataType1)
-                    }
-                   if($(e.target).data('type') == "浮标投放信息"){
-                        this.menuDataType2 = true
-                        this.$emit('flagType2',this.menuDataType2)
-                    }
-                    if($(e.target).data('type') == "磁探探测目标"){
-                        this.menuDataType3 = true
-                        this.$emit('flagType3',this.menuDataType3)
-                    }
-                    if($(e.target).data('type') == "浮标探测目标"){
-                        this.menuDataType4 = true
-                        this.$emit('flagType4',this.menuDataType4)
-                    }
-            }
-        })
     },
     watch: {
 
@@ -1142,11 +1098,13 @@ export default {
     }
     .cmsNav .menu{
         position: absolute;
-        width: 134px;
+        width: 117px;
         height: 210px;
         top: 53px;
         left: 29px;
         background-color: #102d58;
+        text-align: left;
+        padding-left: 20px;
     }
     .menu{
         display: flex;
@@ -1178,14 +1136,16 @@ export default {
     }
     .menuOption{
         position: absolute;
-        width: 134px;
+        width: 117px;
         height: 157px;
         top: 53px;
         left: 323px;
         background-color: #102d58;
         display: flex;
         justify-content: space-around;
-        align-items: center
+        align-items: center;
+        text-align: left;
+        padding-left: 20px;
     }
     .cms-nav .cms-left span{
         color: #27c1e9;;
@@ -1333,9 +1293,9 @@ export default {
         top: 3px;
         margin:0 10px;  
     }
-    .cmsNav ul li span{
+    /* .cmsNav ul li span{
         display: inline;
-     }
+     } */
      .cmsNav ul li div{
         display: inline;
      }

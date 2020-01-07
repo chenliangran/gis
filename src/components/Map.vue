@@ -370,10 +370,7 @@ background: none !important;
   <div class="MapContainer">
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
     <gis-header :timeNow="timeNow"
-      @flagType1="flagType1"
-      @flagType2="flagType2"
-      @flagType3="flagType3"
-      @flagType4="flagType4"
+      @flagType="flagType"
       @mapTool="maptool"
       @controller="controller"
       @events="events"
@@ -442,17 +439,17 @@ background: none !important;
         </div> 
       </div>
     </div>
-      <div v-show='eventType' class="time-label"  :style="{top: topNum + 'px', left: leftNum + 'px'}">
-         <ul>
-            <li style="color:#ffffff">事件时间：<input type='text' v-model="newEventDate"/></li>
-            <li><p style="font-size:12px;color:red;">时间格式为：2019-04-25 13:30:30</p></li>
-            <li style="color:#ffffff">事件内容：<input type='text' v-model="eventVal"/></li>
-            <li class="events-btn">
-                <div @click='eventConfirm'>确定</div>
-                <div @click='eventCancel'>取消</div>
-            </li>
-         </ul>
-      </div>
+    <div v-show='eventType' class="time-label"  :style="{top: topNum + 'px', left: leftNum + 'px'}">
+        <ul>
+        <li style="color:#ffffff">事件时间：<input type='text' v-model="newEventDate"/></li>
+        <li><p style="font-size:12px;color:red;">时间格式为：2019-04-25 13:30:30</p></li>
+        <li style="color:#ffffff">事件内容：<input type='text' v-model="eventVal"/></li>
+        <li class="events-btn">
+            <div @click='eventConfirm'>确定</div>
+            <div @click='eventCancel'>取消</div>
+        </li>
+        </ul>
+    </div>
     <time-line
       @hingeMsgEvent="hingeMsgEvent"
       @timeDown="timeDown"
@@ -479,10 +476,7 @@ background: none !important;
       :dataInfo="dataInfo"
       :WebSocketData="WebSocketData"
       @uploading="uploading"
-      :flagTypeOne="flagTypeOne" 
-      :flagTypeTwo="flagTypeTwo" 
-      :flagTypeThree="flagTypeThree" 
-      :flagTypeFour="flagTypeFour" 
+      :flagTypeList="flagTypeList" 
     ></replay>
     <info v-if="sleC" :dataInfo="buoyInfo" :visible="showInfo" @close="showInfo=false"></info>
     <selects-elm
@@ -592,11 +586,8 @@ export default {
       topNum:0,
       leftNum:0,
       jiaciName:'',
-      flagTypeOne:true,
-      flagTypeTwo:true,
-      flagTypeThree:true,
-      flagTypeFour:true,
-      FPS:0
+      FPS:0,
+      flagTypeList:[]
     };
   },
 
@@ -668,7 +659,7 @@ export default {
         setTimeout(()=>{
           this.eventsF = false
           
-        },70000)
+        },75000)
       }
      
     });
@@ -932,17 +923,8 @@ export default {
     eventCancel(){
        this.eventType =false;
     },
-    flagType1(type){
-      this.flagTypeOne = type;
-    },
-    flagType2(type){
-       this.flagTypeTwo = type;
-    },
-    flagType3(type){
-        this.flagTypeThree = type;
-    },
-    flagType4(type){
-        this.flagTypeFour = type;
+    flagType(type){
+      this.flagTypeList = type;
     },
     maptool(flag){
       this.toolF = flag;
@@ -1229,10 +1211,6 @@ export default {
 
       this.playFLAG = true;
     },
-   doubleClick(){
-     debugger
-     alert("1111")
-   },
     toDate(str) {
       var date = new Date(str).toJSON();
 
@@ -1610,51 +1588,53 @@ export default {
       viewer.clock.startTime = startTime;
       viewer.clock.stopTime = stopTime;
 
-      that.setZZ()
-      
+      that.setZZ();
+      let wait = 0;
 
       viewer.timeline.addEventListener(
         "mouseup",
         function(e) {
           // console.log()
-
-          let end = new Date(that.allDate.endT),
-            start = new Date(that.allDate.startT),
-            s = end.getTime() - start.getTime()
-          let a = e.pageX-Number($("#visualization").css('margin-left').split('px')[0]).toFixed(2),
-              b = $(".cesium-timeline-bar").css('width').split('px')[0],
-              zhTime = new Date(start.getTime()+(parseInt((a/b).toFixed(3)*s)))
-          // console.log((a/b).toFixed(3)*s,new Date(start.getTime()+(parseInt((a/b).toFixed(3)*s))),start+(parseInt((a/b).toFixed(3)*s)))    
-          // console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime))
-          // return
-          // var dfTime = (viewer.clock.currentTime.dayNumber - startTime.dayNumber)*86400 + (viewer.clock.currentTime.secondsOfDay - startTime.secondsOfDay)
-          
-            console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime),zhTime)
-            that.newEventDate = zhTime
-            // that.progress(that.formatSeconds(dfTime),totleTime)
-            // console.log(viewer.clock)
-            
-            that.eventType = false
-          
-          window.Map.FlyCompare.ClearPath();
-          that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
-          that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
-          $.get(`${globalUrl.host}/find/triggerSocket`, {
-            startTime: zhTime,
-            name: sessionStorage.getItem("groupNum"),
-            id: that.selectId
-          }).then(data => {
-            that.playFLAG = true;
-            that.$refs.timeLine.playFlag = true;
-            that.setZZTime()
-            that.diffTime(zhTime);
-            // that.num = 0;
-            // that.$refs["timeLine"].num = that.num;
-          });
+            if(wait == 0){
+                let end = new Date(that.allDate.endT),
+                    start = new Date(that.allDate.startT),
+                    s = end.getTime() - start.getTime()
+                let a = e.pageX-Number($("#visualization").css('margin-left').split('px')[0]).toFixed(2),
+                    b = $(".cesium-timeline-bar").css('width').split('px')[0],
+                    zhTime = new Date(start.getTime()+(parseInt((a/b).toFixed(3)*s)))
+                    console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime),zhTime)
+                    that.newEventDate = zhTime  
+                    that.eventType = false
+                
+                    window.Map.FlyCompare.ClearPath();
+                    that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+                    that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+                    $.get(`${globalUrl.host}/find/triggerSocket`, {
+                        startTime: zhTime,
+                        name: sessionStorage.getItem("groupNum"),
+                        id: that.selectId
+                    }).then(data => {
+                        that.playFLAG = true;
+                        that.$refs.timeLine.playFlag = true;
+                        that.setZZTime()
+                        that.diffTime(zhTime);
+                        // that.num = 0;
+                        // that.$refs["timeLine"].num = that.num;
+                    }); 
+                    wait = 3;
+            }else{ 
+                setInterval(()=>{
+                    if(wait > 0){
+                        wait--;
+                    }                  
+                },1000)              
+                that.$message('请不要频繁点击跳转！')
+                
+            }
         },
         false
       );
-    
+
       this.startXd();
 
       that.progress(nowTime,totleTime)

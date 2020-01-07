@@ -1,7 +1,7 @@
 <template>
 	<div class="terrace">
 		<div class="replay" :style="{ left: '5px', top: '50px' }">
-			<div class="replay-cont" style="height: 250px;" v-show="flagTypeOne">
+			<div class="replay-cont" style="height: 250px;" v-show="flagType1">
 				<div style="width: 360px;height: 250px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<!-- <div class="close" @click="isShow=false" style="position:absolute ;z-index:10">
@@ -22,14 +22,14 @@
 			</div>
 		</div>
 		<div class="replay" :style="{ left:'5px', top: '288px' }">
-			<div class="replay-cont" v-show="flagTypeTwo" style="width: 360px;height: 190px;">
+			<div class="replay-cont" v-show="flagType2" style="width: 360px;height: 190px;">
 				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<!-- <div class="close" @click="isShow=false">
 						x
 					</div> -->
 					<div class="nav">浮标投放信息</div>
-					<div class="terrace-item" v-if="detectorData.length > 0">
+					<div class="terrace-item">
 						<!-- <div>
 							<span></span>
 							<span>浮标目标</span>
@@ -44,7 +44,7 @@
 								<span style="min-width: 30px">状态</span>
 								<span style="min-width: 40px">阵型</span>
 							</div>
-							<ul v-show="gdFlag">
+							<ul v-if="detectorData.length > 0" v-show="gdFlag">
 								<li :class="{curFb: curFbBh == item.fbbh}" v-for="(item, i) in detectorData" :key="i">
 									<span style="min-width: 60px">{{item["fbbh"].slice(-3)}}</span>
 									<span style="min-width: 40px">{{Math.floor(item["llcrswzjd"]*100)/100}}</span>
@@ -61,14 +61,14 @@
 			</div>
 		</div>
 		<div class="replay" :style="{ left:'5px', top:'472px' }">
-			<div class="replay-cont"  v-show="flagTypeThree">
+			<div class="replay-cont"  v-show="flagType3">
 				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<!-- <div class="close" @click="isShow=false">
 						x
 					</div> -->
 					<div class="nav">磁探探测目标</div>
-					<div class="terrace-item" v-if="ctData.length > 0">
+					<div class="terrace-item">
 						<div class="list">
 							<div>
 								<span style="min-width: 150px">发现时间</span>
@@ -76,7 +76,7 @@
 								<span style="min-width: 50px">纬度</span>
 								<span style="min-width: 100px">探测目标位置偏差</span>
 							</div>
-							<ul v-show="gdFlag">  
+							<ul v-if="ctData.length > 0" v-show="gdFlag">  
 								<li v-for="(item, i) in ctData" :key="i"  v-if="Number(item['mbzxd']) >= 100">
 										<span style="min-width: 150px" :title="item.mbsj">{{item["mbsj"].split('.')[0]}}</span>
 										<span style="min-width: 50px"  :title="item.mbjd">{{Math.floor(item["mbjd"]*100)/100}}</span>
@@ -90,14 +90,14 @@
 			</div>
 		</div>
 		<div class="replay" :style="{ left:'5px' ,top:'655px'}">
-			<div class="replay-cont" v-show="flagTypeFour">
+			<div class="replay-cont" v-show="flagType4">
 				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<!-- <div class="close" @click="isShow=false">
 						x
 					</div> -->
 					<div class="nav">浮标探测目标</div>
-					<div class="terrace-item" v-if="events['mbtcsj'].length > 0">
+					<div class="terrace-item" >
 						<div class="list">
 							<div>
 								<span style="min-width: 60px">浮标编号</span>
@@ -105,9 +105,14 @@
 								<span style="min-width: 60px">纬度</span>
 								<span style="min-width: 100px">距离</span>
 							</div>
-							<ul v-show="gdFlag">
+							<ul v-if="events['mbtcsj'].length > 0" v-show="gdFlag">
 								<li v-for="(item, i) in events['mbtcsj']" :key="i">
-									<span style="min-width: 60px">{{item["mbbh"]}}</span>
+									<span style="min-width: 60px" v-if="item['dwfbxh1'].length == 7">{{item["dwfbxh1"].slice(-3)}}</span>
+                                    <span style="min-width: 60px" v-if="item['dwfbxh2'].length == 7">{{item["dwfbxh2"].slice(-3)}}</span>
+                                    <span style="min-width: 60px" v-if="item['dwfbxh3'].length == 7">{{item["dwfbxh3"].slice(-3)}}</span>
+                                    <span style="min-width: 60px" v-if="item['dwfbxh4'].length == 7">{{item["dwfbxh4"].slice(-3)}}</span>
+                                    <span style="min-width: 60px" v-if="item['dwfbxh5'].length == 7">{{item["dwfbxh5"].slice(-3)}}</span>
+                                    <span style="min-width: 60px" v-if="item['dwfbxh6'].length == 7">{{item["dwfbxh6"].slice(-3)}}</span>
 									<span style="min-width: 60px">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
 									<span style="min-width: 60px">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
 									<span style="min-width: 100px">{{item["jl"]}}</span>
@@ -123,7 +128,7 @@
 
 <script>
 export default {
-	props: ["dataInfo", "WebSocketData", "setTime",'gdFlag','flagTypeOne','flagTypeTwo','flagTypeThree','flagTypeFour'],
+	props: ["dataInfo", "WebSocketData", "setTime",'gdFlag','flagTypeList'],
 	data() {
 		return {
 			name: "",
@@ -144,7 +149,11 @@ export default {
 			isShow: true,
 			jingdu:0,
 			weidu:0,
-			fangxiang:0
+            fangxiang:0,
+            flagType1:true,
+            flagType2:true,
+            flagType3:true,
+            flagType4:true,
 		}
 	},
     mounted() {
@@ -338,17 +347,28 @@ export default {
 		gdFlag(val){
 			console.log(val)
 		},
-		flagTypeOne(val){
-			console.log(val)
-		},
-		flagTypeTwo(val){
-			console.log(val)
-		},
-		flagTypeThree(val){
-			console.log(val)
-		},
-		flagTypeFour(val){
-			console.log(val)
+		flagTypeList(val){
+            this.flagType1 = false 
+            this.flagType2 = false 
+            this.flagType3 = false 
+            this.flagType4 = false 
+            val.map(item=>{
+                if(item.length>0){
+                    if(item == "飞行曲线"){
+                        this.flagType1 = true
+                    }
+                    if(item == "浮标投放信息"){
+                        this.flagType2 = true
+                    }
+                    if(item == "磁探探测目标"){
+                        this.flagType3 = true
+                    }
+                    if(item == "浮标探测目标"){
+                        this.flagType4 = true
+                    }
+                }
+               
+            })
 		},
 		setTime(v) {
 			let id = sessionStorage.getItem("selectEd")
