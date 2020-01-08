@@ -1029,6 +1029,7 @@ export default {
      * 选择数据框确认事件
      */
     selectConfirm() {
+       
       this.selectF = false;
       let that = this;
       let pos = this.$refs["selectsElm"].pos;
@@ -1056,8 +1057,11 @@ export default {
                 //time:null,
                 sjid: this.selectId
               }).then(data => {
-                window.Map.Tool.FlyTo([Number(data.zjjd), Number(data.zjwd), 2000000]);
-              
+                   if(data != ""){
+                        window.Map.Tool.FlyTo([Number(data.zjjd), Number(data.zjwd), 2000000]);
+                   }else{
+                        window.Map.Tool.FlyTo([109.998287,18.073213, 2000000]);
+                   }
               });
               $.ajax({
                 type: "get",
@@ -1104,6 +1108,7 @@ export default {
      * 登录事件
      */
     login() {
+        debugger
       this.loginFs = true;
       this.selectF = true;
       this.loginF = false;
@@ -1488,10 +1493,10 @@ export default {
             if(item.fblx=="主动全向"){
               FBLX = 'R'
             }
-            if(item.fblx=="海噪声"){
+            if(item.fblx=="海噪声浮标"){
               FBLX = 'A'
             }
-            if(item.fblx=="温深"){
+            if(item.fblx=="温深浮标"){
               FBLX = 'B'
             }
            window.Map.Detector.Add({
@@ -2263,10 +2268,10 @@ export default {
               if(item.fblx=="主动全向"){
                 FBLX = 'R'
               }
-              if(item.fblx=="海噪声"){
+              if(item.fblx=="海噪声浮标"){
                 FBLX = 'A'
               }
-              if(item.fblx=="温深"){
+              if(item.fblx=="温深浮标"){
                 FBLX = 'B'
               }
               window.Map.Detector.Add({
@@ -2347,7 +2352,7 @@ export default {
 
       let Fbtfs = [];//浮标发布数据缓存 12-4
       _.forEach(data, item => {
-        // console.log( item )
+        //  console.log( item )
         switch (item.type) {
           // 飞机
           case "FJ":
@@ -2507,8 +2512,7 @@ export default {
               item.cm,
               [Number(item["jd"]), Number(item["wd"]), 0],
               item,
-              function(e) {},
-              0
+              function(e) {}
             );
           } else {
             window.Map.AddCompare("minchuan", {

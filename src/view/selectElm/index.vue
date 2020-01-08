@@ -368,53 +368,86 @@ export default {
                     alert('请选择组')
                     return
                 }
-                this.loaddingF = true
+                that.loaddingF = false
+                sessionStorage.setItem('pos',JSON.stringify(that.pos))
+                
                 $.ajax({
-                    type: "get",
+                    type: "post",
                     // dataType: "json",
-                    url: `${globalUrl.host}/find/organizeData`,
+                    url: `${globalUrl.host}/find/addToAGroup`,
                     // contentType: "application/json;charset=UTF-8",//指定消息请求类型
                     data: {
-                        sjid: sessionStorage.getItem('selectEd')
+                        name:sessionStorage.getItem('name'),
+                        sjId:that.ptData[0].id,
+                        // ip:null,
+                        groupNum:sessionStorage.getItem('groupNum')
                     },//将js对象转成json对象
                     success: function (data) {
-                        that.loaddingF = false
-                        sessionStorage.setItem('pos',JSON.stringify(that.pos))
-                            
-                            $.ajax({
-                                type: "post",
-                                // dataType: "json",
-                                url: `${globalUrl.host}/find/addToAGroup`,
-                                // contentType: "application/json;charset=UTF-8",//指定消息请求类型
-                                data: {
-                                    name:sessionStorage.getItem('name'),
-                                    sjId:that.ptData[0].id,
-                                    // ip:null,
-                                    groupNum:sessionStorage.getItem('groupNum')
-                                },//将js对象转成json对象
-                                success: function (data) {
-                                    $.ajax({
-                                        type: "get",
-                                        // dataType: "json",
-                                        url: `${globalUrl.host}/find/findSystemStatus`,
-                                        // contentType: "application/json;charset=UTF-8",//指定消息请求类型
-                                        data: {
-                                            
-                                            groupNum:sessionStorage.getItem('groupNum')
-                                        },//将js对象转成json对象
-                                        success: function (data) {
+                        $.ajax({
+                            type: "get",
+                            // dataType: "json",
+                            url: `${globalUrl.host}/find/findSystemStatus`,
+                            // contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                            data: {
+                                
+                                groupNum:sessionStorage.getItem('groupNum')
+                            },//将js对象转成json对象
+                            success: function (data) {
 
-                                            sessionStorage.setItem('groupType',data)
-                                            
-                                        }
-                                    })
-                                    
-                                }
-                            })
+                                sessionStorage.setItem('groupType',data)
+                                
+                            }
+                        })
                         
-                        that.$emit('confirm')    
                     }
                 })
+                that.$emit('confirm')  
+                // $.ajax({
+                //     type: "get",
+                //     // dataType: "json",
+                //     url: `${globalUrl.host}/find/organizeData`,
+                //     // contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                //     data: {
+                //         sjid: sessionStorage.getItem('selectEd')
+                //     },//将js对象转成json对象
+                //     success: function (data) {
+                //         that.loaddingF = false
+                //         sessionStorage.setItem('pos',JSON.stringify(that.pos))
+                            
+                //             $.ajax({
+                //                 type: "post",
+                //                 // dataType: "json",
+                //                 url: `${globalUrl.host}/find/addToAGroup`,
+                //                 // contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                //                 data: {
+                //                     name:sessionStorage.getItem('name'),
+                //                     sjId:that.ptData[0].id,
+                //                     // ip:null,
+                //                     groupNum:sessionStorage.getItem('groupNum')
+                //                 },//将js对象转成json对象
+                //                 success: function (data) {
+                //                     $.ajax({
+                //                         type: "get",
+                //                         // dataType: "json",
+                //                         url: `${globalUrl.host}/find/findSystemStatus`,
+                //                         // contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                //                         data: {
+                                            
+                //                             groupNum:sessionStorage.getItem('groupNum')
+                //                         },//将js对象转成json对象
+                //                         success: function (data) {
+
+                //                             sessionStorage.setItem('groupType',data)
+                                            
+                //                         }
+                //                     })
+                                    
+                //                 }
+                //             })
+                        
+                //         that.$emit('confirm')    
+                //     }
+                // })
             }else{
                 if(!this.flag){
                     if(this.ptData.length > 0){

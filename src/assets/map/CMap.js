@@ -176,18 +176,14 @@ export function Init(ele,CONFIG){
                     //海图
                     let haitu = new Cesium.UrlTemplateImageryProvider({
                         url : item.url,
-                        
-                        tilingScheme: new Cesium.WebMercatorTilingScheme({
-                            numberOfLevelZeroTilesX : 1,
+                        ellipsoid: Cesium.Ellipsoid.WGS84,
+                        tilingScheme: new Cesium.GeographicTilingScheme({
+                            numberOfLevelZeroTilesX : 2,
                             numberOfLevelZeroTilesY : 1,
-                            // rectangle : new Cesium.Rectangle(-Cesium.Math.PI, -Cesium.Math.PI * 0.5, Cesium.Math.PI, Cesium.Math.PI * 0.5),
+                            rectangle : new Cesium.Rectangle(-Cesium.Math.PI, -Cesium.Math.PI * 0.5, Cesium.Math.PI, Cesium.Math.PI * 0.5),
                             ellipsoid : Cesium.Ellipsoid.WGS84
                         }),
-                        ellipsoid: Cesium.Ellipsoid.WGS84,
-                        tileWidth:512,
-                        tileHeight:512,
                         maximumLevel:14,
-                        enablePickFeatures:false,
                         customTags:{
                             m : (provider,x,y,level) => level+1,
                             r : (provider,x,y,level) => y,

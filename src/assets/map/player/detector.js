@@ -195,7 +195,7 @@ export default class Detect{
                 group:'detector_mb',
                 label:{
                     font:'12px bold',
-                    text:`${name}S\n${(Ce.Distance(detector.origin.positions, link.positions)).toFixed(2)/1000} km`,
+                    text:`${name}S\n${((Ce.Distance(detector.origin.positions, link.positions))/1000).toFixed(2)}km`,
                     fillColor:Cesium.Color.BLUE,
                     verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                     pixelOffset:Ce.XY2D(0,-10)
