@@ -34,15 +34,15 @@
                      <i class="icon icon9"></i>
                     <span>地图格式</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag5" style="left:478px;height:260px;">
+                    <div class="menuOption" v-show="flag5" style="left:478px;height:310px;">
                         <el-radio-group v-model="mapType" size="small" @change="mapType1(mapType)">
                             <el-radio label="haitu">海图格式</el-radio>
                             <el-radio label="shp格式">shp格式</el-radio>
                             <el-radio label="GeoTiff">GeoTiff格式</el-radio>
                             <el-radio label="png格式">png格式</el-radio>
                             <el-radio label="jysl格式">军用矢量格式</el-radio>
-                        </el-radio-group>
-                        
+                            <el-radio label="mercator">海图墨卡托投影</el-radio>
+                        </el-radio-group>                      
                     </div>
                 </li>
             </ul>
@@ -357,6 +357,7 @@ export default {
             window.Map.viewerImagery['GeoTiff'].show = false
             window.Map.viewerImagery['png格式'].show = false
             window.Map.viewerImagery['jysl格式'].show = false
+            window.Map.viewerImagery['mercator'].show = false
             window.Map.viewerImagery[mapType].show = true
         },
         CurentTime(time){
@@ -1099,7 +1100,7 @@ export default {
     .cmsNav .menu{
         position: absolute;
         width: 117px;
-        height: 210px;
+        height: 220px;
         top: 53px;
         left: 29px;
         background-color: #102d58;

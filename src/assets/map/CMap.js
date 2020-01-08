@@ -177,7 +177,7 @@ export function Init(ele,CONFIG){
                     let haitu = new Cesium.UrlTemplateImageryProvider({
                         url : item.url,
                         ellipsoid: Cesium.Ellipsoid.WGS84,
-                        tilingScheme: new Cesium.GeographicTilingScheme({
+                        tilingScheme: new Cesium.WebMercatorTilingScheme({
                             numberOfLevelZeroTilesX : 2,
                             numberOfLevelZeroTilesY : 1,
                             rectangle : new Cesium.Rectangle(-Cesium.Math.PI, -Cesium.Math.PI * 0.5, Cesium.Math.PI, Cesium.Math.PI * 0.5),
@@ -192,6 +192,28 @@ export function Init(ele,CONFIG){
                     })
                     viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(haitu)
                     viewerImagery[item.name].show = true
+                }else if(item.type == 'mercator'){
+                     //海图
+                     let haitu = new Cesium.UrlTemplateImageryProvider({
+                        url : item.url,                  
+                        tilingScheme: new Cesium.WebMercatorTilingScheme({
+                            numberOfLevelZeroTilesX : 1,
+                            numberOfLevelZeroTilesY : 1,
+                            ellipsoid : Cesium.Ellipsoid.WGS84
+                        }),
+                        ellipsoid: Cesium.Ellipsoid.WGS84,
+                        tileWidth:512,
+                        tilHeight:512,
+                        maximumLevel:14,
+                        enablePickFeatures:false,
+                        customTags:{
+                            m : (provider,x,y,level) => level,
+                            r : (provider,x,y,level) => y,
+                            c : (provider,x,y,level) => x
+                        }
+                    })
+                    viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(haitu)
+                    viewerImagery[item.name].show = false
                 }else if(item.type == 'qita' && item.name !="jysl格式"){
                     let wmts = new Cesium.UrlTemplateImageryProvider({
                         url : item.url,
