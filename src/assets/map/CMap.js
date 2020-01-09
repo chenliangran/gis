@@ -57,6 +57,24 @@ export function Init(ele,CONFIG){
     viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     var viewerImagery = {}
+
+    var lanbote = new Cesium.SingleTileImageryProvider({
+            url : '/static/image/Map/lanbote.jpg',
+    })
+        viewerImagery["lanbote"] =viewer.imageryLayers.addImageryProvider(lanbote)
+        viewerImagery['lanbote'].show = false;
+    var Bonner = new Cesium.SingleTileImageryProvider({
+        url : '/static/image/Map/Bonner.png',
+    })
+        viewerImagery["Bonner"] =viewer.imageryLayers.addImageryProvider(Bonner)
+        viewerImagery['Bonner'].show = false;
+    var StereoGraphic = new Cesium.SingleTileImageryProvider({
+        url : '/static/image/Map/StereoGraphic.jpg',
+    })
+        viewerImagery["StereoGraphic"] = viewer.imageryLayers.addImageryProvider(StereoGraphic)
+        viewerImagery['StereoGraphic'].show = false;
+
+
     const camera = viewer.camera;
 
     const scene = viewer.scene;

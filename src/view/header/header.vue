@@ -41,7 +41,7 @@
                             <el-radio label="GeoTiff">GeoTiff格式</el-radio>
                             <el-radio label="png格式">png格式</el-radio>
                             <el-radio label="jysl格式">军用矢量格式</el-radio>
-                            <el-radio label="mercator">海图墨卡托投影</el-radio>
+<!--                            <el-radio label="mercator">海图墨卡托投影</el-radio>-->
                         </el-radio-group>                      
                     </div>
                 </li>
@@ -57,10 +57,24 @@
         </div>
         <div class="cmsNav cms-right">
              <ul>
-                <li @click="planeLine"><i class="icon icon10"></i><span>飞行包线</span></li>
-                <li @click="controller(flag1)"><i class="icon icon4"></i><span>图层控制</span></li>
-                <li @click="tool(flag)"><i class="icon icon5"></i><span>绘图工具</span></li>
-                <li @click="events(flag3)"><i class="icon icon7"></i><span>事件悬浮面板</span></li>
+                 <li @click="tyClick(flag5)" style="padding: 0 18px">
+                     <i class="icon icon9"></i>
+                     <span>投影方式</span>
+                     <i class="icon icon8"></i>
+                     <div class="menuOption" style="left:10px;height:270px;" v-show="tyShow">
+                         <el-radio-group v-model="tyType" size="small" @change="tyChange(tyType)">
+                             <el-radio label="haitu">墨卡托投影</el-radio>
+                             <el-radio label="lanbote">兰伯特投影</el-radio>
+                             <el-radio label="Bonner">伯纳投影</el-radio>
+                             <el-radio label="StereoGraphic">球极平面投影</el-radio>
+                             <el-radio label="Ronbinson">罗宾逊投影</el-radio>
+                         </el-radio-group>
+                     </div>
+                 </li>
+                <li style="padding: 0 18px" @click="planeLine"><i class="icon icon10"></i><span>飞行包线</span></li>
+                <li style="padding: 0 18px" @click="controller(flag1)"><i class="icon icon4"></i><span>图层控制</span></li>
+                <li style="padding: 0 18px" @click="tool(flag)"><i class="icon icon5"></i><span>绘图工具</span></li>
+                <li style="padding: 0 18px" @click="events(flag3)"><i class="icon icon7"></i><span>事件悬浮面板</span></li>
                 <!-- <li @click="clip"><i class="icon icon6"></i><span>截屏</span></li> -->
                 <!--<li style="margin-right: 30px;"><i class="icon icon7"></i><span>FPS信息：{{FPS}}</span></li>-->
             </ul>
@@ -337,6 +351,7 @@ export default {
                 len: ''
             },
             mapType:'haitu',
+            tyType:"haitu",
             selectFs:'jwd',
             jwdType:true,
             dfmType:false,
@@ -344,12 +359,28 @@ export default {
             tableData:[],
             jingweiduVisible:false,
             handleCurrentData:{},
-            tilesShow:false
+            tilesShow:false,
+            tyShow:false
 		}
 	},
 	methods: {
         handleChecked(menuData){
             this.$emit('flagType',this.menuData)
+        },
+        tyChange(s){
+            window.Map.viewerImagery['haitu'].show = false;
+            window.Map.viewerImagery['shp格式'].show = false;
+            window.Map.viewerImagery['GeoTiff'].show = false;
+            window.Map.viewerImagery['png格式'].show = false;
+            window.Map.viewerImagery['jysl格式'].show = false;
+            window.Map.viewerImagery['lanbote'].show = false;
+            window.Map.viewerImagery['Bonner'].show = false;
+            window.Map.viewerImagery['StereoGraphic'].show = false;
+            if(s == "Ronbinson"){
+
+            } else {
+                window.Map.viewerImagery[s].show = true;
+            }
         },
         mapType1(mapType){
             window.Map.viewerImagery['haitu'].show = false
@@ -457,6 +488,9 @@ export default {
         events(flag3){
             this.flag3 = !flag3;
             this.$emit("events",this.flag3)  
+        },
+        tyClick(){
+            this.tyShow = !this.tyShow
         },
         tudeShow(){
             this.jwdVisible =true;
@@ -1161,6 +1195,9 @@ export default {
         /* letter-spacing: 4px; */
         padding-left: 2px;
     }
+    .cms-nav .cms-right span{
+        color: #27c1e9;;
+    }
     .cms-nav .cms-middle{
          margin:0;
          float: left;
@@ -1251,7 +1288,7 @@ export default {
         background: url(../../assets/header/xinxi.png);      
     }
     .cmsNav ul li .icon9{
-        background: url(../../assets/header/diqiu.png);      
+        background: url(../../assets/header/ic_jieping.png);
         width: 17px;
         height: 17px;
     }
@@ -1312,7 +1349,6 @@ export default {
         position: relative;
         color: white;
         margin:0;
-
     }
     .cmsNav li{
         cursor: pointer;
