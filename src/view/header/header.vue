@@ -472,9 +472,10 @@ export default {
         tiles(){
             this.tilesShow = true;
             if(this.tilesShow){
+
                 // window.Map.viewer.scene.primitives.add(Tileset)
-                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[1])
-                window.Map.Tileset._primitives[1].show = this.tilesShow
+                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[4])
+                window.Map.Tileset._primitives[4].show = this.tilesShow
             }
            
         },
@@ -1099,12 +1100,18 @@ export default {
     }
     .cmsNav .menu{
         position: absolute;
-        width: 117px;
+        width: 137px;
         height: 220px;
         top: 53px;
         left: 29px;
         background-color: #102d58;
         text-align: left;
+        /* padding-left: 20px; */
+    }
+     .cmsNav .menu .el-checkbox {
+        cursor: pointer;
+        margin-right: 0;
+        width: 100%;
         padding-left: 20px;
     }
     .menu{
