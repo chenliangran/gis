@@ -515,8 +515,8 @@ export default {
             if(this.tilesShow){
 
                 // window.Map.viewer.scene.primitives.add(Tileset)
-                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[4])
-                window.Map.Tileset._primitives[4].show = this.tilesShow
+                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[5])
+                window.Map.Tileset._primitives[5].show = this.tilesShow
             }
            
         },

@@ -1511,7 +1511,6 @@ export default {
 
       // 处理浮标目标数据
       function dealFbSJMb(item) {
-        console.log(item);
         //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
           let FbId = "detector_" + item["jcxxid"];
           let fbbhName = ''
