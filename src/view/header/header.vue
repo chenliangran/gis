@@ -63,7 +63,7 @@
                      <i class="icon icon8"></i>
                      <div class="menuOption" style="left:10px;height:270px;" v-show="tyShow">
                          <el-radio-group v-model="tyType" size="small" @change="tyChange(tyType)">
-                             <el-radio label="haitu">墨卡托投影</el-radio>
+                              <el-radio label="mercator">墨卡托投影</el-radio>
                              <el-radio label="lanbote">兰伯特投影</el-radio>
                              <el-radio label="Bonner">伯纳投影</el-radio>
                              <el-radio label="StereoGraphic">球极平面投影</el-radio>
@@ -368,13 +368,13 @@ export default {
             this.$emit('flagType',this.menuData)
         },
         tyChange(s){
-            window.Map.viewerImagery['haitu'].show = false;
             window.Map.viewerImagery['shp格式'].show = false;
             window.Map.viewerImagery['GeoTiff'].show = false;
             window.Map.viewerImagery['png格式'].show = false;
             window.Map.viewerImagery['jysl格式'].show = false;
             window.Map.viewerImagery['lanbote'].show = false;
             window.Map.viewerImagery['Bonner'].show = false;
+            window.Map.viewerImagery['mercator'].show = false
             window.Map.viewerImagery['StereoGraphic'].show = false;
             if(s == "Ronbinson"){
 
@@ -388,7 +388,7 @@ export default {
             window.Map.viewerImagery['GeoTiff'].show = false
             window.Map.viewerImagery['png格式'].show = false
             window.Map.viewerImagery['jysl格式'].show = false
-            window.Map.viewerImagery['mercator'].show = false
+           
             window.Map.viewerImagery[mapType].show = true
         },
         CurentTime(time){
@@ -465,17 +465,20 @@ export default {
         dataShow(flag2){
            this.flag2 = !flag2;   
            this.flag4 = false;     
-           this.flag5 = false;    
+           this.flag5 = false; 
+           this.tyShow = false;   
         },
         optionShow(flag4){
-           this.flag4 = !flag4; 
-           this.flag2 = false;     
-           this.flag5 = false; 
+            this.flag4 = !flag4; 
+            this.flag2 = false;     
+            this.flag5 = false; 
+            this.tyShow = false;  
         },	
         geshi(flag5){
-           this.flag5 = !flag5
-           this.flag2 = false;     
-           this.flag4 = false; 
+            this.flag5 = !flag5
+            this.flag2 = false;     
+            this.flag4 = false; 
+            this.tyShow = false;  
         },
         tool(flag){
             this.flag = !flag;
@@ -490,6 +493,9 @@ export default {
             this.$emit("events",this.flag3)  
         },
         tyClick(){
+             this.flag4 = false; 
+            this.flag2 = false;     
+            this.flag5 = false; 
             this.tyShow = !this.tyShow
         },
         tudeShow(){

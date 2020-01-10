@@ -91,10 +91,18 @@ export function Init(ele,CONFIG){
     scene.globe.depthTestAgainstTerrain = false;
 
     
+    // scene.screenSpaceCameraController.maximumZoomDistance = 100000000;
     const Ce = new calculater(Cesium);
 
     const Tool = new Tools(Cesium,viewer);
 
+    $.get(`${globalUrl.host}/find/findDistance`, {
+        crossDomain: true, 
+        dataType:'jsonp',
+    }).then(data=>{
+        //最大缩放范围
+        scene.screenSpaceCameraController.minimumZoomDistance = data;
+    })
     // const Tileset = new Cesium.Cesium3DTileset({
     //     url:"http://192.168.0.111:8080/earthview/services/file/GetFileData/tileset/tileset.json",
     //     show:false
@@ -274,7 +282,7 @@ export function Init(ele,CONFIG){
                         tileWidth:256,
                         tilHeight:256,
                         maximumLevel:14,
-                        // enablePickFeatures:false,
+                        enablePickFeatures:false,
                         customTags:{
                             m : (provider,x,y,level) => level+1,
                             r : (provider,x,y,level) => y,

@@ -79,7 +79,7 @@ export default class Player{
             let _orientation = Ce.ToOrientation(position, Ce.ToRadians( Number(origin.hjj || origin.hx) - 90 ), 0, 0);
                 
             target.entity.orientation = _orientation;
-            if(id == "plane_1"){
+            if(origin.hjj || origin.hx){
                 target.entity.billboard.rotation = Ce.ToRadians( 360 - Number(origin.hjj || origin.hx));
             }
             let _lpos = Ce.ToPointsHeight( target.path );

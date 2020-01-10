@@ -626,7 +626,7 @@ export default {
           setTimeout(()=>{
             this.eventsF = false
             
-          },90000)
+          },70000)
         }
       }
     }
@@ -659,7 +659,7 @@ export default {
         setTimeout(()=>{
           this.eventsF = false
           
-        },90000)
+        },75000)
       }
      
     });
@@ -1108,6 +1108,7 @@ export default {
      * 登录事件
      */
     login() {
+        debugger
       this.loginFs = true;
       this.selectF = true;
       this.loginF = false;
@@ -1321,7 +1322,6 @@ export default {
           // let arr = notifyList
           
           that.notifyList = that.bSort(notifyList)
-          that.eventsF = true
       }
 
       // that.notifyType = 'SDSJ'
@@ -1600,7 +1600,6 @@ export default {
         "mouseup",
         function(e) {
           // console.log()
-          console.log
             if(wait == 0){
                 let end = new Date(that.allDate.endT),
                     start = new Date(that.allDate.startT),
@@ -2250,7 +2249,6 @@ export default {
           //   }
           // }
           _this.notifyList = _this.bSort(notifyList)
-          _this.eventsF = true
         }
         
         // 处理浮标数据
@@ -2394,9 +2392,6 @@ export default {
           case "FBTFSJ4":
                 dealFbtfsj(item.data)
             break;  
-           case "WQGJ":
-                dealFbtfsj(item.data)
-            break;    
         }
       });
 
@@ -2511,13 +2506,15 @@ export default {
       }
 
       function dealXMc(items) {
+
         _.forEach(items, item => {
           if (window.Map.Tool.GetId(item.cm)) {
             window.Map.FlyCompare.Update(
               item.cm,
               [Number(item["jd"]), Number(item["wd"]), 0],
               item,
-              function(e) {}
+              function(e) {},
+              0
             );
           } else {
             window.Map.AddCompare("minchuan", {
