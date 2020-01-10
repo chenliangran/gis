@@ -235,7 +235,7 @@ export function Init(ele,CONFIG){
     //     let m22 = Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(90));
     //   //   var m1 = Cesium.Matrix3.fromRotationX(Cesium.Math.toRadians(90)); 
     //   //   var m1 = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(90)); 
-    //     //矩阵计算  // Cesium.Matrix4.multiplyByMatrix3 （矩阵，旋转，结果）
+    //     //矩阵计算logi  // Cesium.Matrix4.multiplyByMatrix3 （矩阵，旋转，结果）
     //     Cesium.Matrix4.multiplyByMatrix3(m2,m22,m2);
     //     //将计算结果再赋值给modelMatrix1
     //     model2.modelMatrix2 = m2;
@@ -244,6 +244,7 @@ export function Init(ele,CONFIG){
         crossDomain: true, 
         dataType:'jsonp',
     }).then(data => {
+        debugger
         var arrAll = data;
         arrAll.map(item =>{
             if(!viewerImagery[item.name]){

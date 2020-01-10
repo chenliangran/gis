@@ -1108,7 +1108,6 @@ export default {
      * 登录事件
      */
     login() {
-        debugger
       this.loginFs = true;
       this.selectF = true;
       this.loginF = false;
