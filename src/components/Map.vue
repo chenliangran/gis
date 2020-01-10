@@ -2380,7 +2380,6 @@ export default {
 
       let Fbtfs = [];//浮标发布数据缓存 12-4
       _.forEach(data, item => {
-         console.log( item )
         switch (item.type) {
           // 飞机
           case "FJ":
