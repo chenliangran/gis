@@ -100,7 +100,6 @@ export function Init(ele,CONFIG){
         crossDomain: true, 
         dataType:'jsonp',
     }).then(data=>{
-        //最大缩放范围
         scene.screenSpaceCameraController.minimumZoomDistance = data;
     })
     // const Tileset = new Cesium.Cesium3DTileset({
@@ -205,6 +204,23 @@ export function Init(ele,CONFIG){
             Cesium.Cartesian3.fromDegrees(110.230099,19.049240,0.0)),
         scale : 500.0
     }));
+    var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(109.4757074400,18.2844629500,0.0))  
+    var model2 = scene.primitives.add(Cesium.Model.fromGltf({
+        url : '/static/SampleData/models/gaoyaxian/Tower.gltf',
+        modelMatrix : modelMatrix,
+        scale : 2.0
+    }));
+      /*获取3D model 的旋转矩阵modelMatrix*/
+      let l = model2.modelMatrix;
+      //构建一个三阶旋转矩阵。模型旋转一定的角度，fromRotation[Z]来控制旋转轴，toRadians()为旋转角度，转为弧度再参与运算
+    //   let l1 = Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(90));
+    //   var l1 = Cesium.Matrix3.fromRotationX(Cesium.Math.toRadians(90)); 
+      var l1 = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(-90)); 
+      //矩阵计算  // Cesium.Matrix4.multiplyByMatrix3 （矩阵，旋转，结果）
+      Cesium.Matrix4.multiplyByMatrix3(l,l1,l);
+      //将计算结果再赋值给modelMatrix
+      model2.modelMatrix = l;
+
     var modelMatrix =Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(109.2111189,18.044240,0.0))  
     var model =  scene.primitives.add(Cesium.Model.fromGltf({
         url : '/static/SampleData/models/zjpt.gltf',
@@ -221,24 +237,6 @@ export function Init(ele,CONFIG){
       Cesium.Matrix4.multiplyByMatrix3(m,m1,m);
       //将计算结果再赋值给modelMatrix
       model.modelMatrix = m;
-
-
-    //   var modelMatrix2 =Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(108.2111189,18.044240,0.0))  
-    //   var model2 =  scene.primitives.add(Cesium.Model.fromGltf({
-    //       url : '/static/SampleData/models/zjpt.gltf',
-    //       modelMatrix : modelMatrix2,
-    //       scale : 1.0
-    //   }));
-    //     /*获取3D model 的旋转矩阵modelMatrix*/
-    //     let m2 = model2.modelMatrix2;
-    //     //构建一个三阶旋转矩阵。模型旋转一定的角度，fromRotation[Z]来控制旋转轴，toRadians()为旋转角度，转为弧度再参与运算
-    //     let m22 = Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(90));
-    //   //   var m1 = Cesium.Matrix3.fromRotationX(Cesium.Math.toRadians(90)); 
-    //   //   var m1 = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(90)); 
-    //     //矩阵计算  // Cesium.Matrix4.multiplyByMatrix3 （矩阵，旋转，结果）
-    //     Cesium.Matrix4.multiplyByMatrix3(m2,m22,m2);
-    //     //将计算结果再赋值给modelMatrix1
-    //     model2.modelMatrix2 = m2;
 
     $.get(`${globalUrl.host}/find/findGisPath`, {
         crossDomain: true, 
@@ -259,7 +257,7 @@ export function Init(ele,CONFIG){
                             rectangle : new Cesium.Rectangle(-Cesium.Math.PI, -Cesium.Math.PI * 0.5, Cesium.Math.PI, Cesium.Math.PI * 0.5),
                             ellipsoid : Cesium.Ellipsoid.WGS84
                         }),
-                        maximumLevel:14,
+                        maximumLevel:13,
                         customTags:{
                             m : (provider,x,y,level) => level+1,
                             r : (provider,x,y,level) => y,

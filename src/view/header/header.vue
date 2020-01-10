@@ -389,7 +389,7 @@ export default {
             window.Map.viewerImagery['png格式'].show = false
             window.Map.viewerImagery['jysl格式'].show = false
            
-            window.Map.viewerImagery[mapType].show = true
+            window.Map.viewerImagery[mapType].show = true  
         },
         CurentTime(time){
             var now = new Date(time);
