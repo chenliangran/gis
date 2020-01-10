@@ -242,6 +242,7 @@ export function Init(ele,CONFIG){
         crossDomain: true, 
         dataType:'jsonp',
     }).then(data => {
+        debugger
         var arrAll = data;
         arrAll.map(item =>{
             if(!viewerImagery[item.name]){

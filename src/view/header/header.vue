@@ -351,7 +351,7 @@ export default {
                 len: ''
             },
             mapType:'haitu',
-            tyType:"haitu",
+            tyType:"",
             selectFs:'jwd',
             jwdType:true,
             dfmType:false,
@@ -374,7 +374,8 @@ export default {
             window.Map.viewerImagery['jysl格式'].show = false;
             window.Map.viewerImagery['lanbote'].show = false;
             window.Map.viewerImagery['Bonner'].show = false;
-            window.Map.viewerImagery['mercator'].show = false
+            window.Map.viewerImagery['mercator'].show = false;
+            window.Map.viewerImagery['haitu'].show = false
             window.Map.viewerImagery['StereoGraphic'].show = false;
             if(s == "Ronbinson"){
 
