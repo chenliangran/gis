@@ -626,7 +626,7 @@ export default {
           setTimeout(()=>{
             this.eventsF = false
             
-          },70000)
+          },90000)
         }
       }
     }
@@ -659,7 +659,7 @@ export default {
         setTimeout(()=>{
           this.eventsF = false
           
-        },75000)
+        },90000)
       }
      
     });
@@ -1108,7 +1108,6 @@ export default {
      * 登录事件
      */
     login() {
-        debugger
       this.loginFs = true;
       this.selectF = true;
       this.loginF = false;
@@ -1322,6 +1321,7 @@ export default {
           // let arr = notifyList
           
           that.notifyList = that.bSort(notifyList)
+          that.eventsF = true
       }
 
       // that.notifyType = 'SDSJ'
@@ -1600,6 +1600,7 @@ export default {
         "mouseup",
         function(e) {
           // console.log()
+          console.log
             if(wait == 0){
                 let end = new Date(that.allDate.endT),
                     start = new Date(that.allDate.startT),
@@ -2250,6 +2251,7 @@ export default {
           //   }
           // }
           _this.notifyList = _this.bSort(notifyList)
+          _this.eventsF = true
         }
         
         // 处理浮标数据
@@ -2291,7 +2293,6 @@ export default {
         }
         //武器轨迹
         function dealWqgj(s) {
-          console.log(s);
           s.map(t=>{
             let entity = window.Map.viewer.entities.getById(t.mc);
             if(entity){
@@ -2382,7 +2383,7 @@ export default {
 
       let Fbtfs = [];//浮标发布数据缓存 12-4
       _.forEach(data, item => {
-        //  console.log( item )
+         console.log( item )
         switch (item.type) {
           // 飞机
           case "FJ":

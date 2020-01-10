@@ -182,6 +182,55 @@ export function Init(ele,CONFIG){
 
 //         return labelLon+" "+labelLat;
 //         }
+   
+    // var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
+    //     Cesium.Cartesian3.fromDegrees(110.199990,19.044240,0.0));
+    scene.primitives.add(Cesium.Model.fromGltf({
+        url : '/static/SampleData/models/fjc-obj/runway.gltf',
+        modelMatrix : Cesium.Transforms.eastNorthUpToFixedFrame(
+            Cesium.Cartesian3.fromDegrees(110.160000,19.044220,0.0)),
+        scale : 100.0
+    }));
+    scene.primitives.add(Cesium.Model.fromGltf({
+        url : '/static/SampleData/models/hzd-obj/airport-terminal.gltf',
+        modelMatrix : Cesium.Transforms.eastNorthUpToFixedFrame(
+            Cesium.Cartesian3.fromDegrees(110.230099,19.049240,0.0)),
+        scale : 500.0
+    }));
+    var modelMatrix =Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(109.2111189,18.044240,0.0))  
+    var model =  scene.primitives.add(Cesium.Model.fromGltf({
+        url : '/static/SampleData/models/zjpt.gltf',
+        modelMatrix : modelMatrix,
+        scale : 1.0
+    }));
+      /*获取3D model 的旋转矩阵modelMatrix*/
+      let m = model.modelMatrix;
+      //构建一个三阶旋转矩阵。模型旋转一定的角度，fromRotation[Z]来控制旋转轴，toRadians()为旋转角度，转为弧度再参与运算
+      let m1 = Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(90));
+    //   var m1 = Cesium.Matrix3.fromRotationX(Cesium.Math.toRadians(90)); 
+    //   var m1 = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(90)); 
+      //矩阵计算  // Cesium.Matrix4.multiplyByMatrix3 （矩阵，旋转，结果）
+      Cesium.Matrix4.multiplyByMatrix3(m,m1,m);
+      //将计算结果再赋值给modelMatrix
+      model.modelMatrix = m;
+
+
+    //   var modelMatrix2 =Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(108.2111189,18.044240,0.0))  
+    //   var model2 =  scene.primitives.add(Cesium.Model.fromGltf({
+    //       url : '/static/SampleData/models/zjpt.gltf',
+    //       modelMatrix : modelMatrix2,
+    //       scale : 1.0
+    //   }));
+    //     /*获取3D model 的旋转矩阵modelMatrix*/
+    //     let m2 = model2.modelMatrix2;
+    //     //构建一个三阶旋转矩阵。模型旋转一定的角度，fromRotation[Z]来控制旋转轴，toRadians()为旋转角度，转为弧度再参与运算
+    //     let m22 = Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(90));
+    //   //   var m1 = Cesium.Matrix3.fromRotationX(Cesium.Math.toRadians(90)); 
+    //   //   var m1 = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(90)); 
+    //     //矩阵计算  // Cesium.Matrix4.multiplyByMatrix3 （矩阵，旋转，结果）
+    //     Cesium.Matrix4.multiplyByMatrix3(m2,m22,m2);
+    //     //将计算结果再赋值给modelMatrix1
+    //     model2.modelMatrix2 = m2;
 
     $.get(`${globalUrl.host}/find/findGisPath`, {
         crossDomain: true, 
@@ -192,10 +241,11 @@ export function Init(ele,CONFIG){
             if(!viewerImagery[item.name]){
                 if(item.type == 'haitu'){
                     //海图
+
                     let haitu = new Cesium.UrlTemplateImageryProvider({
                         url : item.url,
                         ellipsoid: Cesium.Ellipsoid.WGS84,
-                        tilingScheme: new Cesium.WebMercatorTilingScheme({
+                        tilingScheme: new Cesium.GeographicTilingScheme({
                             numberOfLevelZeroTilesX : 2,
                             numberOfLevelZeroTilesY : 1,
                             rectangle : new Cesium.Rectangle(-Cesium.Math.PI, -Cesium.Math.PI * 0.5, Cesium.Math.PI, Cesium.Math.PI * 0.5),
@@ -212,20 +262,21 @@ export function Init(ele,CONFIG){
                     viewerImagery[item.name].show = true
                 }else if(item.type == 'mercator'){
                      //海图
+                     //http://localhost:8080/earthview/services/新地图3/MapService/WMTS?service=wmts&request=GetTile&version=1.0.0&style=default&LAYER=新地图3_Mercator_Web&TILEMATRIX=2&TILEROW=1&TILECOL=1&FORMAT=image/png&TileMatrixSet=OGC_WebMercator
                      let haitu = new Cesium.UrlTemplateImageryProvider({
-                        url : item.url,                  
+                        url : item.url,             
                         tilingScheme: new Cesium.WebMercatorTilingScheme({
                             numberOfLevelZeroTilesX : 1,
                             numberOfLevelZeroTilesY : 1,
                             ellipsoid : Cesium.Ellipsoid.WGS84
                         }),
                         ellipsoid: Cesium.Ellipsoid.WGS84,
-                        tileWidth:512,
-                        tilHeight:512,
+                        tileWidth:256,
+                        tilHeight:256,
                         maximumLevel:14,
-                        enablePickFeatures:false,
+                        // enablePickFeatures:false,
                         customTags:{
-                            m : (provider,x,y,level) => level,
+                            m : (provider,x,y,level) => level+1,
                             r : (provider,x,y,level) => y,
                             c : (provider,x,y,level) => x
                         }
@@ -456,7 +507,7 @@ export function Init(ele,CONFIG){
                 //     distanceDisplayCondition:Ce.DisplayNF(0, 300000)
                 // },
             })
-        }
+        } 
 
         let entity = DrawEntity.Draw(shape)
     
