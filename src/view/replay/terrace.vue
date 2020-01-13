@@ -71,14 +71,14 @@
 					<div class="terrace-item">
 						<div class="list">
 							<div>
-								<span style="min-width: 150px">发现时间</span>
+								<span style="min-width: 120px">发现时间</span>
 								<span style="min-width: 50px">经度</span>
 								<span style="min-width: 50px">纬度</span>
 								<span style="min-width: 100px">探测目标位置偏差</span>
 							</div>
 							<ul v-if="ctData.length > 0" v-show="gdFlag">  
 								<li v-for="(item, i) in ctData" :key="i"  v-if="Number(item['mbzxd']) >= 100">
-										<span style="min-width: 150px" :title="item.mbsj">{{item["mbsj"].slice(5).split('.')[0]}}</span>
+										<span style="min-width: 120px" :title="item.mbsj">{{item["mbsj"].slice(5).split('.')[0]}}</span>
 										<span style="min-width: 50px"  :title="item.mbjd">{{Math.floor(item["mbjd"]*100)/100}}</span>
 										<span style="min-width: 50px"  :title="item.mbwd">{{Math.floor(item["mbwd"]*100)/100}}</span>
 										<span style="min-width: 100px" :title="item.mbwzwc">{{item["mbwzwc"]}}</span>																
@@ -108,40 +108,40 @@
 							<ul v-if="events['mbtcsj'].length > 0" v-show="gdFlag">
 								<li v-for="(item, i) in events['mbtcsj']" :key="i">
                                     <div v-if="item['dwfbxh1'].length == 7">
-                                        <span style="min-width: 60px;display: inline-block;">{{item["dwfbxh1"].slice(-3)}}</span>
-                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-                                        <span style="min-width: 100px;display: inline-block;">{{item["jl"]}}</span>  
+                                        <span style="min-width: 60px;">{{item["dwfbxh1"].slice(-3)}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;">{{item["jl"]}}</span>  
                                     </div>
-                                    <div v-if="item['dwfbxh2'].length == 7" style="width:100%;height: 30px;line-height: 30px;float: left;">
-                                        <span style="min-width: 60px;display: inline-block;">{{item["dwfbxh2"].slice(-3)}}</span>
-                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-                                        <span style="min-width: 100px;display: inline-block;">{{item["jl"]}}</span>
+                                    <div v-if="item['dwfbxh2'].length == 7">
+                                        <span style="min-width: 60px;">{{item["dwfbxh2"].slice(-3)}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;">{{item["jl"]}}</span>
                                     </div>
-									<div v-if="item['dwfbxh3'].length == 7" style="width:100%;height: 30px;line-height: 30px;float: left;">
-                                        <span style="min-width: 60px;display: inline-block;">{{item["dwfbxh3"].slice(-3)}}</span>
-                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-                                        <span style="min-width: 100px;display: inline-block;">{{item["jl"]}}</span>  
+									<div v-if="item['dwfbxh3'].length == 7">
+                                        <span style="min-width: 60px;">{{item["dwfbxh3"].slice(-3)}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;">{{item["jl"]}}</span>  
                                     </div>
-                                    <div v-if="item['dwfbxh4'].length == 7" style="width:100%;height: 30px;line-height: 30px;float: left;">
-                                        <span style="min-width: 60px;display: inline-block;">{{item["dwfbxh4"].slice(-3)}}</span>
-                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-                                        <span style="min-width: 100px;display: inline-block;">{{item["jl"]}}</span>
+                                    <div v-if="item['dwfbxh4'].length == 7">
+                                        <span style="min-width: 60px;">{{item["dwfbxh4"].slice(-3)}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;">{{item["jl"]}}</span>
                                     </div>
-                                    <div v-if="item['dwfbxh5'].length == 7" style="width:100%;height: 30px;line-height: 30px;float: left;">
-                                        <span style="min-width: 60px;display: inline-block;">{{item["dwfbxh5"].slice(-3)}}</span>
-                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-                                        <span style="min-width: 100px;display: inline-block;">{{item["jl"]}}</span>  
+                                    <div v-if="item['dwfbxh5'].length == 7">
+                                        <span style="min-width: 60px;">{{item["dwfbxh5"].slice(-3)}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;">{{item["jl"]}}</span>  
                                     </div>
-                                    <div v-if="item['dwfbxh6'].length == 7" style="width:100%;height: 30px;line-height: 30px;float: left;">
-                                        <span style="min-width: 60px;display: inline-block;">{{item["dwfbxh6"].slice(-3)}}</span>
-                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-                                        <span style="min-width: 60px;display: inline-block;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-                                        <span style="min-width: 100px;display: inline-block;">{{item["jl"]}}</span>
+                                    <div v-if="item['dwfbxh6'].length == 7">
+                                        <span style="min-width: 60px;">{{item["dwfbxh6"].slice(-3)}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 60px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;">{{item["jl"]}}</span>
                                     </div>
 								</li>
 							</ul>
