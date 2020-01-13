@@ -1597,7 +1597,7 @@ export default {
       viewer.timeline.addEventListener(
         "mouseup",
         function(e) {
-          // console.log()
+           console.log(wait)
             if(wait == 0){
                 let end = new Date(that.allDate.endT),
                     start = new Date(that.allDate.startT),
@@ -1660,6 +1660,8 @@ export default {
                 setInterval(()=>{
                     if(wait > 0){
                         wait--;
+                    }else{
+                        wait = 0;
                     }                  
                 },1000)              
                 that.$message('请不要频繁点击跳转！')
@@ -2030,6 +2032,7 @@ export default {
      */
     buildSocket(type) {
       const _this = this;
+      let WQGJList = [] 
       console.log('打开ws')
       // window.Map.viewer.clock.shouldAnimate = true;
 
@@ -2076,7 +2079,78 @@ export default {
             }
           } else {
             _this.dealMessage(JSON.parse(e.data));
-            // console.log(JSON.parse(e.data))
+            let dataList = JSON.parse(e.data)
+        //    console.log(JSON.parse(e.data))
+            let wqgj_tem_xt=[]
+            let wqgj_tem_bt=[]
+            let dyc=true;
+            let sfywq=false
+            dataList.map(item=>{
+                if(item.type == "WQGJ"){
+                    sfywq=true
+                    if(WQGJList.length ==0){
+                        WQGJList = item.data
+                    }else{
+                        dyc=false;                      
+                       item.data.map(index=>{
+                           let _falg=true;
+                           WQGJList.map(list =>{    
+                            if(list.mc == index.mc){
+                                    wqgj_tem_xt.push(index)
+                                    _falg=false;
+                                    return;                               
+                                }       
+                          
+                            }) 
+                            if(_falg){
+                                wqgj_tem_bt.push(index)
+                            }
+                       })
+                 
+                    }
+                   
+                }
+            }) 
+            if(!sfywq){
+                if(WQGJList.length>0){
+                        WQGJList.map(item=>{
+                            window["Map"].viewer.entities.removeById(item.mc)
+                        })
+                    }
+            }
+            if(!dyc){
+            let _ls_data=[]
+            if(WQGJList.length > 0){
+                WQGJList.map(item=>{
+                    let _f_f=true;
+                    if(wqgj_tem_xt.length > 0){
+                        wqgj_tem_xt.map(_item=>{
+                            if(item.mc!=_item.mc){
+                                _f_f=false;
+                            }
+                        })
+                        if(!_f_f){
+                            _ls_data.push(item)
+                        }
+                       
+                    }
+
+                })
+                    //删除
+                    if(_ls_data.length >0){
+                        _ls_data.map(item=>{
+                            // window["Map"].entities.removeById(item.mc)
+                            window["Map"].viewer.entities.removeById(item.mc)
+                        })
+                    }
+                    
+            
+            }
+            WQGJList=wqgj_tem_xt
+            WQGJList.push(...wqgj_tem_bt)
+
+            }
+            
           }
         }
       };
@@ -2086,7 +2160,7 @@ export default {
      * ws数据处理事件
      */
     dealMessage(data) {
-
+    //   console.log(data)
       const _this = this;
       let notifyList = [];
       let id = sessionStorage.getItem("selectEd")
@@ -2288,7 +2362,7 @@ export default {
           }
         }
         //武器轨迹
-        function dealWqgj(s) {
+        function dealWqgj(s) {    
           s.map(t=>{
             let entity = window.Map.viewer.entities.getById(t.mc);
             if(entity){
@@ -2378,7 +2452,8 @@ export default {
 
 
       let Fbtfs = [];//浮标发布数据缓存 12-4
-      _.forEach(data, item => {
+      _.forEach(data, item => { 
+                    
         switch (item.type) {
           // 飞机
           case "FJ":

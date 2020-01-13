@@ -36,23 +36,23 @@
 						</div> -->
 						<div class="list">
 							<div>
-								<span style="min-width: 60px">浮标编号</span>
+								<span style="min-width: 55px">浮标编号</span>
 								<span style="min-width: 40px">经度</span>
 								<span style="min-width: 40px">纬度</span>
 								<span style="min-width: 60px">浮标类型</span>
 								<span style="min-width: 60px">射频通道号</span>
 								<span style="min-width: 30px">状态</span>
-								<span style="min-width: 40px">阵型</span>
+								<span style="min-width: 60px">阵型</span>
 							</div>
 							<ul v-if="detectorData.length > 0" v-show="gdFlag">
 								<li :class="{curFb: curFbBh == item.fbbh}" v-for="(item, i) in detectorData" :key="i">
-									<span style="min-width: 60px">{{item["fbbh"].slice(-3)}}</span>
+									<span style="min-width: 55px">{{item["fbbh"].slice(-3)}}</span>
 									<span style="min-width: 40px">{{Math.floor(item["llcrswzjd"]*100)/100}}</span>
 									<span style="min-width: 40px">{{Math.floor(item["llcrswzwd"]*100)/100}}</span>
 									<span style="min-width: 60px">{{item["fblx"]}}</span>
 									<span style="min-width: 60px">{{item["sptdh"]}}</span>
 									<span style="min-width: 30px">{{item["fbzt"]}}</span>
-									<span style="min-width: 40px">{{item["zx"]}}</span>
+									<span style="min-width: 60px">{{item["zx"]}}</span>
 								</li>
 							</ul>
 						</div>
@@ -78,7 +78,7 @@
 							</div>
 							<ul v-if="ctData.length > 0" v-show="gdFlag">  
 								<li v-for="(item, i) in ctData" :key="i"  v-if="Number(item['mbzxd']) >= 100">
-										<span style="min-width: 150px" :title="item.mbsj">{{item["mbsj"].split('.')[0]}}</span>
+										<span style="min-width: 150px" :title="item.mbsj">{{item["mbsj"].slice(5).split('.')[0]}}</span>
 										<span style="min-width: 50px"  :title="item.mbjd">{{Math.floor(item["mbjd"]*100)/100}}</span>
 										<span style="min-width: 50px"  :title="item.mbwd">{{Math.floor(item["mbwd"]*100)/100}}</span>
 										<span style="min-width: 100px" :title="item.mbwzwc">{{item["mbwzwc"]}}</span>																
@@ -98,7 +98,7 @@
 					</div> -->
 					<div class="nav">浮标探测目标</div>
 					<div class="terrace-item" >
-						<div class="list">
+						<div class=" list fubiao">
 							<div>
 								<span style="min-width: 60px">浮标编号</span>
 								<span style="min-width: 60px">经度</span>
@@ -107,15 +107,42 @@
 							</div>
 							<ul v-if="events['mbtcsj'].length > 0" v-show="gdFlag">
 								<li v-for="(item, i) in events['mbtcsj']" :key="i">
-									<span style="min-width: 60px" v-if="item['dwfbxh1'].length == 7">{{item["dwfbxh1"].slice(-3)}}</span>
-                                    <span style="min-width: 60px" v-if="item['dwfbxh2'].length == 7">{{item["dwfbxh2"].slice(-3)}}</span>
-                                    <span style="min-width: 60px" v-if="item['dwfbxh3'].length == 7">{{item["dwfbxh3"].slice(-3)}}</span>
-                                    <span style="min-width: 60px" v-if="item['dwfbxh4'].length == 7">{{item["dwfbxh4"].slice(-3)}}</span>
-                                    <span style="min-width: 60px" v-if="item['dwfbxh5'].length == 7">{{item["dwfbxh5"].slice(-3)}}</span>
-                                    <span style="min-width: 60px" v-if="item['dwfbxh6'].length == 7">{{item["dwfbxh6"].slice(-3)}}</span>
-									<span style="min-width: 60px">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-									<span style="min-width: 60px">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-									<span style="min-width: 100px">{{item["jl"]}}</span>
+                                    <div v-if="item['dwfbxh1'].length == 7">
+                                        <span style="min-width: 60px;display: inline-block;">{{item["dwfbxh1"].slice(-3)}}</span>
+                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;display: inline-block;">{{item["jl"]}}</span>  
+                                    </div>
+                                    <div v-if="item['dwfbxh2'].length == 7" style="width:100%;height: 30px;line-height: 30px;float: left;">
+                                        <span style="min-width: 60px;display: inline-block;">{{item["dwfbxh2"].slice(-3)}}</span>
+                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;display: inline-block;">{{item["jl"]}}</span>
+                                    </div>
+									<div v-if="item['dwfbxh3'].length == 7" style="width:100%;height: 30px;line-height: 30px;float: left;">
+                                        <span style="min-width: 60px;display: inline-block;">{{item["dwfbxh3"].slice(-3)}}</span>
+                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;display: inline-block;">{{item["jl"]}}</span>  
+                                    </div>
+                                    <div v-if="item['dwfbxh4'].length == 7" style="width:100%;height: 30px;line-height: 30px;float: left;">
+                                        <span style="min-width: 60px;display: inline-block;">{{item["dwfbxh4"].slice(-3)}}</span>
+                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;display: inline-block;">{{item["jl"]}}</span>
+                                    </div>
+                                    <div v-if="item['dwfbxh5'].length == 7" style="width:100%;height: 30px;line-height: 30px;float: left;">
+                                        <span style="min-width: 60px;display: inline-block;">{{item["dwfbxh5"].slice(-3)}}</span>
+                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;display: inline-block;">{{item["jl"]}}</span>  
+                                    </div>
+                                    <div v-if="item['dwfbxh6'].length == 7" style="width:100%;height: 30px;line-height: 30px;float: left;">
+                                        <span style="min-width: 60px;display: inline-block;">{{item["dwfbxh6"].slice(-3)}}</span>
+                                        <span style="min-width: 80px;display: inline-block;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 60px;display: inline-block;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;display: inline-block;">{{item["jl"]}}</span>
+                                    </div>
 								</li>
 							</ul>
 						</div>
@@ -465,7 +492,7 @@ export default {
 		border: 1px solid #104284;
 		/* margin:5px 10px; */
 		width: 100%;
-		overflow: auto;
+		/* overflow: auto; */
 		max-height: 110px;
 	}
 	.terrace-item .list >div:first-child{
@@ -479,7 +506,8 @@ export default {
 		text-align: center;
 	}
 	.terrace-item .list ul {
-		max-height: 200px;
+		max-height: 80px;
+        overflow: auto;
 	}
 	.terrace-item .list ul li{
 		height: 30px;
@@ -487,11 +515,11 @@ export default {
 		display: flex;
 	}
 	.terrace-item .list div span{
-		padding: 0 5px;
-		background: #092254;
+		/* padding: 0 5px; */
+		/* background: #092254; */
 	}
 	.terrace-item .list ul span{
-		padding: 0 5px;
+		/* padding: 0 5px; */
 	}
 	.terrace-item .curFb {
 		background: #0922546b;
@@ -502,5 +530,23 @@ export default {
 	}
 	.terrace-item{
 		max-height: 220px;
-	}
+    }
+    .terrace-item .fubiao ul {
+        max-height: 80px;
+        overflow: auto;
+    }
+    .terrace-item .fubiao  ul li {
+        max-height: 80px;
+        /* overflow: auto; */
+        display: block;
+    }
+    .fubiao  ul li div {
+        width:100%;
+        height: 30px;
+        line-height: 30px;
+        float: left;
+    }
+     .fubiao  ul li div  span{
+        display: inline-block;
+    }
 </style>
