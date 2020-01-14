@@ -1321,6 +1321,7 @@ export default {
           // let arr = notifyList
           
           that.notifyList = that.bSort(notifyList)
+          that.eventsF = true
       }
 
       // that.notifyType = 'SDSJ'
@@ -1473,7 +1474,8 @@ export default {
         //     }
         //   }
         // console.log(that.bSort(notifyList))
-          that.notifyList = that.bSort(notifyList)
+        that.notifyList = that.bSort(notifyList)
+        that.eventsF = true
       }
      
       // 处理浮标数据
@@ -2322,6 +2324,7 @@ export default {
           //   }
           // }
           _this.notifyList = _this.bSort(notifyList)
+          _this.eventsF = true
         }
         
         // 处理浮标数据
