@@ -46,7 +46,7 @@
 							</div>
 							<ul v-if="detectorData.length > 0" v-show="gdFlag">
 								<li :class="{curFb: curFbBh == item.fbbh}" v-for="(item, i) in detectorData" :key="i">
-									<span style="min-width: 55px">{{item["fbbh"].slice(-3)}}</span>
+									<span style="min-width: 55px">{{i+1}}</span>
 									<span style="min-width: 40px">{{Math.floor(item["llcrswzjd"]*100)/100}}</span>
 									<span style="min-width: 40px">{{Math.floor(item["llcrswzwd"]*100)/100}}</span>
 									<span style="min-width: 60px">{{item["fblx"]}}</span>
@@ -107,41 +107,11 @@
 							</div>
 							<ul v-if="events['mbtcsj'].length > 0" v-show="gdFlag">
 								<li v-for="(item, i) in events['mbtcsj']" :key="i">
-                                    <div v-if="item['dwfbxh1'].length == 7">
-                                        <span style="min-width: 60px;">{{item["dwfbxh1"].slice(-3)}}</span>
+                                    <div>
+                                        <span style="min-width: 60px;">{{i+1}}</span>
                                         <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
                                         <span style="min-width: 80px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
                                         <span style="min-width: 100px;">{{item["jl"]}}</span>  
-                                    </div>
-                                    <div v-if="item['dwfbxh2'].length == 7">
-                                        <span style="min-width: 60px;">{{item["dwfbxh2"].slice(-3)}}</span>
-                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-                                        <span style="min-width: 100px;">{{item["jl"]}}</span>
-                                    </div>
-									<div v-if="item['dwfbxh3'].length == 7">
-                                        <span style="min-width: 60px;">{{item["dwfbxh3"].slice(-3)}}</span>
-                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-                                        <span style="min-width: 100px;">{{item["jl"]}}</span>  
-                                    </div>
-                                    <div v-if="item['dwfbxh4'].length == 7">
-                                        <span style="min-width: 60px;">{{item["dwfbxh4"].slice(-3)}}</span>
-                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-                                        <span style="min-width: 100px;">{{item["jl"]}}</span>
-                                    </div>
-                                    <div v-if="item['dwfbxh5'].length == 7">
-                                        <span style="min-width: 60px;">{{item["dwfbxh5"].slice(-3)}}</span>
-                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-                                        <span style="min-width: 100px;">{{item["jl"]}}</span>  
-                                    </div>
-                                    <div v-if="item['dwfbxh6'].length == 7">
-                                        <span style="min-width: 60px;">{{item["dwfbxh6"].slice(-3)}}</span>
-                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-                                        <span style="min-width: 60px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-                                        <span style="min-width: 100px;">{{item["jl"]}}</span>
                                     </div>
 								</li>
 							</ul>
@@ -301,8 +271,8 @@ export default {
 	methods: {
 		updtea(data){
 			this.detectorData = data.b;
-			this.ctData =  data.a;
-			this.events['mbtcsj'] =  data.c;
+            this.ctData =  data.a;
+            this.dealFBCC(data.c)
 		},
         setLineOption(data) {
 			let that = this;
@@ -358,13 +328,58 @@ export default {
             let index = time.indexOf(".")
             return time.substring(0, index)
         },
+        dealFBCC(data){
+            let _this = this
+            let fbctmb = []
+                data.map(item=>{  
+                    let obj ={}     
+                    if(item.dwfbxh1.length == 7){
+                        obj['mbwzjd'] = item.mbwzjd
+                        obj['mbwzwd'] =item.mbwzwd
+                        obj['jl'] = item.jl
+                        fbctmb.push(obj)
+                    }
+                    if(item.dwfbxh2.length == 7){
+                       obj['mbwzjd'] = item.mbwzjd
+                        obj['mbwzwd'] =item.mbwzwd
+                        obj['jl'] = item.jl
+                        fbctmb.push(obj)
+                    }
+                    if(item.dwfbxh3.length == 7){
+                        obj['mbwzjd'] = item.mbwzjd
+                        obj['mbwzwd'] =item.mbwzwd
+                        obj['jl'] = item.jl
+                        fbctmb.push(obj)
+                    }
+                    if(item.dwfbxh4.length == 7){
+                        obj['mbwzjd'] = item.mbwzjd
+                        obj['mbwzwd'] =item.mbwzwd
+                        obj['jl'] = item.jl
+                        fbctmb.push(obj)
+                    }
+                    if(item.dwfbxh5.length == 7){
+                        obj['mbwzjd'] = item.mbwzjd
+                        obj['mbwzwd'] =item.mbwzwd
+                        obj['jl'] = item.jl
+                        fbctmb.push(obj)
+                    }
+                    if(item.dwfbxh6.length == 7){
+                      obj['mbwzjd'] = item.mbwzjd
+                        obj['mbwzwd'] =item.mbwzwd
+                        obj['jl'] = item.jl
+                        fbctmb.push(obj)
+                    }
+
+                })
+                _this.events.mbtcsj = fbctmb
+                _this.events.mbtcsj.push(...fbctmb)
+        },
         getEventList() {
             let id = sessionStorage.getItem("selectEd")
             let _this = this
             $.get(globalUrl.host+'/find/findEventListForRex',{sjid: id}).then(data => {
                 _this.events.fbtfsj = data.FBSJ
-                _this.events.mbtcsj = data.FBMBSJ
-                _this.events.mbtcsj.push(...data.FBMBSJ)
+                _this.dealFBCC(data.FBMBSJ)
                 _this.events.sdsj = data.SDSJ
             })
         }
@@ -401,12 +416,12 @@ export default {
 			let id = sessionStorage.getItem("selectEd")
 			let _this = this
 			$.get(globalUrl.host+'/find/findEventListForRex',{sjid: id,time: v}).then(data => {
-				this.detectorData = data.FBSJ;
+				_this.detectorData = data.FBSJ;
                 _this.events.fbtfsj = data.FBSJ
-                _this.events.mbtcsj = data.FBMBSJ
-                _this.events.mbtcsj.push(...data.FBMBSJ)
+                _this.dealFBCC(data.FBMBSJ)
                 _this.events.sdsj = data.SDSJ
                 _this.ctData =data.CTMBSJ
+                
 			})
 		},
 		WebSocketData: {
