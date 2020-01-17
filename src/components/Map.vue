@@ -190,7 +190,7 @@ background: none !important;
 }
 .seamless-warp{
   position: fixed !important;
-  bottom: 20%;
+  bottom: 22%;
   right: 50px;
   height: 500px;
   overflow-y: auto;
@@ -361,8 +361,8 @@ background: none !important;
   max-width: 80%;
 }
 .cesium-viewer-toolbar{
-  top:60px;
-  right:10px
+  top:110px;
+  right:50px
 }
 </style>
 
@@ -1657,7 +1657,7 @@ export default {
                             }
                         }
                     })
-                    wait = 3;
+                    wait = 2;
             }else{ 
                 setInterval(()=>{
                     if(wait > 0){

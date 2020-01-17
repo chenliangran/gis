@@ -2,6 +2,7 @@ import Calculater from '../tools/calculater.js';
 import Tools from '../tools/tools.js';
 
 import Params from "../params.js";
+import ParamsQT from "../paramsQT.js";
 
 
 const Drawer     = require('../drawer/Draw.js');
@@ -60,12 +61,22 @@ export default class Player{
 
                 return;
             }
+           if(id =="plane_1"){
+                if(target.path.length > Params.path.len){
+                    target.path.shift()
+                    target.path.shift()
+                    target.path.shift()
+                }
+           }
+           if(id =="subMarine_1"){
+                if(target.path.length > ParamsQT.path.len){
+                    target.path.shift()
+                    target.path.shift()
+                    target.path.shift()
+                } 
+           }
+            
            
-            if(target.path.length > Params.path.len){
-                target.path.shift()
-                target.path.shift()
-                target.path.shift()
-            }
             target.path.push(position[0])
             target.path.push(position[1])
             target.path.push(position[2])

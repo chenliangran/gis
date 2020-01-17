@@ -147,12 +147,13 @@
                                     :key="'航迹点' + index"
                                     :prop="'domains.' + index + '.value'"
                             >
+                                 <el-input type='number' style="width: 35%;margin-right: 10px" v-model="domain.wd">
+                                    <i slot="suffix">纬度</i>
+                                </el-input>
                                 <el-input type='number' style="width: 35%;margin-right: 10px;" v-model="domain.jd">
                                     <i slot="suffix">经度</i>
                                 </el-input>
-                                <el-input type='number' style="width: 35%;margin-right: 10px" v-model="domain.wd">
-                                    <i slot="suffix">纬度</i>
-                                </el-input>
+                               
                                 <el-button type="danger" @click.prevent="removeDomain(domain)">删除</el-button>
                             </el-form-item>
                         </el-col>
@@ -167,18 +168,18 @@
                     <el-form :model="dynamicValidateForm2" ref="dynamicValidateForm2" label-width="100px" class="demo-dynamic">
                         <el-col>
                             <li v-for="(domain, index) in dynamicValidateForm2.domains">
-                                <div style="margin: 5px 0">
-                                    <span style="font-size: 16px;margin-right: 5px">经度:{{index+1}}</span>
-                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd1"/>°
-                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd2"/>′
-                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd3"/>″
-                                </div>
-                                <div style="margin: 5px 0">
+                                 <div style="margin: 5px 0">
                                     <span style="font-size: 16px;margin-right: 5px">纬度:{{index+1}}</span>
                                     <el-input size="small" style="width: 25%" type='number' v-model="domain.wd1"/>°
                                     <el-input size="small" style="width: 25%" type='number' v-model="domain.wd2"/>′
                                     <el-input size="small" style="width: 25%" type='number' v-model="domain.wd3"/>″
                                     <el-button size="small" type="danger" @click.prevent="removeDomain2(domain)">删除</el-button>
+                                </div>
+                                <div style="margin: 5px 0">
+                                    <span style="font-size: 16px;margin-right: 5px">经度:{{index+1}}</span>
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd1"/>°
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd2"/>′
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd3"/>″
                                 </div>
                             </li>
                         </el-col>
@@ -214,14 +215,14 @@
                              <el-form-item label="航迹点" style="width:10%">
                                 <span>{{item.sx+1}}</span>
                             </el-form-item>
-                            <el-form-item label="经度" style="width:30%">
-                                <el-input v-if="item.isOK" v-model="item.jd" style="width:100%;hight:100%"></el-input>
-                                <span v-else @click="dbclick(item)">{{ item.jd }}</span>
-                            </el-form-item>
                             <el-form-item label="纬度" style="width:30%">
                                 <el-input v-if="item.isOK" v-model="item.wd" style="width:100%;hight:100%"></el-input>
                                 <span v-else @click="dbclick(item)">{{ item.wd}}</span>
                                 <span></span>
+                            </el-form-item>
+                             <el-form-item label="经度" style="width:30%">
+                                <el-input v-if="item.isOK" v-model="item.jd" style="width:100%;hight:100%"></el-input>
+                                <span v-else @click="dbclick(item)">{{ item.jd }}</span>
                             </el-form-item>
                             <el-form-item style="width:15%" v-if="i===props.row.hjds.length-1">
                                <el-button type="primary" size="small" @click="drawPolygon1(props)">修改</el-button>
@@ -286,6 +287,7 @@
 
 <script>
 import Params from "../../assets/map/params.js";
+import ParamsQT from "../../assets/map/paramsQT.js";
 import CMap from "../../assets/map/CMap.js"
 export default {
     props: ["WebSocketData","FBnum","timeNow","eventsF"],
@@ -559,7 +561,7 @@ export default {
                 this.$message.error('潜艇轨迹长度不能大于5000！');
                 return false
             }
-            Params.path.len = Number(this.form.len)
+            ParamsQT.path.len = Number(this.form.len)
             this.dunkerVisible = false;
         },
         drawPolygon(){
@@ -1127,8 +1129,8 @@ export default {
         width: 100%;
         position: fixed;
         top: 0;
-        z-index: 10;
-        height: 86px;
+        z-index: 1;
+        height: 85px;
         display: block;
         justify-content: flex-end;
         background: url(../../assets/header/nav.png) no-repeat;
@@ -1260,7 +1262,7 @@ export default {
         cursor: pointer;
     }
     .cmsNav ul li .icon{
-         display: inline-block;
+        display: inline-block;
         width: 16px;
         height: 15px;
         background-repeat: no-repeat;
