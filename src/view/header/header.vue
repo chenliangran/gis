@@ -7,10 +7,12 @@
                     <span>数据统计</span>
                     <i class="icon icon8"></i>
                     <div class="menu" v-show="flag2">
-                        <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='飞行曲线'>✔</span><label>飞行曲线</label></p>
-                        <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='浮标投放信息'>✔</span><label>浮标投放信息</label></p>
-                        <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='磁探探测目标'>✔</span><label>磁探探测目标</label></p>
-                        <p><input class="event-menu-checkbox" type="checkbox" name="item"><span data-type='浮标探测目标'>✔</span><label>浮标探测目标</label></p>
+                        <el-checkbox-group v-model="menuData" @change="handleChecked"> 
+                            <el-checkbox label="飞行曲线"></el-checkbox>
+                            <el-checkbox label="浮标投放信息"></el-checkbox>
+                            <el-checkbox label="磁探探测目标"></el-checkbox>
+                            <el-checkbox label="浮标探测目标"></el-checkbox>
+                        </el-checkbox-group>
                     </div>
                 </li>
                 <li>
@@ -21,26 +23,26 @@
                     <i class="icon icon3"></i>
                     <span>参数设置</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag4">
+                    <div class="menuOption" v-show="flag4" style="height:208px">
                         <p @click="tudeShow(tudeShow)">经纬度设置</p>
                         <p @click="plane">飞机轨迹</p>
                         <p @click="submarine">潜艇轨迹</p>
-
+                        <p @click="tiles">高程模型</p>
                     </div>
                 </li>
                 <li @click="geshi(flag5)">
                      <i class="icon icon9"></i>
                     <span>地图格式</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag5" style="left:478px;height:260px;">
+                    <div class="menuOption" v-show="flag5" style="left:478px;height:310px;">
                         <el-radio-group v-model="mapType" size="small" @change="mapType1(mapType)">
                             <el-radio label="haitu">海图格式</el-radio>
                             <el-radio label="shp格式">shp格式</el-radio>
                             <el-radio label="GeoTiff">GeoTiff格式</el-radio>
                             <el-radio label="png格式">png格式</el-radio>
                             <el-radio label="jysl格式">军用矢量格式</el-radio>
-                        </el-radio-group>
-                        
+<!--                            <el-radio label="mercator">海图墨卡托投影</el-radio>-->
+                        </el-radio-group>                      
                     </div>
                 </li>
             </ul>
@@ -55,10 +57,24 @@
         </div>
         <div class="cmsNav cms-right">
              <ul>
-                <li @click="planeLine"><i class="icon icon10"></i><span>飞行包线</span></li>
-                <li @click="controller(flag1)"><i class="icon icon4"></i><span>图层控制</span></li>
-                <li @click="tool(flag)"><i class="icon icon5"></i><span>绘图工具</span></li>
-                <li @click="events(flag3)"><i class="icon icon7"></i><span>事件悬浮面板</span></li>
+                 <li @click="tyClick(flag5)" style="padding: 0 18px">
+                     <i class="icon icon9"></i>
+                     <span>投影方式</span>
+                     <i class="icon icon8"></i>
+                     <div class="menuOption" style="left:10px;height:270px;" v-show="tyShow">
+                         <el-radio-group v-model="tyType" size="small" @change="tyChange(tyType)">
+                              <el-radio label="mercator">墨卡托投影</el-radio>
+                             <el-radio label="lanbote">兰伯特投影</el-radio>
+                             <el-radio label="Bonner">伯纳投影</el-radio>
+                             <el-radio label="StereoGraphic">球极平面投影</el-radio>
+                             <el-radio label="Ronbinson">罗宾逊投影</el-radio>
+                         </el-radio-group>
+                     </div>
+                 </li>
+                <li style="padding: 0 18px" @click="planeLine"><i class="icon icon10"></i><span>飞行包线</span></li>
+                <li style="padding: 0 18px" @click="controller(flag1)"><i class="icon icon4"></i><span>图层控制</span></li>
+                <li style="padding: 0 18px" @click="tool(flag)"><i class="icon icon5"></i><span>绘图工具</span></li>
+                <li style="padding: 0 18px" @click="events(flag3)"><i class="icon icon7"></i><span>事件悬浮面板</span></li>
                 <!-- <li @click="clip"><i class="icon icon6"></i><span>截屏</span></li> -->
                 <!--<li style="margin-right: 30px;"><i class="icon icon7"></i><span>FPS信息：{{FPS}}</span></li>-->
             </ul>
@@ -131,12 +147,13 @@
                                     :key="'航迹点' + index"
                                     :prop="'domains.' + index + '.value'"
                             >
+                                 <el-input type='number' style="width: 35%;margin-right: 10px" v-model="domain.wd">
+                                    <i slot="suffix">纬度</i>
+                                </el-input>
                                 <el-input type='number' style="width: 35%;margin-right: 10px;" v-model="domain.jd">
                                     <i slot="suffix">经度</i>
                                 </el-input>
-                                <el-input type='number' style="width: 35%;margin-right: 10px" v-model="domain.wd">
-                                    <i slot="suffix">纬度</i>
-                                </el-input>
+                               
                                 <el-button type="danger" @click.prevent="removeDomain(domain)">删除</el-button>
                             </el-form-item>
                         </el-col>
@@ -151,18 +168,18 @@
                     <el-form :model="dynamicValidateForm2" ref="dynamicValidateForm2" label-width="100px" class="demo-dynamic">
                         <el-col>
                             <li v-for="(domain, index) in dynamicValidateForm2.domains">
-                                <div style="margin: 5px 0">
-                                    <span style="font-size: 16px;margin-right: 5px">经度:{{index+1}}</span>
-                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd1"/>°
-                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd2"/>′
-                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd3"/>″
-                                </div>
-                                <div style="margin: 5px 0">
+                                 <div style="margin: 5px 0">
                                     <span style="font-size: 16px;margin-right: 5px">纬度:{{index+1}}</span>
                                     <el-input size="small" style="width: 25%" type='number' v-model="domain.wd1"/>°
                                     <el-input size="small" style="width: 25%" type='number' v-model="domain.wd2"/>′
                                     <el-input size="small" style="width: 25%" type='number' v-model="domain.wd3"/>″
                                     <el-button size="small" type="danger" @click.prevent="removeDomain2(domain)">删除</el-button>
+                                </div>
+                                <div style="margin: 5px 0">
+                                    <span style="font-size: 16px;margin-right: 5px">经度:{{index+1}}</span>
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd1"/>°
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd2"/>′
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd3"/>″
                                 </div>
                             </li>
                         </el-col>
@@ -198,14 +215,14 @@
                              <el-form-item label="航迹点" style="width:10%">
                                 <span>{{item.sx+1}}</span>
                             </el-form-item>
-                            <el-form-item label="经度" style="width:30%">
-                                <el-input v-if="item.isOK" v-model="item.jd" style="width:100%;hight:100%"></el-input>
-                                <span v-else @click="dbclick(item)">{{ item.jd }}</span>
-                            </el-form-item>
                             <el-form-item label="纬度" style="width:30%">
                                 <el-input v-if="item.isOK" v-model="item.wd" style="width:100%;hight:100%"></el-input>
                                 <span v-else @click="dbclick(item)">{{ item.wd}}</span>
                                 <span></span>
+                            </el-form-item>
+                             <el-form-item label="经度" style="width:30%">
+                                <el-input v-if="item.isOK" v-model="item.jd" style="width:100%;hight:100%"></el-input>
+                                <span v-else @click="dbclick(item)">{{ item.jd }}</span>
                             </el-form-item>
                             <el-form-item style="width:15%" v-if="i===props.row.hjds.length-1">
                                <el-button type="primary" size="small" @click="drawPolygon1(props)">修改</el-button>
@@ -270,6 +287,7 @@
 
 <script>
 import Params from "../../assets/map/params.js";
+import ParamsQT from "../../assets/map/paramsQT.js";
 import CMap from "../../assets/map/CMap.js"
 export default {
     props: ["WebSocketData","FBnum","timeNow","eventsF"],
@@ -321,16 +339,13 @@ export default {
                 }],
             },
             lineId:[],
-            menuData:{
-			  '飞行曲线':'',
-			  '浮标投放信息':'',
-              '磁探探测目标':'',
-              '浮标探测目标':''
-           },
-            menuDataType1:true,
-            menuDataType2:true,
-            menuDataType3:true,
-            menuDataType4:true,
+        //     menuData:{
+		// 	  '飞行曲线':'',
+		// 	  '浮标投放信息':'',
+        //       '磁探探测目标':'',
+        //       '浮标探测目标':''
+        //    },
+            menuData:['飞行曲线','浮标投放信息','磁探探测目标','浮标探测目标'],
             formInline: {
                 len: ''
             },
@@ -338,23 +353,46 @@ export default {
                 len: ''
             },
             mapType:'haitu',
+            tyType:"",
             selectFs:'jwd',
             jwdType:true,
             dfmType:false,
             hjName:'',
             tableData:[],
             jingweiduVisible:false,
-            handleCurrentData:{}
+            handleCurrentData:{},
+            tilesShow:false,
+            tyShow:false
 		}
 	},
 	methods: {
+        handleChecked(menuData){
+            this.$emit('flagType',this.menuData)
+        },
+        tyChange(s){
+            window.Map.viewerImagery['shp格式'].show = false;
+            window.Map.viewerImagery['GeoTiff'].show = false;
+            window.Map.viewerImagery['png格式'].show = false;
+            window.Map.viewerImagery['jysl格式'].show = false;
+            window.Map.viewerImagery['lanbote'].show = false;
+            window.Map.viewerImagery['Bonner'].show = false;
+            window.Map.viewerImagery['mercator'].show = false;
+            window.Map.viewerImagery['haitu'].show = false
+            window.Map.viewerImagery['StereoGraphic'].show = false;
+            if(s == "Ronbinson"){
+
+            } else {
+                window.Map.viewerImagery[s].show = true;
+            }
+        },
         mapType1(mapType){
             window.Map.viewerImagery['haitu'].show = false
             window.Map.viewerImagery['shp格式'].show = false
             window.Map.viewerImagery['GeoTiff'].show = false
             window.Map.viewerImagery['png格式'].show = false
             window.Map.viewerImagery['jysl格式'].show = false
-            window.Map.viewerImagery[mapType].show = true
+           
+            window.Map.viewerImagery[mapType].show = true  
         },
         CurentTime(time){
             var now = new Date(time);
@@ -428,13 +466,22 @@ export default {
           this.planeVisible = !this.planeVisible
         },
         dataShow(flag2){
-           this.flag2 = !flag2;          
+           this.flag2 = !flag2;   
+           this.flag4 = false;     
+           this.flag5 = false; 
+           this.tyShow = false;   
         },
         optionShow(flag4){
-           this.flag4 = !flag4; 
+            this.flag4 = !flag4; 
+            this.flag2 = false;     
+            this.flag5 = false; 
+            this.tyShow = false;  
         },	
         geshi(flag5){
-           this.flag5 = !flag5
+            this.flag5 = !flag5
+            this.flag2 = false;     
+            this.flag4 = false; 
+            this.tyShow = false;  
         },
         tool(flag){
             this.flag = !flag;
@@ -448,15 +495,32 @@ export default {
             this.flag3 = !flag3;
             this.$emit("events",this.flag3)  
         },
+        tyClick(){
+             this.flag4 = false; 
+            this.flag2 = false;     
+            this.flag5 = false; 
+            this.tyShow = !this.tyShow
+        },
         tudeShow(){
             this.jwdVisible =true;
             this.dynamicValidateForm.domains=[{jd: "", wd:"", key: ""}];
+            this. dynamicValidateForm2.domains=[{jd1: "",jd2: "0",jd3: "0",wd1:"",wd2:"0",wd3:"0",key: ""}];           
         },
         plane(){
             this.feijiVisible = true;
         },
         submarine(){
             this.dunkerVisible = true;
+        },
+        tiles(){
+            this.tilesShow = true;
+            if(this.tilesShow){
+
+                // window.Map.viewer.scene.primitives.add(Tileset)
+                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[5])
+                window.Map.Tileset._primitives[5].show = this.tilesShow
+            }
+           
         },
         addDomain() {
             this.dynamicValidateForm.domains.push({
@@ -497,7 +561,7 @@ export default {
                 this.$message.error('潜艇轨迹长度不能大于5000！');
                 return false
             }
-            Params.path.len = Number(this.form.len)
+            ParamsQT.path.len = Number(this.form.len)
             this.dunkerVisible = false;
         },
         drawPolygon(){
@@ -810,7 +874,8 @@ export default {
                             that.$message.error('保存航迹线失败！');
                         }
                         if(data == 1){
-                            that.$message.success('保存航迹线成功！')
+                            that.$message.success('保存航迹线成功！');
+
                         }
                         if(data == 2){
                             that.$message.error('航迹线名称重复！');
@@ -1035,52 +1100,6 @@ export default {
              isDown = false;
              dv.style.cursor = 'default';
          }
-        $(".event-menu-checkbox[type=checkbox]+span").click((e) => {
-            console.log($(e.target).html())
-            if($(e.target).html()){
-                    $(e.target).html('')
-                    if($(e.target).data('type') == "飞行曲线"){
-                        this.menuDataType1 = false
-                        delete this.menuData[$(e.target).data('type')]
-                        this.$emit('flagType1',this.menuDataType1)
-                    }
-                   if($(e.target).data('type') == "浮标投放信息"){
-                        this.menuDataType2 = false
-                        delete this.menuData[$(e.target).data('type')]
-                        this.$emit('flagType2',this.menuDataType2)
-                    }
-                    if($(e.target).data('type') == "磁探探测目标"){
-                        this.menuDataType3 = false
-                        delete this.menuData[$(e.target).data('type')]
-                        this.$emit('flagType3',this.menuDataType3)
-                    }
-                    if($(e.target).data('type') == "浮标探测目标"){
-                        this.menuDataType4 = false
-                        delete this.menuData[$(e.target).data('type')]
-                        this.$emit('flagType4',this.menuDataType4)
-                    }
-                    
-            }else{
-                    this.menuData[$(e.target).data('type')] = ''
-                    $(e.target).html('✔')
-                     if($(e.target).data('type') == "飞行曲线"){
-                        this.menuDataType1 = true
-                        this.$emit('flagType1',this.menuDataType1)
-                    }
-                   if($(e.target).data('type') == "浮标投放信息"){
-                        this.menuDataType2 = true
-                        this.$emit('flagType2',this.menuDataType2)
-                    }
-                    if($(e.target).data('type') == "磁探探测目标"){
-                        this.menuDataType3 = true
-                        this.$emit('flagType3',this.menuDataType3)
-                    }
-                    if($(e.target).data('type') == "浮标探测目标"){
-                        this.menuDataType4 = true
-                        this.$emit('flagType4',this.menuDataType4)
-                    }
-            }
-        })
     },
     watch: {
 
@@ -1110,8 +1129,8 @@ export default {
         width: 100%;
         position: fixed;
         top: 0;
-        z-index: 10;
-        height: 86px;
+        z-index: 1;
+        height: 85px;
         display: block;
         justify-content: flex-end;
         background: url(../../assets/header/nav.png) no-repeat;
@@ -1124,11 +1143,19 @@ export default {
     }
     .cmsNav .menu{
         position: absolute;
-        width: 134px;
-        height: 210px;
+        width: 137px;
+        height: 220px;
         top: 53px;
         left: 29px;
         background-color: #102d58;
+        text-align: left;
+        /* padding-left: 20px; */
+    }
+     .cmsNav .menu .el-checkbox {
+        cursor: pointer;
+        margin-right: 0;
+        width: 100%;
+        padding-left: 20px;
     }
     .menu{
         display: flex;
@@ -1160,20 +1187,25 @@ export default {
     }
     .menuOption{
         position: absolute;
-        width: 134px;
+        width: 117px;
         height: 157px;
         top: 53px;
         left: 323px;
         background-color: #102d58;
         display: flex;
         justify-content: space-around;
-        align-items: center
+        align-items: center;
+        text-align: left;
+        padding-left: 20px;
     }
     .cms-nav .cms-left span{
         color: #27c1e9;;
         font-size: 12px;
         /* letter-spacing: 4px; */
         padding-left: 2px;
+    }
+    .cms-nav .cms-right span{
+        color: #27c1e9;;
     }
     .cms-nav .cms-middle{
          margin:0;
@@ -1230,7 +1262,7 @@ export default {
         cursor: pointer;
     }
     .cmsNav ul li .icon{
-         display: inline-block;
+        display: inline-block;
         width: 16px;
         height: 15px;
         background-repeat: no-repeat;
@@ -1265,7 +1297,7 @@ export default {
         background: url(../../assets/header/xinxi.png);      
     }
     .cmsNav ul li .icon9{
-        background: url(../../assets/header/diqiu.png);      
+        background: url(../../assets/header/ic_jieping.png);
         width: 17px;
         height: 17px;
     }
@@ -1315,9 +1347,9 @@ export default {
         top: 3px;
         margin:0 10px;  
     }
-    .cmsNav ul li span{
+    /* .cmsNav ul li span{
         display: inline;
-     }
+     } */
      .cmsNav ul li div{
         display: inline;
      }
@@ -1326,7 +1358,6 @@ export default {
         position: relative;
         color: white;
         margin:0;
-
     }
     .cmsNav li{
         cursor: pointer;
@@ -1340,6 +1371,9 @@ export default {
     .planeLine img{
        margin-right: 20px;
     }
+    .planeDiv .el-dialog__body {
+        padding: 30px 10px 30px 20px;
+   }
     .el-radio__input{
        display:inline-flex !important;
      }

@@ -2,6 +2,7 @@ import Calculater from '../tools/calculater.js';
 import Tools from '../tools/tools.js';
 
 import Params from "../params.js";
+import ParamsQT from "../paramsQT.js";
 
 
 const Drawer     = require('../drawer/Draw.js');
@@ -45,7 +46,6 @@ export default class Player{
     }
 
     Update( id, position, origin, callback ){
-
         // console.log(window.Map.Tool.GetId(id))    
         let target = sourceData[id];
         if( target ){
@@ -61,16 +61,22 @@ export default class Player{
 
                 return;
             }
+           if(id =="plane_1"){
+                if(target.path.length > Params.path.len){
+                    target.path.shift()
+                    target.path.shift()
+                    target.path.shift()
+                }
+           }
+           if(id =="subMarine_1"){
+                if(target.path.length > ParamsQT.path.len){
+                    target.path.shift()
+                    target.path.shift()
+                    target.path.shift()
+                } 
+           }
+            
            
-            if(target.path.length > Params.path.len){
-                // console.log((target.path.length - Params.path.len))
-                // _.times( (target.path.length - Params.path.len) ,()=>{
-                //     target.path.shift()
-                // })
-                target.path.shift()
-                target.path.shift()
-                target.path.shift()
-            }
             target.path.push(position[0])
             target.path.push(position[1])
             target.path.push(position[2])
@@ -79,21 +85,21 @@ export default class Player{
 
             target.entity.position = Ce.ToPoint(position);
 
-            // let angle = Ce.CalcAngle(  [_pos.lon,_pos.lat], position );
+            let angle = Ce.CalcAngle(  [_pos.lon,_pos.lat], position );
 
             let _orientation = Ce.ToOrientation(position, Ce.ToRadians( Number(origin.hjj || origin.hx) - 90 ), 0, 0);
                 
             target.entity.orientation = _orientation;
-
-            target.entity.billboard.rotation = Ce.ToRadians( 360 - Number(origin.hjj || origin.hx));
-
+            if(origin.hjj || origin.hx){
+                target.entity.billboard.rotation = Ce.ToRadians( 360 - Number(origin.hjj || origin.hx));
+            }
             let _lpos = Ce.ToPointsHeight( target.path );
 
             target.entity.polyline.positions = new Cesium.CallbackProperty(function(){
 
                 return _lpos
             },false)
-
+            
             if(callback){
 
                 let info = {

@@ -105,9 +105,10 @@ export default class Detect{
         _.forEach(sourceData, (single) => {
             let id = single.target.id;
             let detector = Tool.GetId(id);
-           if(single.target.origin.fbzt == "成活"){
-               detector.billboard.image = '/static/image/junbiao/fubiao1.png'
-           } else if(single.target.origin.fbzt == "死亡"){
+        //    if(single.target.origin.fbzt == "成活"){
+        //        detector.billboard.image = '/static/image/junbiao/fubiao1.png'
+        //    } else
+            if(single.target.origin.fbzt == "死亡"){
                detector.billboard.image = '/static/image/junbiao/fubiao5.png'
            } else if(single.target.origin.fbzt == "失联"){
                detector.billboard.image = '/static/image/junbiao/fubiaosl.png'
@@ -136,7 +137,7 @@ export default class Detect{
 
     LinkOn( detectorId, link ){
         let detector = Tool.GetId(detectorId);
-
+        //  debugger
         if(!detector){
             return
         }
@@ -144,12 +145,18 @@ export default class Detect{
         link.positions = _.map(link.positions, (item) => {
             return (item).toFixed(2)
         })
-
-
         let detecPosition = Tool.GetGps(detector.position._value);
-        // let ToName = Ce.ToName(linePosition)
+        let linePosition = []
+        if(detecPosition){
+            linePosition = [detecPosition.lon, detecPosition.lat].concat(link.positions);
+        }else{
+            linePosition = detector.origin.positions.concat(link.positions);
+        }
 
-        let linePosition = [detecPosition.lon, detecPosition.lat].concat(link.positions);
+        
+        // let ToName = Ce.ToName(linePosition)
+    
+      
 
 
         let linked = Tool.GetId(link.id);
@@ -175,7 +182,7 @@ export default class Detect{
                 if(key.indexOf('dwfbxh') != -1){
                     if(Tool.GetId('detector_'+link.origin[key])){
                         name += Tool.GetId('detector_'+link.origin[key])._origin.origin.sptdh+'/'
-                        console.log(Tool.GetId('detector_'+link.origin[key])._origin.origin.sptdh)
+                        // console.log(Tool.GetId('detector_'+link.origin[key])._origin.origin.sptdh)
                     }
                     
                 }
@@ -188,7 +195,7 @@ export default class Detect{
                 group:'detector_mb',
                 label:{
                     font:'12px bold',
-                    text:`${name}S\n${(Ce.Distance([detecPosition.lon, detecPosition.lat], link.positions)).toFixed(2)/1000} km`,
+                    text:`${name}S\n${((Ce.Distance(detector.origin.positions, link.positions))/1000).toFixed(2)}km`,
                     fillColor:Cesium.Color.BLUE,
                     verticalOrigin:Cesium.VerticalOrigin.BOTTOM,
                     pixelOffset:Ce.XY2D(0,-10)

@@ -190,7 +190,7 @@ background: none !important;
 }
 .seamless-warp{
   position: fixed !important;
-  bottom: 20%;
+  bottom: 22%;
   right: 50px;
   height: 500px;
   overflow-y: auto;
@@ -361,8 +361,8 @@ background: none !important;
   max-width: 80%;
 }
 .cesium-viewer-toolbar{
-  top:60px;
-  right:10px
+  top:110px;
+  right:50px
 }
 </style>
 
@@ -370,10 +370,7 @@ background: none !important;
   <div class="MapContainer">
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
     <gis-header :timeNow="timeNow"
-      @flagType1="flagType1"
-      @flagType2="flagType2"
-      @flagType3="flagType3"
-      @flagType4="flagType4"
+      @flagType="flagType"
       @mapTool="maptool"
       @controller="controller"
       @events="events"
@@ -442,89 +439,17 @@ background: none !important;
         </div> 
       </div>
     </div>
-
-     <!-- <vue-seamless-scroll  id='mySeamless'  style="background: rgba(8, 38, 93, 0.5)"  :data="notifyList" :class-option="optionSingleHeight" class="seamless-warp">
-        <div  class="notifyDiv myMsgList" > 
-          <div  :style="{'height':item.typeall === 'FBSJ'?'160px':'130px'}" class="notify" v-for="(item, i) in notifyList " :key="i">
-            <div   v-if="item.typeall === 'FBSJ'" >
-              <p>
-                <span>事件</span><span style="color:#ffd400">浮标投放</span>
-              </p>
-              <p>
-                <span>时间</span><span>{{item["sb"]?item["sb"].split('.')[0]:item["sb"]}}</span>
-              </p>
-              <p>
-                <span>编号</span><span>{{item["fbbh"]}}</span>
-              </p>
-              <p>
-                <span>经度</span><span>{{item["llcrswzjd"]}}</span>
-              </p>
-              <p>
-                <span>纬度</span><span>{{item["llcrswzwd"]}}</span>
-              </p>
-            </div>
-            <div  v-if="item.typeall === 'CTMBSJ'">
-              <p>
-                <span>事件</span><span style="color:#ffd400">磁探发现目标</span>
-              </p>
-              <p>
-                <span>时间</span><span>{{item["mbsj"]?item["mbsj"].split('.')[0]:item["mbsj"]}}</span>
-              </p>
-              <p>
-                <span>经度</span><span>{{item["mbjd"]}}</span>
-              </p>
-              <p>
-                <span>纬度</span><span>{{item["mbwd"]}}</span>
-              </p>
-            </div>
-            <div  v-if="item.typeall === 'FBMBSJ'">
-              <p>
-                <span>事件</span><span style="color:#ffd400">浮标发现目标</span>
-              </p>
-              <p>
-                <span>时间</span><span>{{item["mbsj"]?item["mbsj"].split('.')[0]:item["mbsj"]}}</span>
-              </p>
-              <p>
-                <span>经度</span><span>{{item["mbwzjd"]}}</span>
-              </p>
-              <p>
-                <span>纬度</span><span>{{item["mbwzwd"]}}</span>
-              </p>
-            </div>
-          </div> 
-        </div>
-      </vue-seamless-scroll> -->
-      <div v-show='eventType' class="time-label"  :style="{top: topNum + 'px', left: leftNum + 'px'}">
-         <ul>
-            <li style="color:#ffffff">事件时间：<input type='text' v-model="newEventDate"/></li>
-            <li><p style="font-size:12px;color:red;">时间格式为：2019-04-25 13:30:30</p></li>
-            <li style="color:#ffffff">事件内容：<input type='text' v-model="eventVal"/></li>
-            <li class="events-btn">
-                <div @click='eventConfirm'>确定</div>
-                <div @click='eventCancel'>取消</div>
-            </li>
-         </ul>
-      </div>
-    <!-- <div class="MBCS" v-show='isShow'>
-        <div class="mbfj">
-          <div style="width: 300px;height: 237px;">
-            <div class="head-hidden"  @mousedown="draggerStart($event)"></div> 
-            <div class="close" @click="isShow=false">
-              x
-            </div>
-            <div class="nav">目标参数</div>
-            <div class="cont">
-                 <ul >
-                    <li><span>经度</span><span>{{feijiCout['zjjd']}}</span></li>
-                    <li><span>纬度</span><span> {{feijiCout['zjwd']}}</span></li>
-                    <li><span>高度</span><span>{{feijiCout['gxqyg']}} 米</span></li>
-                    <li><span>速度</span><span>{{feijiCout['ds']}} km/h</span></li>
-                    <li><span>武器清单</span><span></span></li>
-                 </ul>
-            </div>
-          </div>
-        </div>
-    </div> -->
+    <div v-show='eventType' class="time-label"  :style="{top: topNum + 'px', left: leftNum + 'px'}">
+        <ul>
+        <li style="color:#ffffff">事件时间：<input type='text' v-model="newEventDate"/></li>
+        <li><p style="font-size:12px;color:red;">时间格式为：2019-04-25 13:30:30</p></li>
+        <li style="color:#ffffff">事件内容：<input type='text' v-model="eventVal"/></li>
+        <li class="events-btn">
+            <div @click='eventConfirm'>确定</div>
+            <div @click='eventCancel'>取消</div>
+        </li>
+        </ul>
+    </div>
     <time-line
       @hingeMsgEvent="hingeMsgEvent"
       @timeDown="timeDown"
@@ -551,10 +476,7 @@ background: none !important;
       :dataInfo="dataInfo"
       :WebSocketData="WebSocketData"
       @uploading="uploading"
-      :flagTypeOne="flagTypeOne" 
-      :flagTypeTwo="flagTypeTwo" 
-      :flagTypeThree="flagTypeThree" 
-      :flagTypeFour="flagTypeFour" 
+      :flagTypeList="flagTypeList" 
     ></replay>
     <info v-if="sleC" :dataInfo="buoyInfo" :visible="showInfo" @close="showInfo=false"></info>
     <selects-elm
@@ -664,11 +586,8 @@ export default {
       topNum:0,
       leftNum:0,
       jiaciName:'',
-      flagTypeOne:true,
-      flagTypeTwo:true,
-      flagTypeThree:true,
-      flagTypeFour:true,
-      FPS:0
+      FPS:0,
+      flagTypeList:[]
     };
   },
 
@@ -740,7 +659,7 @@ export default {
         setTimeout(()=>{
           this.eventsF = false
           
-        },70000)
+        },75000)
       }
      
     });
@@ -1004,17 +923,8 @@ export default {
     eventCancel(){
        this.eventType =false;
     },
-    flagType1(type){
-      this.flagTypeOne = type;
-    },
-    flagType2(type){
-       this.flagTypeTwo = type;
-    },
-    flagType3(type){
-        this.flagTypeThree = type;
-    },
-    flagType4(type){
-        this.flagTypeFour = type;
+    flagType(type){
+      this.flagTypeList = type;
     },
     maptool(flag){
       this.toolF = flag;
@@ -1119,6 +1029,7 @@ export default {
      * 选择数据框确认事件
      */
     selectConfirm() {
+       
       this.selectF = false;
       let that = this;
       let pos = this.$refs["selectsElm"].pos;
@@ -1146,8 +1057,11 @@ export default {
                 //time:null,
                 sjid: this.selectId
               }).then(data => {
-                window.Map.Tool.FlyTo([Number(data.zjjd), Number(data.zjwd), 2000000]);
-              
+                   if(data != ""){
+                        window.Map.Tool.FlyTo([Number(data.zjjd), Number(data.zjwd), 2000000]);
+                   }else{
+                        window.Map.Tool.FlyTo([109.998287,18.073213, 2000000]);
+                   }
               });
               $.ajax({
                 type: "get",
@@ -1301,10 +1215,6 @@ export default {
 
       this.playFLAG = true;
     },
-   doubleClick(){
-     debugger
-     alert("1111")
-   },
     toDate(str) {
       var date = new Date(str).toJSON();
 
@@ -1411,6 +1321,7 @@ export default {
           // let arr = notifyList
           
           that.notifyList = that.bSort(notifyList)
+          that.eventsF = true
       }
 
       // that.notifyType = 'SDSJ'
@@ -1500,7 +1411,7 @@ export default {
       let notifyList = [];
       that.notifyType = '';
       // debugger
-      // window["Map"].viewer.entities.removeAll();
+      //window["Map"].viewer.entities.removeAll();
       let arr = [];
       if(window["Map"].viewer.entities.values.length){
         window["Map"].viewer.entities.values.map(s=>{
@@ -1563,7 +1474,8 @@ export default {
         //     }
         //   }
         // console.log(that.bSort(notifyList))
-          that.notifyList = that.bSort(notifyList)
+        that.notifyList = that.bSort(notifyList)
+        that.eventsF = true
       }
      
       // 处理浮标数据
@@ -1582,10 +1494,10 @@ export default {
             if(item.fblx=="主动全向"){
               FBLX = 'R'
             }
-            if(item.fblx=="海噪声"){
+            if(item.fblx=="海噪声浮标"){
               FBLX = 'A'
             }
-            if(item.fblx=="温深"){
+            if(item.fblx=="温深浮标"){
               FBLX = 'B'
             }
            window.Map.Detector.Add({
@@ -1681,51 +1593,139 @@ export default {
       viewer.clock.startTime = startTime;
       viewer.clock.stopTime = stopTime;
 
-      that.setZZ()
-      
+      that.setZZ();
+      let wait = 0;
 
       viewer.timeline.addEventListener(
         "mouseup",
         function(e) {
-          // console.log()
+           console.log(wait)
+            if(wait == 0){
+                let end = new Date(that.allDate.endT),
+                    start = new Date(that.allDate.startT),
+                    s = end.getTime() - start.getTime()
+                let a = e.pageX-Number($("#visualization").css('margin-left').split('px')[0]).toFixed(2),
+                    b = $(".cesium-timeline-bar").css('width').split('px')[0],
+                    zhTime = new Date(start.getTime()+(parseInt((a/b).toFixed(3)*s)))
+                    console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime),zhTime)
+                    that.newEventDate = zhTime  
+                    that.eventType = false
+                
+                    window.Map.FlyCompare.ClearPath();
+                    that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+                    that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+                     $.ajax({
+                        type: "get",
+                        // dataType: "json",
+                        url: `${globalUrl.host}/find/findSystemStatus`,
+                        // contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                        data: {
+                            groupNum: sessionStorage.getItem("groupNum")
+                        }, //将js对象转成json对象
+                        success: function(data) {
+                            if(data.yxzt == 1){
+                            $.get(`${globalUrl.host}/find/triggerSocket`, {
+                                startTime: zhTime,
+                                name: sessionStorage.getItem("groupNum"),
+                                id: that.selectId
+                            }).then(data => {
+                                that.playFLAG = true;
+                                that.$refs.timeLine.playFlag = true;
+                                that.setZZTime()
+                                that.diffTime(zhTime);
+                                // that.num = 0;
+                                // that.$refs["timeLine"].num = that.num;
+                            });
+                            }else if(data.yxzt == 2){
+                            $.get(`${globalUrl.host}/find/triggerSocket`, {
+                                startTime: zhTime,
+                                name: sessionStorage.getItem("groupNum"),
+                                id: that.selectId
+                            }).then(data => {
+                                that.playFLAG = true;
+                                that.$refs.timeLine.playFlag = true;
+                                that.setZZTime()
+                                that.diffTime(zhTime);
+                                $.get(`${globalUrl.host}/find/pauseAndStart`, {
+                                name: sessionStorage.getItem("groupNum")
+                                }).then(data => {
+                                window.Map.viewer.clock.shouldAnimate = false;
+                                });
+                                // that.num = 0;
+                                // that.$refs["timeLine"].num = that.num;
+                            });
+                            }
+                        }
+                    })
+                    wait = 2;
+            }else{ 
+                setInterval(()=>{
+                    if(wait > 0){
+                        wait--;
+                    }else{
+                        wait = 0;
+                    }                  
+                },1000)              
+                that.$message('请不要频繁点击跳转！')
+                
+            }
 
-          let end = new Date(that.allDate.endT),
-            start = new Date(that.allDate.startT),
-            s = end.getTime() - start.getTime()
-          let a = e.pageX-Number($("#visualization").css('margin-left').split('px')[0]).toFixed(2),
-              b = $(".cesium-timeline-bar").css('width').split('px')[0],
-              zhTime = new Date(start.getTime()+(parseInt((a/b).toFixed(3)*s)))
-          // console.log((a/b).toFixed(3)*s,new Date(start.getTime()+(parseInt((a/b).toFixed(3)*s))),start+(parseInt((a/b).toFixed(3)*s)))    
-          // console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime))
-          // return
-          // var dfTime = (viewer.clock.currentTime.dayNumber - startTime.dayNumber)*86400 + (viewer.clock.currentTime.secondsOfDay - startTime.secondsOfDay)
-          
-            console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime),zhTime)
-            that.newEventDate = zhTime
-            // that.progress(that.formatSeconds(dfTime),totleTime)
-            // console.log(viewer.clock)
+        //   let end = new Date(that.allDate.endT),
+        //     start = new Date(that.allDate.startT),
+        //     s = end.getTime() - start.getTime()
+        //   let a = e.pageX-Number($("#visualization").css('margin-left').split('px')[0]).toFixed(2),
+        //       b = $(".cesium-timeline-bar").css('width').split('px')[0],
+        //       zhTime = new Date(start.getTime()+(parseInt((a/b).toFixed(3)*s)))
+        //     console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime),zhTime)
+        //     that.newEventDate = zhTime
             
-            that.eventType = false
+        //     that.eventType = false
           
-          window.Map.FlyCompare.ClearPath();
-          that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
-          that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
-          $.get(`${globalUrl.host}/find/triggerSocket`, {
-            startTime: zhTime,
-            name: sessionStorage.getItem("groupNum"),
-            id: that.selectId
-          }).then(data => {
-            that.playFLAG = true;
-            that.$refs.timeLine.playFlag = true;
-            that.setZZTime()
-            that.diffTime(zhTime);
-            // that.num = 0;
-            // that.$refs["timeLine"].num = that.num;
-          });
+        //   window.Map.FlyCompare.ClearPath();
+        //   that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+        //   that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+        //    $.ajax({
+        //       type: "get",
+        //       url: `${globalUrl.host}/find/findSystemStatus`,
+        //       data: {
+        //         groupNum: sessionStorage.getItem("groupNum")
+        //       }, //将js对象转成json对象
+        //       success: function(data) {
+        //         if(data.yxzt == 1){
+        //           $.get(`${globalUrl.host}/find/triggerSocket`, {
+        //             startTime: zhTime,
+        //             name: sessionStorage.getItem("groupNum"),
+        //             id: that.selectId
+        //           }).then(data => {
+        //             that.playFLAG = true;
+        //             that.$refs.timeLine.playFlag = true;
+        //             that.setZZTime()
+        //             that.diffTime(zhTime);
+        //           });
+        //         }else if(data.yxzt == 2){
+        //           $.get(`${globalUrl.host}/find/triggerSocket`, {
+        //             startTime: zhTime,
+        //             name: sessionStorage.getItem("groupNum"),
+        //             id: that.selectId
+        //           }).then(data => {
+        //             that.playFLAG = true;
+        //             that.$refs.timeLine.playFlag = true;
+        //             that.setZZTime()
+        //             that.diffTime(zhTime);
+        //             $.get(`${globalUrl.host}/find/pauseAndStart`, {
+        //               name: sessionStorage.getItem("groupNum")
+        //             }).then(data => {
+        //               window.Map.viewer.clock.shouldAnimate = false;
+        //             });
+        //           });
+        //         }
+        //       }
+        //    })
+
         },
         false
       );
-    
+
       this.startXd();
 
       that.progress(nowTime,totleTime)
@@ -1994,6 +1994,7 @@ export default {
     init() {
       let that = this;
       window["Map"] = CMap.Init("mapElement", {});
+
       console.log('window.Map',window.Map)
       this.bindEvents();
       
@@ -2024,6 +2025,7 @@ export default {
 
       setTimeout(() => {
         this.initTimeLine();
+        window.Map.Tool.FlyTo([110.468746, 17.076428, 2000000]);
       }, 300);
     },
 
@@ -2032,6 +2034,7 @@ export default {
      */
     buildSocket(type) {
       const _this = this;
+      let WQGJList = [] 
       console.log('打开ws')
       // window.Map.viewer.clock.shouldAnimate = true;
 
@@ -2078,7 +2081,78 @@ export default {
             }
           } else {
             _this.dealMessage(JSON.parse(e.data));
-            console.log(JSON.parse(e.data))
+            let dataList = JSON.parse(e.data)
+        //    console.log(JSON.parse(e.data))
+            let wqgj_tem_xt=[]
+            let wqgj_tem_bt=[]
+            let dyc=true;
+            let sfywq=false
+            dataList.map(item=>{
+                if(item.type == "WQGJ"){
+                    sfywq=true
+                    if(WQGJList.length ==0){
+                        WQGJList = item.data
+                    }else{
+                        dyc=false;                      
+                       item.data.map(index=>{
+                           let _falg=true;
+                           WQGJList.map(list =>{    
+                            if(list.mc == index.mc){
+                                    wqgj_tem_xt.push(index)
+                                    _falg=false;
+                                    return;                               
+                                }       
+                          
+                            }) 
+                            if(_falg){
+                                wqgj_tem_bt.push(index)
+                            }
+                       })
+                 
+                    }
+                   
+                }
+            }) 
+            if(!sfywq){
+                if(WQGJList.length>0){
+                        WQGJList.map(item=>{
+                            window["Map"].viewer.entities.removeById(item.mc)
+                        })
+                    }
+            }
+            if(!dyc){
+            let _ls_data=[]
+            if(WQGJList.length > 0){
+                WQGJList.map(item=>{
+                    let _f_f=true;
+                    if(wqgj_tem_xt.length > 0){
+                        wqgj_tem_xt.map(_item=>{
+                            if(item.mc!=_item.mc){
+                                _f_f=false;
+                            }
+                        })
+                        if(!_f_f){
+                            _ls_data.push(item)
+                        }
+                       
+                    }
+
+                })
+                    //删除
+                    if(_ls_data.length >0){
+                        _ls_data.map(item=>{
+                            // window["Map"].entities.removeById(item.mc)
+                            window["Map"].viewer.entities.removeById(item.mc)
+                        })
+                    }
+                    
+            
+            }
+            WQGJList=wqgj_tem_xt
+            WQGJList.push(...wqgj_tem_bt)
+
+            }
+            
           }
         }
       };
@@ -2088,6 +2162,7 @@ export default {
      * ws数据处理事件
      */
     dealMessage(data) {
+    //   console.log(data)
       const _this = this;
       let notifyList = [];
       let id = sessionStorage.getItem("selectEd")
@@ -2249,6 +2324,7 @@ export default {
           //   }
           // }
           _this.notifyList = _this.bSort(notifyList)
+          _this.eventsF = true
         }
         
         // 处理浮标数据
@@ -2268,10 +2344,10 @@ export default {
               if(item.fblx=="主动全向"){
                 FBLX = 'R'
               }
-              if(item.fblx=="海噪声"){
+              if(item.fblx=="海噪声浮标"){
                 FBLX = 'A'
               }
-              if(item.fblx=="温深"){
+              if(item.fblx=="温深浮标"){
                 FBLX = 'B'
               }
               window.Map.Detector.Add({
@@ -2288,10 +2364,37 @@ export default {
             }
           }
         }
-
+        //武器轨迹
+        function dealWqgj(s) {    
+          s.map(t=>{
+            let entity = window.Map.viewer.entities.getById(t.mc);
+            if(entity){
+              entity.position =new Cesium.CallbackProperty(function(){
+                return Cesium.Cartesian3.fromDegrees(Number(t.jd),Number(t.wd))
+              },false)
+            } else {
+              window.Map.viewer.entities.add({
+                id:t.mc,
+                position:Cesium.Cartesian3.fromDegrees(Number(t.jd),Number(t.wd)),
+                type:'wqgj',
+                label:{
+                  text:t.mc,
+                  font:'16px bold',
+                  fillColor:Cesium.Color.BLUE,
+                  pixelOffset:new Cesium.Cartesian2(10,20)
+                },
+                billboard:{
+                  image:'/static/image/junbiao/daodan.png',
+                  width:30,
+                  height:30,
+                  rotation:Cesium.Math.toRadians(Number(360 - Number(t.hjj || t.hx)))
+                }
+              })
+            }
+          })
+        }
         // 处理浮标目标数据
         function dealFbSJMb(item) {
-
           //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
           if (window.Map.viewer.entities.getById("detector_" + item["fbbh"]))
           return;
@@ -2349,12 +2452,11 @@ export default {
           }
         }
 
-      }
 
-      /**------------------------------------------------------------------------------------------- */
-         let Fbtfs = [];//浮标发布数据缓存 12-4
-      _.forEach(data, item => {
-        //console.log( item )
+
+      let Fbtfs = [];//浮标发布数据缓存 12-4
+      _.forEach(data, item => { 
+                    
         switch (item.type) {
           // 飞机
           case "FJ":
@@ -2393,13 +2495,17 @@ export default {
             break;
           case "FBTFSJ4":
                 dealFbtfsj(item.data)
-            break;  
+            break;
+          case "WQGJ":
+            dealWqgj(item.data)
+            break;
         }
       });
 
-        // 处理浮标投放数据 12-4
+        // 处理浮标投放数据 12-4 
       function dealFbtfsj(item){
           if(item){
+            window.Map.Detector.Update(item)
             let ent = window.Map.viewer.entities;
             _.forEach(item, (v,k)=>{
                   if((k.indexOf('fbxh') != -1) && (v !== '0')){
@@ -2410,8 +2516,10 @@ export default {
                         let jd = item["fbsswzjd" + index];
                         let wd = item["fbsswzwd" + index];
                         s.position =new Cesium.CallbackProperty(function(){
-                          return Cesium.Cartesian3.fromDegrees(Number(jd),Number(wd))
+                          return Cesium.Cartesian3.fromDegrees(Number(jd),Number(wd),0)
                         },false)
+                        // s.position =Cesium.Cartesian3.fromDegrees(Number(jd),Number(wd),0)
+
                       }
                     })
                   }
@@ -2422,16 +2530,11 @@ export default {
       Fbtfs = _.map(Fbtfs,(id)=>{
           return "detector_" + id
       })
-
         window.Map.Detector.Lights(Fbtfs)
+      }
 
-
-
-
-
-
-
-
+      /**------------------------------------------------------------------------------------------- */
+       
 
       //   刘川修改
       //   处理飞机
@@ -2510,6 +2613,7 @@ export default {
       }
 
       function dealXMc(items) {
+
         _.forEach(items, item => {
           if (window.Map.Tool.GetId(item.cm)) {
             window.Map.FlyCompare.Update(
@@ -2531,41 +2635,42 @@ export default {
       }
 
       // 处理浮标目标数据
-      function dealFbSJMb(item) {
-        //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
-        if(item.zxd >0){
-        let FbId = "detector_" + item["jcxxid"];
-        if (item["mbwzjd"] && item["mbwzwd"]) {
-            let fbbhName = ''
-            if(item.dwfbxh1 != '0'){
-              fbbhName = item.dwfbxh1.slice(-3)+'/'
-            }
-            if(item.dwfbxh2 != '0'){
-              fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
-            }
-            if(item.dwfbxh3 != '0'){
-              fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
-            }
-            if(item.dwfbxh4 != '0'){
-              fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
-            }
-            if(item.dwfbxh5 != '0'){
-              fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
-            }
-            if(item.dwfbxh6 != '0'){
-              fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
-            }
-
-            let link = {
-              id: item.jcxxid,
-              positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
-              origin: item,
-              fbbh:fbbhName
-            };
-            window.Map.Detector.LinkOn(FbId, link);
-          }
-        }
-      }
+      // function dealFbSJMb(item) {
+      //   console.log(item,"++++++++++++++++++++++++++");
+      //   //1号文件中置信度低于100的不要显示了，增加置信度判断功能  （1号文件就是浮标目标数据）
+      //   if(item.zxd >0){
+      //   let FbId = "detector_" + item["jcxxid"];
+      //   if (item["mbwzjd"] && item["mbwzwd"]) {
+      //       let fbbhName = ''
+      //       if(item.dwfbxh1 != '0'){
+      //         fbbhName = item.dwfbxh1.slice(-3)+'/'
+      //       }
+      //       if(item.dwfbxh2 != '0'){
+      //         fbbhName = fbbhName + item.dwfbxh2.slice(-3)+'/'
+      //       }
+      //       if(item.dwfbxh3 != '0'){
+      //         fbbhName = fbbhName + item.dwfbxh3.slice(-3)+'/'
+      //       }
+      //       if(item.dwfbxh4 != '0'){
+      //         fbbhName = fbbhName + item.dwfbxh4.slice(-3)+'/'
+      //       }
+      //       if(item.dwfbxh5 != '0'){
+      //         fbbhName = fbbhName+item.dwfbxh5.slice(-3)+'/'
+      //       }
+      //       if(item.dwfbxh6 != '0'){
+      //         fbbhName = fbbhName+item.dwfbxh6.slice(-3)+'/'
+      //       }
+      //
+      //       let link = {
+      //         id: item.jcxxid,
+      //         positions: [Number(item["mbwzjd"]), Number(item["mbwzwd"])],
+      //         origin: item,
+      //         fbbh:fbbhName
+      //       };
+      //       window.Map.Detector.LinkOn(FbId, link);
+      //     }
+      //   }
+      // }
     },
     sendCommond(param) {
       console.log(this.fjlnglat);

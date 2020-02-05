@@ -107,6 +107,11 @@ export default {
 				})
 			}
 		}
+	},
+	mounted() {
+		document.addEventListener("contextmenu", (e)=>{
+			this.isShow = false
+		})
 	}
 }
 </script>

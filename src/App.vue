@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <cms-top style="pointer-events: none;"></cms-top>
+    <!-- <cms-top style="pointer-events: none;"></cms-top> -->
     <c-map></c-map>
     <!-- <canvas id="bg_canvas" width="100%" height="100%"/> -->
     <!-- <cms-footer></cms-footer> -->

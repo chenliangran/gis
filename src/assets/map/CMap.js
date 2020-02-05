@@ -27,6 +27,12 @@ export function Init(ele,CONFIG){
         return new Cesium.Viewer(eleid,{
             selectionIndicator:false,
             timeline:true,
+            animation:false,
+            geocoder: false,
+            homeButton: false,
+            baseLayerPicker: false,
+            fullscreenButton: false,
+            navigationHelpButton: false,
             sceneMode : Cesium.SceneMode.SCENE2D,  //初始场景模式 为二维
             imageryProvider: new Cesium.SingleTileImageryProvider({
                 url : '/static/image/Map/single.jpg',
@@ -51,6 +57,24 @@ export function Init(ele,CONFIG){
     viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     var viewerImagery = {}
+
+    var lanbote = new Cesium.SingleTileImageryProvider({
+            url : '/static/image/Map/lanbote.jpg',
+    })
+        viewerImagery["lanbote"] =viewer.imageryLayers.addImageryProvider(lanbote)
+        viewerImagery['lanbote'].show = false;
+    var Bonner = new Cesium.SingleTileImageryProvider({
+        url : '/static/image/Map/Bonner.png',
+    })
+        viewerImagery["Bonner"] =viewer.imageryLayers.addImageryProvider(Bonner)
+        viewerImagery['Bonner'].show = false;
+    var StereoGraphic = new Cesium.SingleTileImageryProvider({
+        url : '/static/image/Map/StereoGraphic.jpg',
+    })
+        viewerImagery["StereoGraphic"] = viewer.imageryLayers.addImageryProvider(StereoGraphic)
+        viewerImagery['StereoGraphic'].show = false;
+
+
     const camera = viewer.camera;
 
     const scene = viewer.scene;
@@ -67,11 +91,33 @@ export function Init(ele,CONFIG){
     scene.globe.depthTestAgainstTerrain = false;
 
     
+    // scene.screenSpaceCameraController.maximumZoomDistance = 100000000;
     const Ce = new calculater(Cesium);
 
     const Tool = new Tools(Cesium,viewer);
 
-
+    $.get(`${globalUrl.host}/find/findDistance`, {
+        crossDomain: true, 
+        dataType:'jsonp',
+    }).then(data=>{
+        scene.screenSpaceCameraController.minimumZoomDistance = data;
+    })
+    // const Tileset = new Cesium.Cesium3DTileset({
+    //     url:"http://192.168.0.111:8080/earthview/services/file/GetFileData/tileset/tileset.json",
+    //     show:false
+    // })
+    // viewer.scene.primitives.add(Tileset)
+    var Tileset = viewer.scene.primitives
+    $.get(`${globalUrl.host}/find/findHypsographicMap`, {
+        crossDomain: true, 
+        dataType:'jsonp',
+    }).then(data=>{
+        Tileset.add(new Cesium.Cesium3DTileset({
+            url:data,
+            show:false
+        }))
+    })
+    // viewer.zoomTo(Tileset)
     // let landMap = imageryLayers.addImageryProvider(new Cesium.ArcGisMapServerImageryProvider({
     //     url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
     //     enablePickFeatures: false
@@ -143,6 +189,54 @@ export function Init(ele,CONFIG){
 
 //         return labelLon+" "+labelLat;
 //         }
+   
+    // var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
+    //     Cesium.Cartesian3.fromDegrees(110.199990,19.044240,0.0));
+    scene.primitives.add(Cesium.Model.fromGltf({
+        url : '/static/SampleData/models/fjc-obj/runway.gltf',
+        modelMatrix : Cesium.Transforms.eastNorthUpToFixedFrame(
+            Cesium.Cartesian3.fromDegrees(110.160000,19.044220,0.0)),
+        scale : 100.0
+    }));
+    scene.primitives.add(Cesium.Model.fromGltf({
+        url : '/static/SampleData/models/hzd-obj/airport-terminal.gltf',
+        modelMatrix : Cesium.Transforms.eastNorthUpToFixedFrame(
+            Cesium.Cartesian3.fromDegrees(110.230099,19.049240,0.0)),
+        scale : 500.0
+    }));
+    var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(109.4757074400,18.2844629500,0.0))  
+    var model2 = scene.primitives.add(Cesium.Model.fromGltf({
+        url : '/static/SampleData/models/gaoyaxian/Tower.gltf',
+        modelMatrix : modelMatrix,
+        scale : 2.0
+    }));
+      /*获取3D model 的旋转矩阵modelMatrix*/
+      let l = model2.modelMatrix;
+      //构建一个三阶旋转矩阵。模型旋转一定的角度，fromRotation[Z]来控制旋转轴，toRadians()为旋转角度，转为弧度再参与运算
+    //   let l1 = Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(90));
+    //   var l1 = Cesium.Matrix3.fromRotationX(Cesium.Math.toRadians(90)); 
+      var l1 = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(-90)); 
+      //矩阵计算  // Cesium.Matrix4.multiplyByMatrix3 （矩阵，旋转，结果）
+      Cesium.Matrix4.multiplyByMatrix3(l,l1,l);
+      //将计算结果再赋值给modelMatrix
+      model2.modelMatrix = l;
+
+    var modelMatrix =Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(109.2111189,18.044240,0.0))  
+    var model =  scene.primitives.add(Cesium.Model.fromGltf({
+        url : '/static/SampleData/models/zjpt.gltf',
+        modelMatrix : modelMatrix,
+        scale : 1.0
+    }));
+      /*获取3D model 的旋转矩阵modelMatrix*/
+      let m = model.modelMatrix;
+      //构建一个三阶旋转矩阵。模型旋转一定的角度，fromRotation[Z]来控制旋转轴，toRadians()为旋转角度，转为弧度再参与运算
+      let m1 = Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(90));
+    //   var m1 = Cesium.Matrix3.fromRotationX(Cesium.Math.toRadians(90)); 
+    //   var m1 = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(90)); 
+      //矩阵计算  // Cesium.Matrix4.multiplyByMatrix3 （矩阵，旋转，结果）
+      Cesium.Matrix4.multiplyByMatrix3(m,m1,m);
+      //将计算结果再赋值给modelMatrix
+      model.modelMatrix = m;
 
     $.get(`${globalUrl.host}/find/findGisPath`, {
         crossDomain: true, 
@@ -153,6 +247,7 @@ export function Init(ele,CONFIG){
             if(!viewerImagery[item.name]){
                 if(item.type == 'haitu'){
                     //海图
+
                     let haitu = new Cesium.UrlTemplateImageryProvider({
                         url : item.url,
                         ellipsoid: Cesium.Ellipsoid.WGS84,
@@ -162,7 +257,7 @@ export function Init(ele,CONFIG){
                             rectangle : new Cesium.Rectangle(-Cesium.Math.PI, -Cesium.Math.PI * 0.5, Cesium.Math.PI, Cesium.Math.PI * 0.5),
                             ellipsoid : Cesium.Ellipsoid.WGS84
                         }),
-                        maximumLevel:14,
+                        maximumLevel:13,
                         customTags:{
                             m : (provider,x,y,level) => level+1,
                             r : (provider,x,y,level) => y,
@@ -171,7 +266,30 @@ export function Init(ele,CONFIG){
                     })
                     viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(haitu)
                     viewerImagery[item.name].show = true
-                }else if(item.type == 'qita'){
+                }else if(item.type == 'mercator'){
+                     //海图
+                     //http://localhost:8080/earthview/services/新地图3/MapService/WMTS?service=wmts&request=GetTile&version=1.0.0&style=default&LAYER=新地图3_Mercator_Web&TILEMATRIX=2&TILEROW=1&TILECOL=1&FORMAT=image/png&TileMatrixSet=OGC_WebMercator
+                     let haitu = new Cesium.UrlTemplateImageryProvider({
+                        url : item.url,             
+                        tilingScheme: new Cesium.WebMercatorTilingScheme({
+                            numberOfLevelZeroTilesX : 1,
+                            numberOfLevelZeroTilesY : 1,
+                            ellipsoid : Cesium.Ellipsoid.WGS84
+                        }),
+                        ellipsoid: Cesium.Ellipsoid.WGS84,
+                        tileWidth:256,
+                        tilHeight:256,
+                        maximumLevel:14,
+                        enablePickFeatures:false,
+                        customTags:{
+                            m : (provider,x,y,level) => level+1,
+                            r : (provider,x,y,level) => y,
+                            c : (provider,x,y,level) => x
+                        }
+                    })
+                    viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(haitu)
+                    viewerImagery[item.name].show = false
+                }else if(item.type == 'qita' && item.name !="jysl格式"){
                     let wmts = new Cesium.UrlTemplateImageryProvider({
                         url : item.url,
                         tilingScheme: new Cesium.GeographicTilingScheme({
@@ -196,6 +314,35 @@ export function Init(ele,CONFIG){
                             }
                         }
                     })
+                    
+                    viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(wmts)
+                    viewerImagery[item.name].show = false
+                }else if(item.type == 'qita' && item.name =="jysl格式"){
+                    let wmts = new Cesium.UrlTemplateImageryProvider({
+                        url : item.url,
+                        tilingScheme: new Cesium.GeographicTilingScheme({
+                            numberOfLevelZeroTilesX : 2,
+                            numberOfLevelZeroTilesY : 1,
+                            ellipsoid : Cesium.Ellipsoid.WGS84
+                        }),
+                        ellipsoid: Cesium.Ellipsoid.WGS84,
+                        tileWidth: 512,
+                        tilHeight: 512,
+                        maximumLevel: 10,
+                        enablePickFeatures: false,
+                        customTags: {
+                            matrix: function(imageryProvider,x,y,level) {
+                                return (Array(2).join(0) + level).slice(-2)
+                            },
+                            row:function(imageryProvider, x, y,level){
+                                return (Array(8).join(0) + ((1<<level)- y-1)).slice(-8)
+                            },
+                            col: function(imageryProvider,x,y,level) {
+                                return (Array(8).join(0)+x).slice(-8)
+                            }
+                        }
+                    })
+                    
                     viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(wmts)
                     viewerImagery[item.name].show = false
                 }
@@ -366,7 +513,7 @@ export function Init(ele,CONFIG){
                 //     distanceDisplayCondition:Ce.DisplayNF(0, 300000)
                 // },
             })
-        }
+        } 
 
         let entity = DrawEntity.Draw(shape)
     
@@ -473,6 +620,7 @@ export function Init(ele,CONFIG){
         viewerImagery,
         viewer,
         Tool,
+        Tileset,
         Event,
         FlyPlayer,
         FlyCompare,

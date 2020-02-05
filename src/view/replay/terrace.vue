@@ -1,7 +1,7 @@
 <template>
 	<div class="terrace">
 		<div class="replay" :style="{ left: '5px', top: '50px' }">
-			<div class="replay-cont" style="height: 250px;" v-show="flagTypeOne">
+			<div class="replay-cont" style="height: 250px;" v-show="flagType1">
 				<div style="width: 360px;height: 250px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<!-- <div class="close" @click="isShow=false" style="position:absolute ;z-index:10">
@@ -22,37 +22,37 @@
 			</div>
 		</div>
 		<div class="replay" :style="{ left:'5px', top: '288px' }">
-			<div class="replay-cont" v-show="flagTypeTwo" style="width: 360px;height: 190px;">
+			<div class="replay-cont" v-show="flagType2" style="width: 360px;height: 190px;">
 				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<!-- <div class="close" @click="isShow=false">
 						x
 					</div> -->
 					<div class="nav">浮标投放信息</div>
-					<div class="terrace-item" v-if="detectorData.length > 0">
+					<div class="terrace-item">
 						<!-- <div>
 							<span></span>
 							<span>浮标目标</span>
 						</div> -->
 						<div class="list">
 							<div>
-								<span style="min-width: 60px">浮标编号</span>
+								<span style="min-width: 55px">浮标编号</span>
 								<span style="min-width: 40px">经度</span>
 								<span style="min-width: 40px">纬度</span>
 								<span style="min-width: 60px">浮标类型</span>
 								<span style="min-width: 60px">射频通道号</span>
 								<span style="min-width: 30px">状态</span>
-								<span style="min-width: 40px">阵型</span>
+								<span style="min-width: 60px">阵型</span>
 							</div>
-							<ul v-show="gdFlag">
+							<ul v-if="detectorData.length > 0" v-show="gdFlag">
 								<li :class="{curFb: curFbBh == item.fbbh}" v-for="(item, i) in detectorData" :key="i">
-									<span style="min-width: 60px">{{item["fbbh"].slice(-3)}}</span>
+									<span style="min-width: 55px">{{i+1}}</span>
 									<span style="min-width: 40px">{{Math.floor(item["llcrswzjd"]*100)/100}}</span>
 									<span style="min-width: 40px">{{Math.floor(item["llcrswzwd"]*100)/100}}</span>
 									<span style="min-width: 60px">{{item["fblx"]}}</span>
 									<span style="min-width: 60px">{{item["sptdh"]}}</span>
 									<span style="min-width: 30px">{{item["fbzt"]}}</span>
-									<span style="min-width: 40px">{{item["zx"]}}</span>
+									<span style="min-width: 60px">{{item["zx"]}}</span>
 								</li>
 							</ul>
 						</div>
@@ -61,24 +61,24 @@
 			</div>
 		</div>
 		<div class="replay" :style="{ left:'5px', top:'472px' }">
-			<div class="replay-cont"  v-show="flagTypeThree">
+			<div class="replay-cont"  v-show="flagType3">
 				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<!-- <div class="close" @click="isShow=false">
 						x
 					</div> -->
 					<div class="nav">磁探探测目标</div>
-					<div class="terrace-item" v-if="ctData.length > 0">
+					<div class="terrace-item">
 						<div class="list">
 							<div>
-								<span style="min-width: 150px">发现时间</span>
+								<span style="min-width: 120px">发现时间</span>
 								<span style="min-width: 50px">经度</span>
 								<span style="min-width: 50px">纬度</span>
 								<span style="min-width: 100px">探测目标位置偏差</span>
 							</div>
-							<ul v-show="gdFlag">  
+							<ul v-if="ctData.length > 0" v-show="gdFlag">  
 								<li v-for="(item, i) in ctData" :key="i"  v-if="Number(item['mbzxd']) >= 100">
-										<span style="min-width: 150px" :title="item.mbsj">{{item["mbsj"].split('.')[0]}}</span>
+										<span style="min-width: 120px" :title="item.mbsj">{{item["mbsj"].slice(5).split('.')[0]}}</span>
 										<span style="min-width: 50px"  :title="item.mbjd">{{Math.floor(item["mbjd"]*100)/100}}</span>
 										<span style="min-width: 50px"  :title="item.mbwd">{{Math.floor(item["mbwd"]*100)/100}}</span>
 										<span style="min-width: 100px" :title="item.mbwzwc">{{item["mbwzwc"]}}</span>																
@@ -90,27 +90,29 @@
 			</div>
 		</div>
 		<div class="replay" :style="{ left:'5px' ,top:'655px'}">
-			<div class="replay-cont" v-show="flagTypeFour">
+			<div class="replay-cont" v-show="flagType4">
 				<div style="width: 360px;height: 185px;">
 					<div class="head-hidden"  @mousedown="draggerStart($event)"></div>
 					<!-- <div class="close" @click="isShow=false">
 						x
 					</div> -->
 					<div class="nav">浮标探测目标</div>
-					<div class="terrace-item" v-if="events['mbtcsj'].length > 0">
-						<div class="list">
+					<div class="terrace-item" >
+						<div class=" list fubiao">
 							<div>
 								<span style="min-width: 60px">浮标编号</span>
 								<span style="min-width: 60px">经度</span>
 								<span style="min-width: 60px">纬度</span>
 								<span style="min-width: 100px">距离</span>
 							</div>
-							<ul v-show="gdFlag">
+							<ul v-if="events['mbtcsj'].length > 0" v-show="gdFlag">
 								<li v-for="(item, i) in events['mbtcsj']" :key="i">
-									<span style="min-width: 60px">{{item["mbbh"]}}</span>
-									<span style="min-width: 60px">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
-									<span style="min-width: 60px">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
-									<span style="min-width: 100px">{{item["jl"]}}</span>
+                                    <div>
+                                        <span style="min-width: 60px;">{{i+1}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzjd"]*100)/100}}</span>
+                                        <span style="min-width: 80px;">{{Math.floor(item["mbwzwd"]*100)/100}}</span>
+                                        <span style="min-width: 100px;">{{item["jl"]}}</span>  
+                                    </div>
 								</li>
 							</ul>
 						</div>
@@ -123,7 +125,7 @@
 
 <script>
 export default {
-	props: ["dataInfo", "WebSocketData", "setTime",'gdFlag','flagTypeOne','flagTypeTwo','flagTypeThree','flagTypeFour'],
+	props: ["dataInfo", "WebSocketData", "setTime",'gdFlag','flagTypeList'],
 	data() {
 		return {
 			name: "",
@@ -144,7 +146,11 @@ export default {
 			isShow: true,
 			jingdu:0,
 			weidu:0,
-			fangxiang:0
+            fangxiang:0,
+            flagType1:true,
+            flagType2:true,
+            flagType3:true,
+            flagType4:true,
 		}
 	},
     mounted() {
@@ -265,8 +271,8 @@ export default {
 	methods: {
 		updtea(data){
 			this.detectorData = data.b;
-			this.ctData =  data.a;
-			this.events['mbtcsj'] =  data.c;
+            this.ctData =  data.a;
+            this.dealFBCC(data.c)
 		},
         setLineOption(data) {
 			let that = this;
@@ -322,13 +328,58 @@ export default {
             let index = time.indexOf(".")
             return time.substring(0, index)
         },
+        dealFBCC(data){
+            let _this = this
+            let fbctmb = []
+                data.map(item=>{  
+                    let obj ={}     
+                    if(item.dwfbxh1.length == 7){
+                        obj['mbwzjd'] = item.mbwzjd
+                        obj['mbwzwd'] =item.mbwzwd
+                        obj['jl'] = item.jl
+                        fbctmb.push(obj)
+                    }
+                    if(item.dwfbxh2.length == 7){
+                       obj['mbwzjd'] = item.mbwzjd
+                        obj['mbwzwd'] =item.mbwzwd
+                        obj['jl'] = item.jl
+                        fbctmb.push(obj)
+                    }
+                    if(item.dwfbxh3.length == 7){
+                        obj['mbwzjd'] = item.mbwzjd
+                        obj['mbwzwd'] =item.mbwzwd
+                        obj['jl'] = item.jl
+                        fbctmb.push(obj)
+                    }
+                    if(item.dwfbxh4.length == 7){
+                        obj['mbwzjd'] = item.mbwzjd
+                        obj['mbwzwd'] =item.mbwzwd
+                        obj['jl'] = item.jl
+                        fbctmb.push(obj)
+                    }
+                    if(item.dwfbxh5.length == 7){
+                        obj['mbwzjd'] = item.mbwzjd
+                        obj['mbwzwd'] =item.mbwzwd
+                        obj['jl'] = item.jl
+                        fbctmb.push(obj)
+                    }
+                    if(item.dwfbxh6.length == 7){
+                      obj['mbwzjd'] = item.mbwzjd
+                        obj['mbwzwd'] =item.mbwzwd
+                        obj['jl'] = item.jl
+                        fbctmb.push(obj)
+                    }
+
+                })
+                _this.events.mbtcsj = fbctmb
+                _this.events.mbtcsj.push(...fbctmb)
+        },
         getEventList() {
             let id = sessionStorage.getItem("selectEd")
             let _this = this
             $.get(globalUrl.host+'/find/findEventListForRex',{sjid: id}).then(data => {
                 _this.events.fbtfsj = data.FBSJ
-                _this.events.mbtcsj = data.FBMBSJ
-                _this.events.mbtcsj.push(...data.FBMBSJ)
+                _this.dealFBCC(data.FBMBSJ)
                 _this.events.sdsj = data.SDSJ
             })
         }
@@ -338,28 +389,39 @@ export default {
 		gdFlag(val){
 			console.log(val)
 		},
-		flagTypeOne(val){
-			console.log(val)
-		},
-		flagTypeTwo(val){
-			console.log(val)
-		},
-		flagTypeThree(val){
-			console.log(val)
-		},
-		flagTypeFour(val){
-			console.log(val)
+		flagTypeList(val){
+            this.flagType1 = false 
+            this.flagType2 = false 
+            this.flagType3 = false 
+            this.flagType4 = false 
+            val.map(item=>{
+                if(item.length>0){
+                    if(item == "飞行曲线"){
+                        this.flagType1 = true
+                    }
+                    if(item == "浮标投放信息"){
+                        this.flagType2 = true
+                    }
+                    if(item == "磁探探测目标"){
+                        this.flagType3 = true
+                    }
+                    if(item == "浮标探测目标"){
+                        this.flagType4 = true
+                    }
+                }
+               
+            })
 		},
 		setTime(v) {
 			let id = sessionStorage.getItem("selectEd")
 			let _this = this
 			$.get(globalUrl.host+'/find/findEventListForRex',{sjid: id,time: v}).then(data => {
-				this.detectorData = data.FBSJ;
+				_this.detectorData = data.FBSJ;
                 _this.events.fbtfsj = data.FBSJ
-                _this.events.mbtcsj = data.FBMBSJ
-                _this.events.mbtcsj.push(...data.FBMBSJ)
+                _this.dealFBCC(data.FBMBSJ)
                 _this.events.sdsj = data.SDSJ
                 _this.ctData =data.CTMBSJ
+                
 			})
 		},
 		WebSocketData: {
@@ -445,7 +507,7 @@ export default {
 		border: 1px solid #104284;
 		/* margin:5px 10px; */
 		width: 100%;
-		overflow: auto;
+		/* overflow: auto; */
 		max-height: 110px;
 	}
 	.terrace-item .list >div:first-child{
@@ -459,7 +521,8 @@ export default {
 		text-align: center;
 	}
 	.terrace-item .list ul {
-		max-height: 200px;
+		max-height: 80px;
+        overflow: auto;
 	}
 	.terrace-item .list ul li{
 		height: 30px;
@@ -467,11 +530,11 @@ export default {
 		display: flex;
 	}
 	.terrace-item .list div span{
-		padding: 0 5px;
-		background: #092254;
+		/* padding: 0 5px; */
+		/* background: #092254; */
 	}
 	.terrace-item .list ul span{
-		padding: 0 5px;
+		/* padding: 0 5px; */
 	}
 	.terrace-item .curFb {
 		background: #0922546b;
@@ -482,5 +545,23 @@ export default {
 	}
 	.terrace-item{
 		max-height: 220px;
-	}
+    }
+    .terrace-item .fubiao ul {
+        max-height: 80px;
+        overflow: auto;
+    }
+    .terrace-item .fubiao  ul li {
+        max-height: 80px;
+        /* overflow: auto; */
+        display: block;
+    }
+    .fubiao  ul li div {
+        width:100%;
+        height: 30px;
+        line-height: 30px;
+        float: left;
+    }
+     .fubiao  ul li div  span{
+        display: inline-block;
+    }
 </style>
