@@ -135,11 +135,16 @@
     align-items: center
 }
 .select-loadding-icon{
-    width: 134px;
-    height: 10px;
-    background: url(../../assets/icon/veryhuo.com_gif_61.gif) no-repeat!important;
-	background-size: 100% 100%!important;
+    width: 300px;
+    height: 24px;
+    /* background: url(../../assets/icon/veryhuo.com_gif_61.gif) no-repeat!important;
+	background-size: 100% 100%!important; */
     /* opacity:0.5 */
+}
+.select-loadding-icon .el-progress-bar__innerText {
+    color: #000;
+    font-size: 12px;
+    margin: 0 5px;
 }
 .tl-sm{
 	height:40px;
@@ -155,7 +160,7 @@
   <div class="select-big">
       <div class="select-loadding" v-show='loaddingF'>
           <div class="select-loadding-icon">
-          
+              <el-progress :text-inside="true" :stroke-width="24" :percentage="percentage" status="success"></el-progress>
         </div>
       </div>
       <div class='select-msg'>
@@ -263,7 +268,8 @@ export default {
                   f:0,
                   m:0
               }
-          }
+          },
+          percentage:0
       }    
   },
 
@@ -370,7 +376,24 @@ export default {
                 }
                 that.loaddingF = false
                 sessionStorage.setItem('pos',JSON.stringify(that.pos))
-                
+                let timer = setInterval(()=>{
+                    $.ajax({
+                            type: "get",
+                            // dataType: "json",
+                            url: `${globalUrl.host}/find/percentLoaded`,
+                            // contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                            data: {
+                                sjid:that.ptData[0].id,
+                            },//将js对象转成json对象
+                            success: function (data) {
+                            console.log(data)  
+                            that.percentage = data*100
+                            if(data*100 == 100){
+                                window.clearInterval(timer)
+                            }
+                            }
+                        }) 
+                },1000)
                 $.ajax({
                     type: "post",
                     // dataType: "json",
@@ -395,7 +418,6 @@ export default {
                             success: function (data) {
 
                                 sessionStorage.setItem('groupType',data)
-                                
                             }
                         })
                         
@@ -500,6 +522,25 @@ export default {
                                 that.$emit('confirm')    
                             }
                         })
+                        let timer = setInterval(()=>{
+                            $.ajax({
+                                    type: "get",
+                                    // dataType: "json",
+                                    url: `${globalUrl.host}/find/percentLoaded`,
+                                    // contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                                    data: {
+                                        sjid:that.ptData[0].id,
+                                    },//将js对象转成json对象
+                                    success: function (data) {
+                                    console.log(data)  
+                                    that.percentage = data*100
+                                    if(data*100 == 100){
+                                        window.clearInterval(timer)
+                                    }
+                                    }
+                                })
+                            
+                        },1000)
                     }
                 }else{
                     
@@ -545,6 +586,7 @@ export default {
 
                                                 sessionStorage.setItem('groupType',data)
                                                 
+                                                
                                             }
                                         })
                                     }
@@ -556,6 +598,25 @@ export default {
                             that.$emit('confirm')    
                         }
                     })
+                    let timer = setInterval(()=>{
+                        $.ajax({
+                                type: "get",
+                                // dataType: "json",
+                                url: `${globalUrl.host}/find/percentLoaded`,
+                                // contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                                data: {
+                                    sjid:that.ptData[0].id,
+                                },//将js对象转成json对象
+                                success: function (data) {
+                                console.log(data)  
+                                that.percentage = data*100
+                                if(data*100 == 100){
+                                    window.clearInterval(timer)
+                                }
+                                }
+                            })
+                        
+                    },1000)
                 }
             }
             
