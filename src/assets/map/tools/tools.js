@@ -54,6 +54,7 @@ export default class Tools{
     }
 
     Blink( id, duration=5000 ){
+        
 
         let entity = this.GetId( id );
 

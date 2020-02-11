@@ -549,6 +549,7 @@ export default {
                 this.$message.error('飞机轨迹长度不能大于5000！');
                 return false
             }
+            window.Map.FlyCompare.ClearPath();
             Params.path.len = Number(this.formInline.len)
             this.feijiVisible = false;
         },
@@ -561,6 +562,7 @@ export default {
                 this.$message.error('潜艇轨迹长度不能大于5000！');
                 return false
             }
+            window.Map.FlyCompare.ClearPath();
             ParamsQT.path.len = Number(this.form.len)
             this.dunkerVisible = false;
         },

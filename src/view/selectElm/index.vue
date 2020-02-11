@@ -387,7 +387,7 @@ export default {
                             },//将js对象转成json对象
                             success: function (data) {
                             console.log(data)  
-                            that.percentage = data*100
+                            that.percentage = Math.floor(data*100)
                             if(data*100 == 100){
                                 window.clearInterval(timer)
                             }
@@ -533,7 +533,7 @@ export default {
                                     },//将js对象转成json对象
                                     success: function (data) {
                                     console.log(data)  
-                                    that.percentage = data*100
+                                    that.percentage = Math.floor(data*100)
                                     if(data*100 == 100){
                                         window.clearInterval(timer)
                                     }
@@ -609,7 +609,7 @@ export default {
                                 },//将js对象转成json对象
                                 success: function (data) {
                                 console.log(data)  
-                                that.percentage = data*100
+                                that.percentage = Math.floor(data*100)
                                 if(data*100 == 100){
                                     window.clearInterval(timer)
                                 }

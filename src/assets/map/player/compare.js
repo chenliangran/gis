@@ -113,9 +113,7 @@ export default class Player{
     }
 
     ClearPath( id ){
-
-
-
+     
         if( id ){
 
             let target = sourceData[id];

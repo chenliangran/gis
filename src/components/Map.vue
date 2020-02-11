@@ -505,10 +505,10 @@ import MapTool from "../view/toolbar/maptool.vue";
 import DisplayController from "../view/toolbar/displayController.vue";
 import { setInterval } from 'timers';
 //import { connect } from 'http2';
+
 const _ = require("lodash");
 
 const CMap = require("../assets/map/CMap.js");
-
 let socketController = null;
 
 const keyMap = {
@@ -1607,6 +1607,7 @@ export default {
                 let a = e.pageX-Number($("#visualization").css('margin-left').split('px')[0]).toFixed(2),
                     b = $(".cesium-timeline-bar").css('width').split('px')[0],
                     zhTime = new Date(start.getTime()+(parseInt((a/b).toFixed(3)*s)))
+                    console.log(that.allDate.startT)
                     console.log(new Cesium.JulianDate.toDate(viewer.clock.currentTime),zhTime)
                     that.newEventDate = zhTime  
                     that.eventType = false
@@ -2570,13 +2571,16 @@ export default {
             function(e) {},
             item.hx
           );
+
         } else {
+          
           window.Map.AddCompare("qianting", {
             origin: item,
             id: "subMarine_1",
             name: "潜艇",
             position: [Number(item["jd"]), Number(item["wd"])]
           });
+ 
         }
 
         // window.Map.AddSubmarine({
@@ -2823,6 +2827,8 @@ export default {
       });
     },
     toPosition(item){
+      console.log(item)
+      let that = this
       var jd,wd;
       if(item.typeall === 'FBSJ'){
          jd = item["llcrswzjd"];
@@ -2836,7 +2842,60 @@ export default {
         jd = item["mbwzjd"];
         wd = item["mbwzwd"];
       }
+      let zhTime 
+      if(item.sb){
+        zhTime = new Date(item.sb)
+      } else{
+         zhTime = new Date(item.mbsj)
+      }
       window.Map.Tool.FlyTo([jd, wd, 40000]);
+      window.Map.Tool.Blink(["detector_" + item.fbbh])
+      window.Map.FlyCompare.ClearPath();
+      that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+      that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
+        $.ajax({
+          type: "get",
+          // dataType: "json",
+          url: `${globalUrl.host}/find/findSystemStatus`,
+          // contentType: "application/json;charset=UTF-8",//指定消息请求类型
+          data: {
+              groupNum: sessionStorage.getItem("groupNum")
+          }, //将js对象转成json对象
+          success: function(data) {
+              if(data.yxzt == 1){
+              $.get(`${globalUrl.host}/find/triggerSocket`, {
+                  startTime: zhTime,
+                  name: sessionStorage.getItem("groupNum"),
+                  id: that.selectId
+              }).then(data => {
+                  that.playFLAG = true;
+                  that.$refs.timeLine.playFlag = true;
+                  that.setZZTime()
+                  that.diffTime(zhTime);
+                  // that.num = 0;
+                  // that.$refs["timeLine"].num = that.num;
+              });
+              }else if(data.yxzt == 2){
+              $.get(`${globalUrl.host}/find/triggerSocket`, {
+                  startTime: zhTime,
+                  name: sessionStorage.getItem("groupNum"),
+                  id: that.selectId
+              }).then(data => {
+                  that.playFLAG = true;
+                  that.$refs.timeLine.playFlag = true;
+                  that.setZZTime()
+                  that.diffTime(zhTime);
+                  $.get(`${globalUrl.host}/find/pauseAndStart`, {
+                  name: sessionStorage.getItem("groupNum")
+                  }).then(data => {
+                  window.Map.viewer.clock.shouldAnimate = false;
+                  });
+                  // that.num = 0;
+                  // that.$refs["timeLine"].num = that.num;
+              });
+              }
+          }
+      })
     }
   },
    computed: {
