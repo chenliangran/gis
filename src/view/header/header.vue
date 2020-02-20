@@ -52,7 +52,7 @@
                 <li><i class="feiji"></i><span>1</span></li>
                 <li><i class="fubiao"></i><span>{{FBnum}}</span></li>
                 <li><span class="time">{{NowTime}}</span></li>
-                <li><i class="group"></i><span>1</span></li>
+                <li><i class="group"></i><span>{{QTnum}}</span></li>
             </ul>
         </div>
         <div class="cmsNav cms-right">
@@ -290,7 +290,7 @@ import Params from "../../assets/map/params.js";
 import ParamsQT from "../../assets/map/paramsQT.js";
 import CMap from "../../assets/map/CMap.js"
 export default {
-    props: ["WebSocketData","FBnum","timeNow","eventsF"],
+    props: ["WebSocketData","FBnum","timeNow","eventsF","QTnum"],
 	data() {
 		return {
 			dataInfo: {},
@@ -319,7 +319,7 @@ export default {
             imgHeight:"300",
             dialogVisible:false,
             dvShow:false,
-            // FBnum:0,
+            //FBnum:0,
             dynamicValidateForm: {
                 domains: [{
                     jd: "",
@@ -362,7 +362,8 @@ export default {
             jingweiduVisible:false,
             handleCurrentData:{},
             tilesShow:false,
-            tyShow:false
+            tyShow:false,
+            //QTnum:0
 		}
 	},
 	methods: {
@@ -1108,6 +1109,12 @@ export default {
         FBnum: {
            handler:function(v){
                this.FBnum = v
+           },
+           deep: true
+        },
+        QTnum:{
+            handler:function(v){
+               this.QTnum = v
            },
            deep: true
         },

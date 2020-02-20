@@ -377,6 +377,7 @@ background: none !important;
       @feijiPolygon="feijiPolygon"
       :WebSocketData="WebSocketData"
       :FBnum="FBnum"
+      :QTnum="QTnum"
       :eventsF="eventsF"></gis-header>
     <div id="mapElement">
       <div class="time_bg">
@@ -571,6 +572,7 @@ export default {
       controllerF:true,
       eventsF:true,
       FBnum: 0,
+      QTnum: 0,
       widthNum:0,
       notifyList:[],
       notifyType:'',
@@ -2563,6 +2565,7 @@ export default {
 
       // 处理潜艇
       function dealQT(item) {
+
         if (window.Map.Tool.GetId("subMarine_1")) {
           window.Map.FlyCompare.Update(
             "subMarine_1",
@@ -2573,7 +2576,7 @@ export default {
           );
 
         } else {
-          
+          _this.QTnum = 1;
           window.Map.AddCompare("qianting", {
             origin: item,
             id: "subMarine_1",
