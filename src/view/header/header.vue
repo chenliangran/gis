@@ -255,9 +255,9 @@
                 append-to-body
                 :close-on-click-modal="false"
             >
-            <el-form :model="formInline" ref="formInline" label-width="100px" class="demo-dynamic">
+            <el-form :model="formInline" ref="formInline" label-width="100px" class="demo-dynamic" @submit.native.prevent>
                 <el-form-item label="长度">
-                    <el-input  type="number" v-model="formInline.len" placeholder="请输入飞机轨迹长度"></el-input>
+                    <el-input  type="number" v-model="formInline.len" placeholder="请输入飞机轨迹长度" @keyup.enter.native="feijiPolygon"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -272,9 +272,9 @@
                 append-to-body
                 :close-on-click-modal="false"
             >
-            <el-form :model="form" ref="form" label-width="100px" class="demo-dynamic">
+            <el-form :model="form" ref="form" label-width="100px" class="demo-dynamic" @submit.native.prevent>
                 <el-form-item label="长度">
-                    <el-input  type="number" v-model="form.len" placeholder="请输入潜艇轨迹长度"></el-input>
+                    <el-input  type="number" v-model="form.len" placeholder="请输入潜艇轨迹长度" @keyup.enter.native="dunkerPolygon"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -542,6 +542,7 @@ export default {
             });
         },
         feijiPolygon(){
+            debugger
             if(!Number(this.formInline.len)){
                 this.$message.error('飞机轨迹长度不能为空！');
                 return false
@@ -1102,7 +1103,7 @@ export default {
              //开关关闭
              isDown = false;
              dv.style.cursor = 'default';
-         }
+         }       
     },
     watch: {
 
