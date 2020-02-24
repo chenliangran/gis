@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="right-mouse" :style="{top: dataInfo.xy.y + 'px', left: dataInfo.xy.x + 'px'}" v-if="isShow">
+        <div class="right-mouse" :style="{top: dataInfo.xy.y + 'px', left: dataInfo.xy.x + 'px'}" v-if="isShow"  @contextmenu.prevent="show">
             <ul>
                 <li @click="isShowAttribute=true; isShow=false">{{type}}属性</li>
                 <!-- <li @click="isShowCourse=true; isShow=false">航迹设置</li> -->
@@ -29,7 +29,9 @@ export default {
         }
     },
     methods: {
-        
+		show(){
+			this.isShow = false;
+		}	
     },
     watch: {
 		visible(v) {
@@ -48,7 +50,7 @@ export default {
 				this.$emit("close")
 			}
 		}
-    }
+	}
 }
 </script>
 
