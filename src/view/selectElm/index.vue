@@ -383,7 +383,7 @@ export default {
                             url: `${globalUrl.host}/find/percentLoaded`,
                             // contentType: "application/json;charset=UTF-8",//指定消息请求类型
                             data: {
-                                sjid:that.ptData[0].id,
+                                sjid:sessionStorage.getItem('selectEd'),
                             },//将js对象转成json对象
                             success: function (data) {
                             console.log(data)  
@@ -401,7 +401,7 @@ export default {
                     // contentType: "application/json;charset=UTF-8",//指定消息请求类型
                     data: {
                         name:sessionStorage.getItem('name'),
-                        sjId:that.ptData[0].id,
+                        sjId:sessionStorage.getItem('selectEd'),
                         // ip:null,
                         groupNum:sessionStorage.getItem('groupNum')
                     },//将js对象转成json对象
@@ -443,7 +443,7 @@ export default {
                 //                 // contentType: "application/json;charset=UTF-8",//指定消息请求类型
                 //                 data: {
                 //                     name:sessionStorage.getItem('name'),
-                //                     sjId:that.ptData[0].id,
+                //                     sjId:sessionStorage.getItem('selectEd'),
                 //                     // ip:null,
                 //                     groupNum:sessionStorage.getItem('groupNum')
                 //                 },//将js对象转成json对象
@@ -481,7 +481,7 @@ export default {
                             url: `${globalUrl.host}/find/organizeData`,
                             // contentType: "application/json;charset=UTF-8",//指定消息请求类型
                             data: {
-                                sjid: that.ptData[0].id
+                                sjid: sessionStorage.getItem('selectEd')
                             },//将js对象转成json对象
                             success: function (data) {
                                 that.loaddingF = false
@@ -494,7 +494,7 @@ export default {
                                         // contentType: "application/json;charset=UTF-8",//指定消息请求类型
                                         data: {
                                             name:sessionStorage.getItem('name'),
-                                            sjId:that.ptData[0].id,
+                                            sjId:sessionStorage.getItem('selectEd'),
                                             // ip:null,
                                             // groupNum:null
                                         },//将js对象转成json对象
@@ -529,7 +529,7 @@ export default {
                                     url: `${globalUrl.host}/find/percentLoaded`,
                                     // contentType: "application/json;charset=UTF-8",//指定消息请求类型
                                     data: {
-                                        sjid:that.ptData[0].id,
+                                        sjid:sessionStorage.getItem('selectEd'),
                                     },//将js对象转成json对象
                                     success: function (data) {
                                     console.log(data)  
@@ -555,7 +555,7 @@ export default {
                         url: `${globalUrl.host}/find/organizeData`,
                         // contentType: "application/json;charset=UTF-8",//指定消息请求类型
                         data: {
-                            sjid: that.setId
+                            sjid: sessionStorage.getItem('selectEd')
                         },//将js对象转成json对象
                         success: function (data) {
                             that.loaddingF = false
@@ -567,7 +567,7 @@ export default {
                                     // contentType: "application/json;charset=UTF-8",//指定消息请求类型
                                     data: {
                                         name:sessionStorage.getItem('name'),
-                                        sjId:that.setId
+                                        sjId:sessionStorage.getItem('selectEd')
                                         // ip:null,
                                         // groupNum:null
                                     },//将js对象转成json对象
@@ -605,7 +605,7 @@ export default {
                                 url: `${globalUrl.host}/find/percentLoaded`,
                                 // contentType: "application/json;charset=UTF-8",//指定消息请求类型
                                 data: {
-                                    sjid:that.ptData[0].id,
+                                    sjid:sessionStorage.getItem('selectEd'),
                                 },//将js对象转成json对象
                                 success: function (data) {
                                 console.log(data)  
