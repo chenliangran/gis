@@ -23,18 +23,20 @@
                     <i class="icon icon3"></i>
                     <span>参数设置</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag4" style="height:208px">
+                    <div class="menuOption" v-show="flag4" style="height:200px">
                         <p @click="tudeShow(tudeShow)">经纬度设置</p>
                         <p @click="plane">飞机轨迹</p>
                         <p @click="submarine">潜艇轨迹</p>
                         <p @click="tiles">高程模型</p>
+                        <p @click="bigTarget">大量目标</p>
+                        <p @click="tiles06">精确地图</p>
                     </div>
                 </li>
                 <li @click="geshi(flag5)">
                      <i class="icon icon9"></i>
                     <span>地图格式</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag5" style="left:478px;height:310px;">
+                    <div class="menuOption" v-show="flag5" style="left:478px;height:265px;">
                         <el-radio-group v-model="mapType" size="small" @change="mapType1(mapType)">
                             <el-radio label="haitu">海图格式</el-radio>
                             <el-radio label="shp格式">shp格式</el-radio>
@@ -362,11 +364,15 @@ export default {
             jingweiduVisible:false,
             handleCurrentData:{},
             tilesShow:false,
+            tiles06Show:false,
             tyShow:false,
             //QTnum:0
 		}
 	},
 	methods: {
+        bigTarget(){
+            this.$emit('bigTarget')
+        },
         handleChecked(menuData){
             this.$emit('flagType',this.menuData)
         },
@@ -518,8 +524,18 @@ export default {
             if(this.tilesShow){
 
                 // window.Map.viewer.scene.primitives.add(Tileset)
-                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[5])
-                window.Map.Tileset._primitives[5].show = this.tilesShow
+                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[6])
+                window.Map.Tileset._primitives[6].show = this.tilesShow
+            }
+           
+        },
+         tiles06(){
+            this.tiles06Show = true;
+            if(this.tiles06Show){
+
+                // window.Map.viewer.scene.primitives.add(Tileset)
+                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[0])
+                window.Map.Tileset._primitives[0].show = this.tiles06Show
             }
            
         },
@@ -1207,6 +1223,10 @@ export default {
         align-items: center;
         text-align: left;
         padding-left: 20px;
+    }
+    .menuOption p{
+        height: 32px;
+        line-height: 32px;
     }
     .cms-nav .cms-left span{
         color: #27c1e9;;

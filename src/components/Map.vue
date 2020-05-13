@@ -364,12 +364,33 @@ background: none !important;
   top:110px;
   right:50px
 }
+#handle-wrap{
+    position: fixed;
+    top:10px;
+    left: 50%;
+    z-index: 1000000;
+}
 </style>
 
 <template>
   <div class="MapContainer">
+      <!-- lkr -->
+      <!-- <div id="handle-wrap">
+
+      </div>
+      <div id="handle-wrap">
+        <select id="pointEvent" @change="selectHandle()">
+            <option value="1">1个point</option>
+            <option value="10">10个point</option>
+            <option value="100">100个point</option>
+            <option value="1000">1000个point</option>
+            <option value="50000">5万个point</option>
+        </select>
+        <div @click="play()" id="play">开始运动</div>
+    </div> -->
+    <!-- lkr -->
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
-    <gis-header :timeNow="timeNow"
+    <gis-header @bigTarget='bigTarget' :timeNow="timeNow"
       @flagType="flagType"
       @mapTool="maptool"
       @controller="controller"
@@ -516,12 +537,24 @@ const keyMap = {
   lon: "zjjd",
   lat: "zjwd"
 };
+// Cesium.Ion.defaultAccessToken = common.cesiumToken;
+//   var viewer = new Cesium.Viewer('cesiumContainer');
+  var pointPrimitives = null;// 申明点渲染集合
+  var isPlay = false; // 点运行状态。false为静止，true为运动
+  // 点颜色集合
+  var colorList = ["SNOW", "PALETURQUOISE1", "BLUE", "GREEN", "YELLOW", "DARKGOLDENROD", "SPRINGGREEN", "INDIANRED1", "FIREBRICK", "FIREBRICK1", "DARKORCHID", "DARKORCHID1", "DARKORCHID2", "PURPLE1", "PURPLE", "PURPLE2", "PURPLE3", "LIGHTCYAN", "LIGHTCYAN1", "LIGHTCYAN2"]
+  // 默认加载一个点
+//   selectHandle();
+  // 申明定时器
+  var timeras = null
 
 export default {
   name: "CMap",
 
   data: function() {
     return {
+        timers:null,
+        timerss:null,
       setZZStyle:{
         left:0,
         width:0
@@ -740,6 +773,80 @@ export default {
     }
   },
   methods: {
+    bigTarget(){
+        this.selectHandle()
+
+    },
+    random(lower, upper) {
+        return Math.floor(Math.random() * (upper - lower)) + lower;
+    },
+    play() {
+
+        window.clearInterval(timeras);
+        let viewer = window.Map.viewer,that = this,i = 0
+        timeras = window.setInterval(function(){
+            i++
+            for (let i = 0; i < pointPrimitives._pointPrimitives.length; i++) {
+            var longitude = that.random(-180, 180);
+            var latitude = that.random(-90, 90);
+            var height = 0;
+            var position = Cesium.Cartesian3.fromDegrees(longitude, latitude, height);
+            // 修改点位置
+            pointPrimitives._pointPrimitives[i].position = position;
+            }
+            if(i >= 30){
+                clear()
+            }
+        }, 500);
+        
+       
+        function clear(){
+            window.clearInterval(timeras);
+            viewer.scene.primitives.remove(pointPrimitives);
+        }
+       
+    },
+    selectHandle() {
+        let viewer = window.Map.viewer
+        // 判断点元素是否已经存在
+        if (pointPrimitives) {
+            // 移除已经存在的点元素
+            viewer.scene.primitives.remove(pointPrimitives);
+        }
+        // 初始化一个点的可渲染集合。
+        pointPrimitives = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
+
+        var numPoints = 50000;
+
+        var base = viewer.scene.globe.ellipsoid.radii.x;
+        // var color = Cesium.Color.LIGHTSKYBLUE;
+        // 从颜色数组中随机取出一个颜色
+        var color = Cesium.Color[colorList[Math.round(this.random(0, 15))]]
+        // 轮廓颜色
+        var outlineColor = Cesium.Color.BLACK;
+        // 循环生成点
+        for (var j = 0; j < numPoints; ++j) {
+        // 随机生成经、纬、高
+        var longitude = this.random(-180, 180);
+        var latitude = this.random(-90, 90);
+        var height = this.random(50000, 5000000);
+        // 将经、纬、高转成笛卡尔3维坐标系坐标x、y、z
+        var position = Cesium.Cartesian3.fromDegrees(longitude, latitude, height);
+        // console.log(longitude,latitude,height,position);
+        // 将点point添加到对象pointPrimitives中
+            pointPrimitives.add({
+                pixelSize: 5,
+                color: Cesium.Color[colorList[Math.round(this.random(0, 15))]],
+                outlineColor: outlineColor,
+                outlineWidth: 0,
+                position: position
+            });
+        }
+        setTimeout(() => {
+            this.play()
+        },300)
+        
+    },
     showFPS(){
       let _this = this
       var requestAnimationFrame =

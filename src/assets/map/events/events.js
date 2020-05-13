@@ -251,10 +251,10 @@ export class Events{
 
         // 处理鼠标右键点击
         handler.setInputAction(function(e) {
-
+            console.log(e)
             let picked = _this.viewer.scene.pick(e.position),
                 _gps = Tool.GetGps(null, e.position);
-
+            
             if(MarkingState){
 
                 
@@ -269,7 +269,7 @@ export class Events{
                     })
                     if(!path.length){return}
                     currentLine.polyline.positions = new _this.Cesium.CallbackProperty(function(){
-
+                        
                         return Ce.ToPoints(path)
                     },false)
                     
@@ -278,12 +278,18 @@ export class Events{
             }
 
             if(picked && picked.id){
-
+                let pos = picked.id._origin.positions
+                if(picked.id.position.getValue){
+                    picked.id.position = picked.id.position.getValue()
+                }
+                
+                // console.log(picked.id.position,_this.Cesium.Cartesian3.fromDegrees(Number(pos[0]),Number(pos[1]),0))
+                // console.log(picked.id.position.getValue(),picked.id.position._value) 
                 _Trigger('EntityRightClick',{
                     id:picked.id.id,
                     type : picked.id.type,
                     xy:e.position,
-                    gps : picked.id.position ? Tool.GetGps(picked.id.position._value) : _gps,
+                    gps : picked.id.position ? Tool.GetGps(picked.id.position._value?picked.id.position._value:picked.id.position.getValue()) : _gps,
                     data : picked.id.origin
                 })
 

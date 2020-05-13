@@ -37,6 +37,13 @@ export function Init(ele,CONFIG){
             imageryProvider: new Cesium.SingleTileImageryProvider({
                 url : '/static/image/Map/single.jpg',
             }),
+//             imageryProvider:new Cesium.UrlTemplateImageryProvider({             
+//                 url:'http://www.google.cn/maps/vt?lyrs=s@800&x={x}&y={y}&z={z}',  
+//                 tilingScheme:new Cesium.WebMercatorTilingScheme(),              
+//                 minimumLevel:1,            
+//                 maximumLevel:99,
+//                 gamma : 0.66  
+//             }),  
             navigation:false,
             sceneModePicker:true,
             contextOptions:{
@@ -73,8 +80,8 @@ export function Init(ele,CONFIG){
     })
         viewerImagery["StereoGraphic"] = viewer.imageryLayers.addImageryProvider(StereoGraphic)
         viewerImagery['StereoGraphic'].show = false;
-
-
+    // cesium 自带设置FPS
+    // viewer.scene.debugShowFramesPerSecond = true;
     const camera = viewer.camera;
 
     const scene = viewer.scene;
@@ -89,7 +96,7 @@ export function Init(ele,CONFIG){
     scene.undergroundDepth = 0;
 
     scene.globe.depthTestAgainstTerrain = false;
-
+    // scene.screenSpaceCameraController.maximumZoomDistance = 22000000; 
     
     // scene.screenSpaceCameraController.maximumZoomDistance = 100000000;
     const Ce = new calculater(Cesium);
@@ -100,13 +107,11 @@ export function Init(ele,CONFIG){
         crossDomain: true, 
         dataType:'jsonp',
     }).then(data=>{
-        scene.screenSpaceCameraController.minimumZoomDistance = data;
+        // scene.screenSpaceCameraController.minimumZoomDistance = data;
     })
-    // const Tileset = new Cesium.Cesium3DTileset({
-    //     url:"http://192.168.0.111:8080/earthview/services/file/GetFileData/tileset/tileset.json",
-    //     show:false
-    // })
-    // viewer.scene.primitives.add(Tileset)
+
+   
+
     var Tileset = viewer.scene.primitives
     $.get(`${globalUrl.host}/find/findHypsographicMap`, {
         crossDomain: true, 
@@ -117,6 +122,13 @@ export function Init(ele,CONFIG){
             show:false
         }))
     })
+    const Tileset06 = viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
+            url:"http://192.168.0.111:8080/earthview/services/file/GetFileData/tileset06/tileset06.json",
+            
+        }),
+      Tool.FlyTo([110.160000,19.044220,0])
+    );
+  
     // viewer.zoomTo(Tileset)
     // let landMap = imageryLayers.addImageryProvider(new Cesium.ArcGisMapServerImageryProvider({
     //     url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
@@ -376,7 +388,7 @@ export function Init(ele,CONFIG){
     }   
 
 
-
+    
 
 
     const Event = new Events(Cesium,viewer);
