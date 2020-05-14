@@ -2144,7 +2144,8 @@ export default {
      */
     buildSocket(type) {
       const _this = this;
-      let WQGJList = [] 
+      let WQGJList = {}
+      let sfywq = false  //是否有武器 
       console.log('打开ws')
       // window.Map.viewer.clock.shouldAnimate = true;
 
@@ -2157,7 +2158,7 @@ export default {
       socketController.onopen = function(e) {
         console.log("Connection to server opened");
       };
-
+       
       socketController.onmessage = function(e) {
         if (_this.wsF) {
           _this.wsName = e.data;
@@ -2192,77 +2193,36 @@ export default {
           } else {
             _this.dealMessage(JSON.parse(e.data));
             let dataList = JSON.parse(e.data)
-        //    console.log(JSON.parse(e.data))
-            let wqgj_tem_xt=[]
-            let wqgj_tem_bt=[]
-            let dyc=true;
-            let sfywq=false
+
+            
             dataList.map(item=>{
+                let wqmcs=[]
                 if(item.type == "WQGJ"){
                     sfywq=true
-                    if(WQGJList.length ==0){
-                        WQGJList = item.data
-                    }else{
-                        dyc=false;                      
-                       item.data.map(index=>{
-                           let _falg=true;
-                           WQGJList.map(list =>{    
-                            if(list.mc == index.mc){
-                                    wqgj_tem_xt.push(index)
-                                    _falg=false;
-                                    return;                               
-                                }       
-                          
-                            }) 
-                            if(_falg){
-                                wqgj_tem_bt.push(index)
-                            }
-                       })
-                 
-                    }
-                   
-                }
-            }) 
-            if(!sfywq){
-                if(WQGJList.length>0){
-                        WQGJList.map(item=>{
-                            window["Map"].viewer.entities.removeById(item.mc)
-                        })
-                    }
-            }
-            if(!dyc){
-            let _ls_data=[]
-            if(WQGJList.length > 0){
-                WQGJList.map(item=>{
-                    let _f_f=true;
-                    if(wqgj_tem_xt.length > 0){
-                        wqgj_tem_xt.map(_item=>{
-                            if(item.mc!=_item.mc){
-                                _f_f=false;
-                            }
-                        })
-                        if(!_f_f){
-                            _ls_data.push(item)
+                    item.data.map(wqData =>{
+                        WQGJList[wqData.mc] = wqData
+                        if(!wqmcs.includes(wqData.mc)){
+                             wqmcs.push(wqData.mc)
+                        }     
+                    })
+                    for(let wq in WQGJList) {
+                        if(!wqmcs.includes(wq) ) {
+                            window["Map"].viewer.entities.removeById(wq)
+                            console.log(wq,11111)
                         }
-                       
-                    }
-
-                })
-                    //删除
-                    if(_ls_data.length >0){
-                        _ls_data.map(item=>{
-                            // window["Map"].entities.removeById(item.mc)
-                            window["Map"].viewer.entities.removeById(item.mc)
-                        })
-                    }
+                    } 
                     
-            
+                }
+                if( item.type == "FBTFSJ"|| item.type == "FBTFSJ1"|| item.type == "FBTFSJ2"|| item.type == "SDSJ"||
+                item.type == "FBTFSJ3"|| item.type == "FBTFSJ4" || item.type == "MC" || item.type == "XMC" || item.type =="QT" || item.type == "CTMBSJ" || item.type == "FBSJ"){
+                    sfywq=false
+                }      
+            })
+            if(!sfywq){
+                for(let wq in WQGJList) {
+                    window["Map"].viewer.entities.removeById(wq)
+                } 
             }
-            WQGJList=wqgj_tem_xt
-            WQGJList.push(...wqgj_tem_bt)
-
-            }
-            
           }
         }
       };
@@ -2702,21 +2662,18 @@ export default {
       }
 
       function dealMc(items) {
+          
         _.forEach(items, item => {
           if (window.Map.Tool.GetId(item.mcmc)) {
             window.Map.FlyCompare.Update(
               item.mcmc,
-              [Number(item["jd"]), Number(item["wd"]), 0],
-              item.data,
-              function(e) {
-                if (_this.visible == true && _this.type == "飞机") {
-                  _this.dataInfo = e;
-                }
-              },
+              [Number(item["jd"]), Number(item["wd"]), 5000],
+              item,
+              function(e) {},
               item.hx
             );
           } else {
-            window.Map.AddCompare("unknow", {
+            window.Map.AddCompare("huweijian", {
               origin: item,
               id: item.mcmc,
               name: item.mcmc,
