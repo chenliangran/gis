@@ -456,6 +456,9 @@ export function Init(ele,CONFIG){
         color : {
             feiji : Ce.CssColor('orange'),
             qianting : Ce.CssColor('#06a9e9'),
+            huweijian : Ce.CssColor('red'),
+            minchuan: Ce.CssColor('green'),
+            daodan: Ce.CssColor('#27c1e9')
         },
         displayDistance : {
             feiji : Ce.DisplayNF(300000, 100000000),

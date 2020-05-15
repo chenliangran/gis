@@ -526,10 +526,11 @@ import gisHeader from "../view/header/header.vue";
 import MapTool from "../view/toolbar/maptool.vue";
 import DisplayController from "../view/toolbar/displayController.vue";
 import { setInterval } from 'timers';
+const calculater = require('../assets/map/tools/calculater.js').default;
 //import { connect } from 'http2';
 
 const _ = require("lodash");
-
+const Ce = new calculater(Cesium);
 const CMap = require("../assets/map/CMap.js");
 let socketController = null;
 
@@ -2435,33 +2436,60 @@ export default {
           }
         }
         //武器轨迹
-        function dealWqgj(s) {    
-          s.map(t=>{
-            let entity = window.Map.viewer.entities.getById(t.mc);
-            if(entity){
-              entity.position =new Cesium.CallbackProperty(function(){
-                return Cesium.Cartesian3.fromDegrees(Number(t.jd),Number(t.wd))
-              },false)
+        function dealWqgj(items) {  
+            _.forEach(items, item => {
+            if (window.Map.Tool.GetId(item.mc)) {
+                window.Map.FlyCompare.Update(
+                item.mc,
+                [Number(item["jd"]), Number(item["wd"]), 0],
+                item,
+                function(e) {},
+                0
+                );
             } else {
-              window.Map.viewer.entities.add({
-                id:t.mc,
-                position:Cesium.Cartesian3.fromDegrees(Number(t.jd),Number(t.wd)),
-                type:'wqgj',
-                label:{
-                  text:t.mc,
-                  font:'16px bold',
-                  fillColor:Cesium.Color.BLUE,
-                  pixelOffset:new Cesium.Cartesian2(10,20)
-                },
-                billboard:{
-                  image:'/static/image/junbiao/daodan.png',
-                  width:30,
-                  height:30,
-                  rotation:Cesium.Math.toRadians(Number(360 - Number(t.hjj || t.hx)))
-                }
-              })
+                window.Map.AddCompare("daodan", {
+                origin: item,
+                id: item.mc,
+                name: item.mc,
+                position: [Number(item["jd"]), Number(item["wd"]), 0]
+                });
             }
-          })
+            });
+
+        //   s.map(t=>{
+        //     let entity = window.Map.viewer.entities.getById(t.mc);
+        //     if(entity){
+        //       entity.position =new Cesium.CallbackProperty(function(){
+        //         return Cesium.Cartesian3.fromDegrees(Number(t.jd),Number(t.wd))
+        //       },false)
+        //     } else {
+        //       window.Map.viewer.entities.add({
+        //         id:t.mc,
+        //         position:Cesium.Cartesian3.fromDegrees(Number(t.jd),Number(t.wd)),
+        //         type:'wqgj',
+        //         label:{
+        //           text:t.mc,
+        //           font:'16px bold',
+        //           fillColor:Cesium.Color.BLUE,
+        //           pixelOffset:new Cesium.Cartesian2(10,20)
+        //         },
+        //         polyline:{
+        //             positions: Ce.ToPointsHeight([]),
+        //             width : 2,
+        //             material:new Cesium.PolylineDashMaterialProperty({
+        //                 color : 'firebrick',
+        //                 dashLength: 8.0
+        //             })
+        //         },
+        //         billboard:{
+        //           image:'/static/image/junbiao/daodan.png',
+        //           width:30,
+        //           height:30,
+        //           rotation:Cesium.Math.toRadians(Number(360 - Number(t.hjj || t.hx)))
+        //         }
+        //       })
+        //     }
+        //   })
         }
         // 处理浮标目标数据
         function dealFbSJMb(item) {

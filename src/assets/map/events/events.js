@@ -253,14 +253,9 @@ export class Events{
         handler.setInputAction(function(e) {
             console.log(e)
             let picked = _this.viewer.scene.pick(e.position),
-                _gps = Tool.GetGps(null, e.position);
-            
-            if(MarkingState){
-
-                
+                _gps = Tool.GetGps(null, e.position);            
+            if(MarkingState){               
                 if(MarkConfig.shape.indexOf('line') != -1){
-                    
-
                     let path = [];
                     _.forEach(linePositions, (item) => {
                         
