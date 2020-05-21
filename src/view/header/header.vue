@@ -23,11 +23,12 @@
                     <i class="icon icon3"></i>
                     <span>参数设置</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag4" style="height:208px">
+                    <div class="menuOption" v-show="flag4" style="height:260px">
                         <p @click="tudeShow(tudeShow)">经纬度设置</p>
                         <p @click="plane">飞机轨迹</p>
                         <p @click="submarine">潜艇轨迹</p>
                         <p @click="tiles">高程模型</p>
+                        <p @click="airSafe">航空安全管道</p>
                     </div>
                 </li>
                 <li @click="geshi(flag5)">
@@ -522,6 +523,13 @@ export default {
                 window.Map.Tileset._primitives[5].show = this.tilesShow
             }
            
+        },
+        airSafe(){
+            var airSafe = window.Map.viewer.entities.getById('航空安全管道');
+            airSafe.show = !airSafe.show;
+            if(airSafe.show){
+                window.Map.Tool.FlyTo([110, 35, 4000000]);
+            }
         },
         addDomain() {
             this.dynamicValidateForm.domains.push({

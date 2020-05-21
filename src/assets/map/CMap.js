@@ -612,9 +612,40 @@ export function Init(ele,CONFIG){
         }
 
     }
+    var height;
+    var positions;
+    var stripeMaterial = new Cesium.StripeMaterialProperty({
+        evenColor: Cesium.Color.WHITE.withAlpha(0.5),
+        oddColor: Cesium.Color.BLUE.withAlpha(0.5),
+        repeat: 5.0,
+    });
 
-
-
+    function computeRect(radius) {
+        var positions = [];
+        positions.push(new Cesium.Cartesian2(-1*radius/2 ,-radius/2));
+        positions.push(new Cesium.Cartesian2(radius/2 ,-radius/2));
+        positions.push(new Cesium.Cartesian2(radius/2 ,radius/2));
+        positions.push(new Cesium.Cartesian2(-1 * radius/2 ,radius/2));
+        return positions;
+    }
+    viewer.entities.add({
+        polylineVolume: {
+            positions: Cesium.Cartesian3.fromDegreesArray([
+                104.0,
+                32.1,
+                111.0,
+                34.0,
+                114.0,
+                37.0,
+                117,
+                42
+            ]),
+            shape: computeRect(80000.0),
+            material: Cesium.Color.RED.withAlpha(0.2)
+        },
+        id:"航空安全管道",
+        show:false
+    });
 
     return {
         viewerImagery,
