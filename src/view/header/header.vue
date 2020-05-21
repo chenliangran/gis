@@ -28,6 +28,8 @@
                         <p @click="plane">飞机轨迹</p>
                         <p @click="submarine">潜艇轨迹</p>
                         <p @click="tiles">高程模型</p>
+                        <p @click="bigTarget">大量目标</p>
+                        <p @click="tiles06">精确地图</p>
                         <p @click="airSafe">航空安全管道</p>
                     </div>
                 </li>
@@ -35,7 +37,7 @@
                      <i class="icon icon9"></i>
                     <span>地图格式</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag5" style="left:478px;height:310px;">
+                    <div class="menuOption" v-show="flag5" style="left:478px;height:265px;">
                         <el-radio-group v-model="mapType" size="small" @change="mapType1(mapType)">
                             <el-radio label="haitu">海图格式</el-radio>
                             <el-radio label="shp格式">shp格式</el-radio>
@@ -437,6 +439,13 @@ export default {
 				this.name = data.fileName
             })
 		},
+        airSafe(){
+            var airSafe = window.Map.viewer.entities.getById('航空安全管道');
+            airSafe.show = !airSafe.show;
+            if(airSafe.show){
+                window.Map.Tool.FlyTo([110, 35, 4000000]);
+            }
+        },
 		load() {
 			let id = sessionStorage.getItem("selectEd")
 			window.open(globalUrl.host+'/find/loadWordFile?fileName='+id)
@@ -524,13 +533,6 @@ export default {
             }
            
         },
-        airSafe(){
-            var airSafe = window.Map.viewer.entities.getById('航空安全管道');
-            airSafe.show = !airSafe.show;
-            if(airSafe.show){
-                window.Map.Tool.FlyTo([110, 35, 4000000]);
-            }
-        },
         addDomain() {
             this.dynamicValidateForm.domains.push({
                 jd: "",
@@ -550,7 +552,6 @@ export default {
             });
         },
         feijiPolygon(){
-            debugger
             if(!Number(this.formInline.len)){
                 this.$message.error('飞机轨迹长度不能为空！');
                 return false

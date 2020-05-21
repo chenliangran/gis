@@ -364,12 +364,33 @@ background: none !important;
   top:110px;
   right:50px
 }
+#handle-wrap{
+    position: fixed;
+    top:10px;
+    left: 50%;
+    z-index: 1000000;
+}
 </style>
 
 <template>
   <div class="MapContainer">
+      <!-- lkr -->
+      <!-- <div id="handle-wrap">
+
+      </div>
+      <div id="handle-wrap">
+        <select id="pointEvent" @change="selectHandle()">
+            <option value="1">1个point</option>
+            <option value="10">10个point</option>
+            <option value="100">100个point</option>
+            <option value="1000">1000个point</option>
+            <option value="50000">5万个point</option>
+        </select>
+        <div @click="play()" id="play">开始运动</div>
+    </div> -->
+    <!-- lkr -->
     <login @login="login" v-if="!loginFs" v-show="loginF"></login>
-    <gis-header :timeNow="timeNow"
+    <gis-header @bigTarget='bigTarget' :timeNow="timeNow"
       @flagType="flagType"
       @mapTool="maptool"
       @controller="controller"
@@ -505,10 +526,11 @@ import gisHeader from "../view/header/header.vue";
 import MapTool from "../view/toolbar/maptool.vue";
 import DisplayController from "../view/toolbar/displayController.vue";
 import { setInterval } from 'timers';
+const calculater = require('../assets/map/tools/calculater.js').default;
 //import { connect } from 'http2';
 
 const _ = require("lodash");
-
+const Ce = new calculater(Cesium);
 const CMap = require("../assets/map/CMap.js");
 let socketController = null;
 
@@ -516,12 +538,24 @@ const keyMap = {
   lon: "zjjd",
   lat: "zjwd"
 };
+// Cesium.Ion.defaultAccessToken = common.cesiumToken;
+//   var viewer = new Cesium.Viewer('cesiumContainer');
+  var pointPrimitives = null;// 申明点渲染集合
+  var isPlay = false; // 点运行状态。false为静止，true为运动
+  // 点颜色集合
+  var colorList = ["SNOW", "PALETURQUOISE1", "BLUE", "GREEN", "YELLOW", "DARKGOLDENROD", "SPRINGGREEN", "INDIANRED1", "FIREBRICK", "FIREBRICK1", "DARKORCHID", "DARKORCHID1", "DARKORCHID2", "PURPLE1", "PURPLE", "PURPLE2", "PURPLE3", "LIGHTCYAN", "LIGHTCYAN1", "LIGHTCYAN2"]
+  // 默认加载一个点
+//   selectHandle();
+  // 申明定时器
+  var timeras = null
 
 export default {
   name: "CMap",
 
   data: function() {
     return {
+        timers:null,
+        timerss:null,
       setZZStyle:{
         left:0,
         width:0
@@ -740,6 +774,80 @@ export default {
     }
   },
   methods: {
+    bigTarget(){
+        this.selectHandle()
+
+    },
+    random(lower, upper) {
+        return Math.floor(Math.random() * (upper - lower)) + lower;
+    },
+    play() {
+
+        window.clearInterval(timeras);
+        let viewer = window.Map.viewer,that = this,i = 0
+        timeras = window.setInterval(function(){
+            i++
+            for (let i = 0; i < pointPrimitives._pointPrimitives.length; i++) {
+            var longitude = that.random(-180, 180);
+            var latitude = that.random(-90, 90);
+            var height = 0;
+            var position = Cesium.Cartesian3.fromDegrees(longitude, latitude, height);
+            // 修改点位置
+            pointPrimitives._pointPrimitives[i].position = position;
+            }
+            if(i >= 30){
+                clear()
+            }
+        }, 500);
+        
+       
+        function clear(){
+            window.clearInterval(timeras);
+            viewer.scene.primitives.remove(pointPrimitives);
+        }
+       
+    },
+    selectHandle() {
+        let viewer = window.Map.viewer
+        // 判断点元素是否已经存在
+        if (pointPrimitives) {
+            // 移除已经存在的点元素
+            viewer.scene.primitives.remove(pointPrimitives);
+        }
+        // 初始化一个点的可渲染集合。
+        pointPrimitives = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
+
+        var numPoints = 50000;
+
+        var base = viewer.scene.globe.ellipsoid.radii.x;
+        // var color = Cesium.Color.LIGHTSKYBLUE;
+        // 从颜色数组中随机取出一个颜色
+        var color = Cesium.Color[colorList[Math.round(this.random(0, 15))]]
+        // 轮廓颜色
+        var outlineColor = Cesium.Color.BLACK;
+        // 循环生成点
+        for (var j = 0; j < numPoints; ++j) {
+        // 随机生成经、纬、高
+        var longitude = this.random(-180, 180);
+        var latitude = this.random(-90, 90);
+        var height = this.random(50000, 5000000);
+        // 将经、纬、高转成笛卡尔3维坐标系坐标x、y、z
+        var position = Cesium.Cartesian3.fromDegrees(longitude, latitude, height);
+        // console.log(longitude,latitude,height,position);
+        // 将点point添加到对象pointPrimitives中
+            pointPrimitives.add({
+                pixelSize: 5,
+                color: Cesium.Color[colorList[Math.round(this.random(0, 15))]],
+                outlineColor: outlineColor,
+                outlineWidth: 0,
+                position: position
+            });
+        }
+        setTimeout(() => {
+            this.play()
+        },300)
+        
+    },
     showFPS(){
       let _this = this
       var requestAnimationFrame =
@@ -2037,7 +2145,8 @@ export default {
      */
     buildSocket(type) {
       const _this = this;
-      let WQGJList = [] 
+      let WQGJList = {}
+      let sfywq = false  //是否有武器 
       console.log('打开ws')
       // window.Map.viewer.clock.shouldAnimate = true;
 
@@ -2050,7 +2159,7 @@ export default {
       socketController.onopen = function(e) {
         console.log("Connection to server opened");
       };
-
+       
       socketController.onmessage = function(e) {
         if (_this.wsF) {
           _this.wsName = e.data;
@@ -2085,77 +2194,36 @@ export default {
           } else {
             _this.dealMessage(JSON.parse(e.data));
             let dataList = JSON.parse(e.data)
-        //    console.log(JSON.parse(e.data))
-            let wqgj_tem_xt=[]
-            let wqgj_tem_bt=[]
-            let dyc=true;
-            let sfywq=false
+
+            
             dataList.map(item=>{
+                let wqmcs=[]
                 if(item.type == "WQGJ"){
                     sfywq=true
-                    if(WQGJList.length ==0){
-                        WQGJList = item.data
-                    }else{
-                        dyc=false;                      
-                       item.data.map(index=>{
-                           let _falg=true;
-                           WQGJList.map(list =>{    
-                            if(list.mc == index.mc){
-                                    wqgj_tem_xt.push(index)
-                                    _falg=false;
-                                    return;                               
-                                }       
-                          
-                            }) 
-                            if(_falg){
-                                wqgj_tem_bt.push(index)
-                            }
-                       })
-                 
-                    }
-                   
-                }
-            }) 
-            if(!sfywq){
-                if(WQGJList.length>0){
-                        WQGJList.map(item=>{
-                            window["Map"].viewer.entities.removeById(item.mc)
-                        })
-                    }
-            }
-            if(!dyc){
-            let _ls_data=[]
-            if(WQGJList.length > 0){
-                WQGJList.map(item=>{
-                    let _f_f=true;
-                    if(wqgj_tem_xt.length > 0){
-                        wqgj_tem_xt.map(_item=>{
-                            if(item.mc!=_item.mc){
-                                _f_f=false;
-                            }
-                        })
-                        if(!_f_f){
-                            _ls_data.push(item)
+                    item.data.map(wqData =>{
+                        WQGJList[wqData.mc] = wqData
+                        if(!wqmcs.includes(wqData.mc)){
+                             wqmcs.push(wqData.mc)
+                        }     
+                    })
+                    for(let wq in WQGJList) {
+                        if(!wqmcs.includes(wq) ) {
+                            window["Map"].viewer.entities.removeById(wq)
+                            console.log(wq,11111)
                         }
-                       
-                    }
-
-                })
-                    //删除
-                    if(_ls_data.length >0){
-                        _ls_data.map(item=>{
-                            // window["Map"].entities.removeById(item.mc)
-                            window["Map"].viewer.entities.removeById(item.mc)
-                        })
-                    }
+                    } 
                     
-            
+                }
+                if( item.type == "FBTFSJ"|| item.type == "FBTFSJ1"|| item.type == "FBTFSJ2"|| item.type == "SDSJ"||
+                item.type == "FBTFSJ3"|| item.type == "FBTFSJ4" || item.type == "MC" || item.type == "XMC" || item.type =="QT" || item.type == "CTMBSJ" || item.type == "FBSJ"){
+                    sfywq=false
+                }      
+            })
+            if(!sfywq){
+                for(let wq in WQGJList) {
+                    window["Map"].viewer.entities.removeById(wq)
+                } 
             }
-            WQGJList=wqgj_tem_xt
-            WQGJList.push(...wqgj_tem_bt)
-
-            }
-            
           }
         }
       };
@@ -2368,33 +2436,60 @@ export default {
           }
         }
         //武器轨迹
-        function dealWqgj(s) {    
-          s.map(t=>{
-            let entity = window.Map.viewer.entities.getById(t.mc);
-            if(entity){
-              entity.position =new Cesium.CallbackProperty(function(){
-                return Cesium.Cartesian3.fromDegrees(Number(t.jd),Number(t.wd))
-              },false)
+        function dealWqgj(items) {  
+            _.forEach(items, item => {
+            if (window.Map.Tool.GetId(item.mc)) {
+                window.Map.FlyCompare.Update(
+                item.mc,
+                [Number(item["jd"]), Number(item["wd"]), 0],
+                item,
+                function(e) {},
+                0
+                );
             } else {
-              window.Map.viewer.entities.add({
-                id:t.mc,
-                position:Cesium.Cartesian3.fromDegrees(Number(t.jd),Number(t.wd)),
-                type:'wqgj',
-                label:{
-                  text:t.mc,
-                  font:'16px bold',
-                  fillColor:Cesium.Color.BLUE,
-                  pixelOffset:new Cesium.Cartesian2(10,20)
-                },
-                billboard:{
-                  image:'/static/image/junbiao/daodan.png',
-                  width:30,
-                  height:30,
-                  rotation:Cesium.Math.toRadians(Number(360 - Number(t.hjj || t.hx)))
-                }
-              })
+                window.Map.AddCompare("daodan", {
+                origin: item,
+                id: item.mc,
+                name: item.mc,
+                position: [Number(item["jd"]), Number(item["wd"]), 0]
+                });
             }
-          })
+            });
+
+        //   s.map(t=>{
+        //     let entity = window.Map.viewer.entities.getById(t.mc);
+        //     if(entity){
+        //       entity.position =new Cesium.CallbackProperty(function(){
+        //         return Cesium.Cartesian3.fromDegrees(Number(t.jd),Number(t.wd))
+        //       },false)
+        //     } else {
+        //       window.Map.viewer.entities.add({
+        //         id:t.mc,
+        //         position:Cesium.Cartesian3.fromDegrees(Number(t.jd),Number(t.wd)),
+        //         type:'wqgj',
+        //         label:{
+        //           text:t.mc,
+        //           font:'16px bold',
+        //           fillColor:Cesium.Color.BLUE,
+        //           pixelOffset:new Cesium.Cartesian2(10,20)
+        //         },
+        //         polyline:{
+        //             positions: Ce.ToPointsHeight([]),
+        //             width : 2,
+        //             material:new Cesium.PolylineDashMaterialProperty({
+        //                 color : 'firebrick',
+        //                 dashLength: 8.0
+        //             })
+        //         },
+        //         billboard:{
+        //           image:'/static/image/junbiao/daodan.png',
+        //           width:30,
+        //           height:30,
+        //           rotation:Cesium.Math.toRadians(Number(360 - Number(t.hjj || t.hx)))
+        //         }
+        //       })
+        //     }
+        //   })
         }
         // 处理浮标目标数据
         function dealFbSJMb(item) {
@@ -2595,21 +2690,18 @@ export default {
       }
 
       function dealMc(items) {
+          
         _.forEach(items, item => {
           if (window.Map.Tool.GetId(item.mcmc)) {
             window.Map.FlyCompare.Update(
               item.mcmc,
-              [Number(item["jd"]), Number(item["wd"]), 0],
-              item.data,
-              function(e) {
-                if (_this.visible == true && _this.type == "飞机") {
-                  _this.dataInfo = e;
-                }
-              },
+              [Number(item["jd"]), Number(item["wd"]), 5000],
+              item,
+              function(e) {},
               item.hx
             );
           } else {
-            window.Map.AddCompare("unknow", {
+            window.Map.AddCompare("huweijian", {
               origin: item,
               id: item.mcmc,
               name: item.mcmc,
