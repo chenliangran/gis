@@ -23,7 +23,7 @@
                     <i class="icon icon3"></i>
                     <span>参数设置</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag4" style="height:260px">
+                    <div class="menuOption" v-show="flag4" style="height:235px">
                         <p @click="tudeShow(tudeShow)">经纬度设置</p>
                         <p @click="plane">飞机轨迹</p>
                         <p @click="submarine">潜艇轨迹</p>
@@ -370,6 +370,18 @@ export default {
 		}
 	},
 	methods: {
+        bigTarget(){
+            this.$emit('bigTarget')
+        },
+        tiles06() {
+            this.tiles06Show = true;
+            if (this.tiles06Show) {
+
+                // window.Map.viewer.scene.primitives.add(Tileset)
+                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[0])
+                window.Map.Tileset._primitives[0].show = this.tiles06Show
+            }
+        },
         handleChecked(menuData){
             this.$emit('flagType',this.menuData)
         },
@@ -1203,6 +1215,10 @@ export default {
         top: 19px;
         left: 10px;
         cursor: pointer;
+    }
+    .menuOption p{
+        height: 32px;
+        line-height: 32px;
     }
     .menuOption{
         position: absolute;
