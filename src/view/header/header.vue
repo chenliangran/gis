@@ -150,13 +150,12 @@
                                     :key="'航迹点' + index"
                                     :prop="'domains.' + index + '.value'"
                             >
-                                 <el-input type='number' style="width: 35%;margin-right: 10px" v-model="domain.wd">
-                                    <i slot="suffix">纬度</i>
-                                </el-input>
                                 <el-input type='number' style="width: 35%;margin-right: 10px;" v-model="domain.jd">
                                     <i slot="suffix">经度</i>
                                 </el-input>
-                               
+                                <el-input type='number' style="width: 35%;margin-right: 10px" v-model="domain.wd">
+                                    <i slot="suffix">纬度</i>
+                                </el-input>
                                 <el-button type="danger" @click.prevent="removeDomain(domain)">删除</el-button>
                             </el-form-item>
                         </el-col>
@@ -171,18 +170,18 @@
                     <el-form :model="dynamicValidateForm2" ref="dynamicValidateForm2" label-width="100px" class="demo-dynamic">
                         <el-col>
                             <li v-for="(domain, index) in dynamicValidateForm2.domains">
+                                <div style="margin: 5px 0">
+                                    <span style="font-size: 16px;margin-right: 5px">经度:{{index+1}}</span>
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd1"/>°
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd2"/>′
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd3"/>″
+                                </div>
                                  <div style="margin: 5px 0">
                                     <span style="font-size: 16px;margin-right: 5px">纬度:{{index+1}}</span>
                                     <el-input size="small" style="width: 25%" type='number' v-model="domain.wd1"/>°
                                     <el-input size="small" style="width: 25%" type='number' v-model="domain.wd2"/>′
                                     <el-input size="small" style="width: 25%" type='number' v-model="domain.wd3"/>″
                                     <el-button size="small" type="danger" @click.prevent="removeDomain2(domain)">删除</el-button>
-                                </div>
-                                <div style="margin: 5px 0">
-                                    <span style="font-size: 16px;margin-right: 5px">经度:{{index+1}}</span>
-                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd1"/>°
-                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd2"/>′
-                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd3"/>″
                                 </div>
                             </li>
                         </el-col>
@@ -215,17 +214,17 @@
                             <!-- <el-form-item label="序号" style="width:10%">
                                 <span>{{ item.sx}}</span>
                             </el-form-item> -->
-                             <el-form-item label="航迹点" style="width:10%">
+                            <el-form-item label="航迹点" style="width:10%">
                                 <span>{{item.sx+1}}</span>
+                            </el-form-item>
+                            <el-form-item label="经度" style="width:30%">
+                                <el-input v-if="item.isOK" v-model="item.jd" style="width:100%;hight:100%"></el-input>
+                                <span v-else @click="dbclick(item)">{{ item.jd }}</span>
                             </el-form-item>
                             <el-form-item label="纬度" style="width:30%">
                                 <el-input v-if="item.isOK" v-model="item.wd" style="width:100%;hight:100%"></el-input>
                                 <span v-else @click="dbclick(item)">{{ item.wd}}</span>
                                 <span></span>
-                            </el-form-item>
-                             <el-form-item label="经度" style="width:30%">
-                                <el-input v-if="item.isOK" v-model="item.jd" style="width:100%;hight:100%"></el-input>
-                                <span v-else @click="dbclick(item)">{{ item.jd }}</span>
                             </el-form-item>
                             <el-form-item style="width:15%" v-if="i===props.row.hjds.length-1">
                                <el-button type="primary" size="small" @click="drawPolygon1(props)">修改</el-button>
@@ -250,6 +249,39 @@
                 <el-button @click="jingweiduVisible = false">取 消</el-button>
                 <el-button type="primary" @click="jingweiduPolygon">确 定</el-button>
             </span>
+        </el-dialog>
+        <el-dialog
+                title="航空安全管道位置设置"
+                :visible.sync="gdVisible"
+                width="30%"
+                append-to-body
+                :close-on-click-modal="false"
+        >
+            <div style="max-height: 600px;overflow: auto">
+                <el-button size="mini" type="primary" @click="addGd" style="margin-bottom: 10px">新增点</el-button>
+                <el-form v-model="gdValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+                    <el-col>
+                        <el-form-item
+                                v-for="(domain, index) in gdValidateForm.domains"
+                                :label="`点${index+1}`"
+                                :key="'点' + index"
+                                :prop="'domains.' + index + '.value'"
+                        >
+                            <el-input type='number' style="width: 35%;margin-right: 10px;" v-model="domain.jd">
+                                <i slot="suffix">经度</i>
+                            </el-input>
+                            <el-input type='number' style="width: 35%;margin-right: 10px" v-model="domain.wd">
+                                <i slot="suffix">纬度</i>
+                            </el-input>
+                            <el-button type="danger" @click.prevent="removeDomainGd(domain)">删除</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-form>
+            </div>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="gdVisible = false">取 消</el-button>
+            <el-button type="primary" @click="drawGd">确 定</el-button>
+          </span>
         </el-dialog>
         <el-dialog
                 title="飞机轨迹"
@@ -341,6 +373,13 @@ export default {
                     key: ""
                 }],
             },
+            gdValidateForm: {
+                domains: [{
+                    jd: "",
+                    wd:"",
+                    key: ""
+                }],
+            },
             lineId:[],
         //     menuData:{
 		// 	  '飞行曲线':'',
@@ -366,6 +405,7 @@ export default {
             handleCurrentData:{},
             tilesShow:false,
             tyShow:false,
+            gdVisible:false
             //QTnum:0
 		}
 	},
@@ -452,11 +492,8 @@ export default {
             })
 		},
         airSafe(){
-            var airSafe = window.Map.viewer.entities.getById('航空安全管道');
-            airSafe.show = !airSafe.show;
-            if(airSafe.show){
-                window.Map.Tool.FlyTo([110, 35, 4000000]);
-            }
+            this.gdVisible = true;
+            this.gdValidateForm.domains=[{jd: "", wd:"", key: ""}];
         },
 		load() {
 			let id = sessionStorage.getItem("selectEd")
@@ -1055,6 +1092,12 @@ export default {
                 go          :  function(){step();} 
             } 
         },
+        removeDomainGd(item) {
+            var index = this.gdValidateForm.domains.indexOf(item)
+            if (index !== -1) {
+                this.gdValidateForm.domains.splice(index, 1)
+            }
+        },
         removeDomain(item) {
             var index = this.dynamicValidateForm.domains.indexOf(item)
             if (index !== -1) {
@@ -1078,6 +1121,44 @@ export default {
                 this.dfmType = true;
             }
         },
+        addGd(){
+            this.gdValidateForm.domains.push({
+                jd: "",
+                wd:"",
+                key: Date.now()
+            });
+        },
+        drawGd(){
+            this.gdVisible = false;
+            function computeRect(radius) {
+                var positions = [];
+                positions.push(new Cesium.Cartesian2(-1*radius/2 ,-radius/2));
+                positions.push(new Cesium.Cartesian2(radius/2 ,-radius/2));
+                positions.push(new Cesium.Cartesian2(radius/2 ,radius/2));
+                positions.push(new Cesium.Cartesian2(-1 * radius/2 ,radius/2));
+                return positions;
+            }
+            let arr = [];
+            this.gdValidateForm.domains.map(s=>{
+                arr.push(Number(s.jd),Number(s.wd))
+            })
+            window.Map.viewer.entities.add({
+                polylineVolume: {
+                    positions: Cesium.Cartesian3.fromDegreesArray(arr),
+                    shape: computeRect(80000.0),
+                    material: Cesium.Color.RED.withAlpha(0.2)
+                },
+            });
+
+            // 104.0,
+            //     32.1,
+            //     111.0,
+            //     34.0,
+            //     114.0,
+            //     37.0,
+            //     117,
+            //     42
+        }
     },
      mounted() {
         let that = this
