@@ -23,7 +23,7 @@
                     <i class="icon icon3"></i>
                     <span>参数设置</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag4" style="height:235px">
+                    <div class="menuOption" v-show="flag4" style="height:258px">
                         <p @click="tudeShow(tudeShow)">经纬度设置</p>
                         <p @click="plane">飞机轨迹</p>
                         <p @click="submarine">潜艇轨迹</p>
@@ -31,6 +31,7 @@
                         <p @click="bigTarget">大量目标</p>
                         <p @click="tiles06">精确地图</p>
                         <p @click="airSafe">航空安全管道</p>
+                        <p @click="searchCity">全国行政区查询</p>
                     </div>
                 </li>
                 <li @click="geshi(flag5)">
@@ -66,7 +67,7 @@
                      <i class="icon icon8"></i>
                      <div class="menuOption" style="left:10px;height:270px;" v-show="tyShow">
                          <el-radio-group v-model="tyType" size="small" @change="tyChange(tyType)">
-                              <el-radio label="mercator">墨卡托投影</el-radio>
+                             <el-radio label="mercator">墨卡托投影</el-radio>
                              <el-radio label="lanbote">兰伯特投影</el-radio>
                              <el-radio label="Bonner">伯纳投影</el-radio>
                              <el-radio label="StereoGraphic">球极平面投影</el-radio>
@@ -317,6 +318,21 @@
             <el-button type="primary" @click="dunkerPolygon">确 定</el-button>
           </span>
         </el-dialog>
+        <el-dialog
+                title="全国行政区查询"
+                :visible.sync="cityVisible"
+                width="15%"
+                append-to-body
+                :close-on-click-modal="false"
+        >
+            <div style="max-height: 600px;overflow: auto">
+                <el-input v-model="cityName" placeholder="请输入行政区名称"></el-input>
+            </div>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="cityVisible = false">取 消</el-button>
+            <el-button type="primary" @click="searchCityYes">查 询</el-button>
+          </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -395,7 +411,7 @@ export default {
                 len: ''
             },
             mapType:'haitu',
-            tyType:"",
+            tyType:"mercator",
             selectFs:'jwd',
             jwdType:true,
             dfmType:false,
@@ -405,7 +421,9 @@ export default {
             handleCurrentData:{},
             tilesShow:false,
             tyShow:false,
-            gdVisible:false
+            gdVisible:false,
+            cityVisible:false,
+            cityName: ""
             //QTnum:0
 		}
 	},
@@ -435,8 +453,9 @@ export default {
             window.Map.viewerImagery['mercator'].show = false;
             window.Map.viewerImagery['haitu'].show = false
             window.Map.viewerImagery['StereoGraphic'].show = false;
-            if(s == "Ronbinson"){
-
+            window.Map.viewerImagery['Ronbinson'].show = false;
+            if(s == "mercator"){
+                window.Map.viewerImagery['haitu'].show = true
             } else {
                 window.Map.viewerImagery[s].show = true;
             }
@@ -447,7 +466,6 @@ export default {
             window.Map.viewerImagery['GeoTiff'].show = false
             window.Map.viewerImagery['png格式'].show = false
             window.Map.viewerImagery['jysl格式'].show = false
-           
             window.Map.viewerImagery[mapType].show = true  
         },
         CurentTime(time){
@@ -1142,22 +1160,39 @@ export default {
             this.gdValidateForm.domains.map(s=>{
                 arr.push(Number(s.jd),Number(s.wd))
             })
-            window.Map.viewer.entities.add({
+            let entity= window.Map.viewer.entities.add({
                 polylineVolume: {
                     positions: Cesium.Cartesian3.fromDegreesArray(arr),
                     shape: computeRect(80000.0),
                     material: Cesium.Color.RED.withAlpha(0.2)
                 },
             });
-
-            // 104.0,
-            //     32.1,
-            //     111.0,
-            //     34.0,
-            //     114.0,
-            //     37.0,
-            //     117,
-            //     42
+            window.Map.viewer.zoomTo(entity)
+        },
+        searchCity(){
+            this.cityName="";
+            this.cityVisible = true;
+        },
+        searchCityYes(){
+            let that = this;
+            $.ajax({
+                type: "get",
+                url: `${globalUrl.host}/hjx/findQGDLSJbyMC`,
+                data: {
+                    mc: this.cityName
+                },
+                success(data) {
+                    that.cityVisible = false;
+                    if(data.length){
+                        let jwd = data[0].zb;
+                        let jd = jwd.split(",")[0];
+                        let wd = jwd.split(",")[1];
+                        window.Map.Tool.FlyTo([Number(jd), Number(wd), 40000]);
+                    } else {
+                        that.$message("无匹配数据！")
+                    }
+                }
+            })
         }
     },
      mounted() {
