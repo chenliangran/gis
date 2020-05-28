@@ -12,17 +12,17 @@
     min-width: 1000px;
 }
 .login-msg-big{
-    width: 35%;
+    width: 40%;
     height: 35%;
     /* border: 1px solid red; */
     position: absolute;
-    left:45%;
+    left:40%;
     top:28%
 }
 .login-tilte{
     width: 100%;
     height: 26%;
-    background: url(../../assets/login/反潜任务复盘软件.png) no-repeat!important;
+    background: url(../../assets/login/indexTitle.png) no-repeat!important;
 	background-size: 100% 100%!important;
 }
 .login-msg{

@@ -66,7 +66,7 @@ export function Init(ele,CONFIG){
     var viewerImagery = {}
 
     var lanbote = new Cesium.SingleTileImageryProvider({
-            url : '/static/image/Map/lanbote.jpg',
+            url : '/static/image/Map/Lambert.jpg',
     })
         viewerImagery["lanbote"] =viewer.imageryLayers.addImageryProvider(lanbote)
         viewerImagery['lanbote'].show = false;
@@ -76,10 +76,16 @@ export function Init(ele,CONFIG){
         viewerImagery["Bonner"] =viewer.imageryLayers.addImageryProvider(Bonner)
         viewerImagery['Bonner'].show = false;
     var StereoGraphic = new Cesium.SingleTileImageryProvider({
-        url : '/static/image/Map/StereoGraphic.jpg',
+        url : '/static/image/Map/qjpm.jpg',
     })
         viewerImagery["StereoGraphic"] = viewer.imageryLayers.addImageryProvider(StereoGraphic)
         viewerImagery['StereoGraphic'].show = false;
+
+    var Ronbinson = new Cesium.SingleTileImageryProvider({
+        url : '/static/image/Map/robinson.jpg',
+    })
+    viewerImagery["Ronbinson"] = viewer.imageryLayers.addImageryProvider(Ronbinson)
+    viewerImagery['Ronbinson'].show = false;
     // cesium 自带设置FPS
     // viewer.scene.debugShowFramesPerSecond = true;
     const camera = viewer.camera;
@@ -1065,8 +1071,13 @@ export function Init(ele,CONFIG){
         }
 
     }
-
-
+    var height;
+    var positions;
+    var stripeMaterial = new Cesium.StripeMaterialProperty({
+        evenColor: Cesium.Color.WHITE.withAlpha(0.5),
+        oddColor: Cesium.Color.BLUE.withAlpha(0.5),
+        repeat: 5.0,
+    });
 
 
     return {

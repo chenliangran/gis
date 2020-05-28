@@ -23,13 +23,15 @@
                     <i class="icon icon3"></i>
                     <span>参数设置</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag4" style="height:200px">
+                    <div class="menuOption" v-show="flag4" style="height:258px">
                         <p @click="tudeShow(tudeShow)">经纬度设置</p>
                         <p @click="plane">飞机轨迹</p>
                         <p @click="submarine">潜艇轨迹</p>
                         <p @click="tiles">高程模型</p>
                         <p @click="bigTarget">大量目标</p>
                         <p @click="tiles06">精确地图</p>
+                        <p @click="airSafe">航空安全管道</p>
+                        <p @click="searchCity">全国行政区查询</p>
                     </div>
                 </li>
                 <li @click="geshi(flag5)">
@@ -65,7 +67,7 @@
                      <i class="icon icon8"></i>
                      <div class="menuOption" style="left:10px;height:270px;" v-show="tyShow">
                          <el-radio-group v-model="tyType" size="small" @change="tyChange(tyType)">
-                              <el-radio label="mercator">墨卡托投影</el-radio>
+                             <el-radio label="mercator">墨卡托投影</el-radio>
                              <el-radio label="lanbote">兰伯特投影</el-radio>
                              <el-radio label="Bonner">伯纳投影</el-radio>
                              <el-radio label="StereoGraphic">球极平面投影</el-radio>
@@ -149,13 +151,12 @@
                                     :key="'航迹点' + index"
                                     :prop="'domains.' + index + '.value'"
                             >
-                                 <el-input type='number' style="width: 35%;margin-right: 10px" v-model="domain.wd">
-                                    <i slot="suffix">纬度</i>
-                                </el-input>
                                 <el-input type='number' style="width: 35%;margin-right: 10px;" v-model="domain.jd">
                                     <i slot="suffix">经度</i>
                                 </el-input>
-                               
+                                <el-input type='number' style="width: 35%;margin-right: 10px" v-model="domain.wd">
+                                    <i slot="suffix">纬度</i>
+                                </el-input>
                                 <el-button type="danger" @click.prevent="removeDomain(domain)">删除</el-button>
                             </el-form-item>
                         </el-col>
@@ -170,18 +171,18 @@
                     <el-form :model="dynamicValidateForm2" ref="dynamicValidateForm2" label-width="100px" class="demo-dynamic">
                         <el-col>
                             <li v-for="(domain, index) in dynamicValidateForm2.domains">
+                                <div style="margin: 5px 0">
+                                    <span style="font-size: 16px;margin-right: 5px">经度:{{index+1}}</span>
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd1"/>°
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd2"/>′
+                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd3"/>″
+                                </div>
                                  <div style="margin: 5px 0">
                                     <span style="font-size: 16px;margin-right: 5px">纬度:{{index+1}}</span>
                                     <el-input size="small" style="width: 25%" type='number' v-model="domain.wd1"/>°
                                     <el-input size="small" style="width: 25%" type='number' v-model="domain.wd2"/>′
                                     <el-input size="small" style="width: 25%" type='number' v-model="domain.wd3"/>″
                                     <el-button size="small" type="danger" @click.prevent="removeDomain2(domain)">删除</el-button>
-                                </div>
-                                <div style="margin: 5px 0">
-                                    <span style="font-size: 16px;margin-right: 5px">经度:{{index+1}}</span>
-                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd1"/>°
-                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd2"/>′
-                                    <el-input size="small" style="width: 25%" type='number' v-model="domain.jd3"/>″
                                 </div>
                             </li>
                         </el-col>
@@ -214,17 +215,17 @@
                             <!-- <el-form-item label="序号" style="width:10%">
                                 <span>{{ item.sx}}</span>
                             </el-form-item> -->
-                             <el-form-item label="航迹点" style="width:10%">
+                            <el-form-item label="航迹点" style="width:10%">
                                 <span>{{item.sx+1}}</span>
+                            </el-form-item>
+                            <el-form-item label="经度" style="width:30%">
+                                <el-input v-if="item.isOK" v-model="item.jd" style="width:100%;hight:100%"></el-input>
+                                <span v-else @click="dbclick(item)">{{ item.jd }}</span>
                             </el-form-item>
                             <el-form-item label="纬度" style="width:30%">
                                 <el-input v-if="item.isOK" v-model="item.wd" style="width:100%;hight:100%"></el-input>
                                 <span v-else @click="dbclick(item)">{{ item.wd}}</span>
                                 <span></span>
-                            </el-form-item>
-                             <el-form-item label="经度" style="width:30%">
-                                <el-input v-if="item.isOK" v-model="item.jd" style="width:100%;hight:100%"></el-input>
-                                <span v-else @click="dbclick(item)">{{ item.jd }}</span>
                             </el-form-item>
                             <el-form-item style="width:15%" v-if="i===props.row.hjds.length-1">
                                <el-button type="primary" size="small" @click="drawPolygon1(props)">修改</el-button>
@@ -249,6 +250,39 @@
                 <el-button @click="jingweiduVisible = false">取 消</el-button>
                 <el-button type="primary" @click="jingweiduPolygon">确 定</el-button>
             </span>
+        </el-dialog>
+        <el-dialog
+                title="航空安全管道位置设置"
+                :visible.sync="gdVisible"
+                width="30%"
+                append-to-body
+                :close-on-click-modal="false"
+        >
+            <div style="max-height: 600px;overflow: auto">
+                <el-button size="mini" type="primary" @click="addGd" style="margin-bottom: 10px">新增点</el-button>
+                <el-form v-model="gdValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+                    <el-col>
+                        <el-form-item
+                                v-for="(domain, index) in gdValidateForm.domains"
+                                :label="`点${index+1}`"
+                                :key="'点' + index"
+                                :prop="'domains.' + index + '.value'"
+                        >
+                            <el-input type='number' style="width: 35%;margin-right: 10px;" v-model="domain.jd">
+                                <i slot="suffix">经度</i>
+                            </el-input>
+                            <el-input type='number' style="width: 35%;margin-right: 10px" v-model="domain.wd">
+                                <i slot="suffix">纬度</i>
+                            </el-input>
+                            <el-button type="danger" @click.prevent="removeDomainGd(domain)">删除</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-form>
+            </div>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="gdVisible = false">取 消</el-button>
+            <el-button type="primary" @click="drawGd">确 定</el-button>
+          </span>
         </el-dialog>
         <el-dialog
                 title="飞机轨迹"
@@ -282,6 +316,21 @@
             <span slot="footer" class="dialog-footer">
             <el-button @click="dunkerVisible = false">取 消</el-button>
             <el-button type="primary" @click="dunkerPolygon">确 定</el-button>
+          </span>
+        </el-dialog>
+        <el-dialog
+                title="全国行政区查询"
+                :visible.sync="cityVisible"
+                width="15%"
+                append-to-body
+                :close-on-click-modal="false"
+        >
+            <div style="max-height: 600px;overflow: auto">
+                <el-input v-model="cityName" placeholder="请输入行政区名称"></el-input>
+            </div>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="cityVisible = false">取 消</el-button>
+            <el-button type="primary" @click="searchCityYes">查 询</el-button>
           </span>
         </el-dialog>
     </div>
@@ -340,6 +389,13 @@ export default {
                     key: ""
                 }],
             },
+            gdValidateForm: {
+                domains: [{
+                    jd: "",
+                    wd:"",
+                    key: ""
+                }],
+            },
             lineId:[],
         //     menuData:{
 		// 	  '飞行曲线':'',
@@ -355,7 +411,7 @@ export default {
                 len: ''
             },
             mapType:'haitu',
-            tyType:"",
+            tyType:"mercator",
             selectFs:'jwd',
             jwdType:true,
             dfmType:false,
@@ -364,14 +420,25 @@ export default {
             jingweiduVisible:false,
             handleCurrentData:{},
             tilesShow:false,
-            tiles06Show:false,
             tyShow:false,
+            gdVisible:false,
+            cityVisible:false,
+            cityName: ""
             //QTnum:0
 		}
 	},
 	methods: {
         bigTarget(){
             this.$emit('bigTarget')
+        },
+        tiles06() {
+            this.tiles06Show = true;
+            if (this.tiles06Show) {
+
+                // window.Map.viewer.scene.primitives.add(Tileset)
+                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[0])
+                window.Map.Tileset._primitives[0].show = this.tiles06Show
+            }
         },
         handleChecked(menuData){
             this.$emit('flagType',this.menuData)
@@ -386,8 +453,9 @@ export default {
             window.Map.viewerImagery['mercator'].show = false;
             window.Map.viewerImagery['haitu'].show = false
             window.Map.viewerImagery['StereoGraphic'].show = false;
-            if(s == "Ronbinson"){
-
+            window.Map.viewerImagery['Ronbinson'].show = false;
+            if(s == "mercator"){
+                window.Map.viewerImagery['haitu'].show = true
             } else {
                 window.Map.viewerImagery[s].show = true;
             }
@@ -398,7 +466,6 @@ export default {
             window.Map.viewerImagery['GeoTiff'].show = false
             window.Map.viewerImagery['png格式'].show = false
             window.Map.viewerImagery['jysl格式'].show = false
-           
             window.Map.viewerImagery[mapType].show = true  
         },
         CurentTime(time){
@@ -442,6 +509,10 @@ export default {
 				this.name = data.fileName
             })
 		},
+        airSafe(){
+            this.gdVisible = true;
+            this.gdValidateForm.domains=[{jd: "", wd:"", key: ""}];
+        },
 		load() {
 			let id = sessionStorage.getItem("selectEd")
 			window.open(globalUrl.host+'/find/loadWordFile?fileName='+id)
@@ -524,18 +595,8 @@ export default {
             if(this.tilesShow){
 
                 // window.Map.viewer.scene.primitives.add(Tileset)
-                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[6])
-                window.Map.Tileset._primitives[6].show = this.tilesShow
-            }
-           
-        },
-         tiles06(){
-            this.tiles06Show = true;
-            if(this.tiles06Show){
-
-                // window.Map.viewer.scene.primitives.add(Tileset)
-                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[0])
-                window.Map.Tileset._primitives[0].show = this.tiles06Show
+                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[5])
+                window.Map.Tileset._primitives[5].show = this.tilesShow
             }
            
         },
@@ -558,7 +619,6 @@ export default {
             });
         },
         feijiPolygon(){
-            debugger
             if(!Number(this.formInline.len)){
                 this.$message.error('飞机轨迹长度不能为空！');
                 return false
@@ -1050,6 +1110,12 @@ export default {
                 go          :  function(){step();} 
             } 
         },
+        removeDomainGd(item) {
+            var index = this.gdValidateForm.domains.indexOf(item)
+            if (index !== -1) {
+                this.gdValidateForm.domains.splice(index, 1)
+            }
+        },
         removeDomain(item) {
             var index = this.dynamicValidateForm.domains.indexOf(item)
             if (index !== -1) {
@@ -1073,6 +1139,61 @@ export default {
                 this.dfmType = true;
             }
         },
+        addGd(){
+            this.gdValidateForm.domains.push({
+                jd: "",
+                wd:"",
+                key: Date.now()
+            });
+        },
+        drawGd(){
+            this.gdVisible = false;
+            function computeRect(radius) {
+                var positions = [];
+                positions.push(new Cesium.Cartesian2(-1*radius/2 ,-radius/2));
+                positions.push(new Cesium.Cartesian2(radius/2 ,-radius/2));
+                positions.push(new Cesium.Cartesian2(radius/2 ,radius/2));
+                positions.push(new Cesium.Cartesian2(-1 * radius/2 ,radius/2));
+                return positions;
+            }
+            let arr = [];
+            this.gdValidateForm.domains.map(s=>{
+                arr.push(Number(s.jd),Number(s.wd))
+            })
+            let entity= window.Map.viewer.entities.add({
+                polylineVolume: {
+                    positions: Cesium.Cartesian3.fromDegreesArray(arr),
+                    shape: computeRect(80000.0),
+                    material: Cesium.Color.RED.withAlpha(0.2)
+                },
+            });
+            window.Map.viewer.zoomTo(entity)
+        },
+        searchCity(){
+            this.cityName="";
+            this.cityVisible = true;
+        },
+        searchCityYes(){
+            let that = this;
+            $.ajax({
+                type: "get",
+                url: `${globalUrl.host}/hjx/findQGDLSJbyMC`,
+                data: {
+                    mc: this.cityName
+                },
+                success(data) {
+                    that.cityVisible = false;
+                    if(data.length){
+                        let jwd = data[0].zb;
+                        let jd = jwd.split(",")[0];
+                        let wd = jwd.split(",")[1];
+                        window.Map.Tool.FlyTo([Number(jd), Number(wd), 40000]);
+                    } else {
+                        that.$message("无匹配数据！")
+                    }
+                }
+            })
+        }
     },
      mounted() {
         let that = this
@@ -1211,6 +1332,10 @@ export default {
         left: 10px;
         cursor: pointer;
     }
+    .menuOption p{
+        height: 32px;
+        line-height: 32px;
+    }
     .menuOption{
         position: absolute;
         width: 117px;
@@ -1223,10 +1348,6 @@ export default {
         align-items: center;
         text-align: left;
         padding-left: 20px;
-    }
-    .menuOption p{
-        height: 32px;
-        line-height: 32px;
     }
     .cms-nav .cms-left span{
         color: #27c1e9;;
