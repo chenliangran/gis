@@ -1704,14 +1704,14 @@ export default {
       viewer.clock.stopTime = stopTime;
 
       that.setZZ();
-      let wait = 0;
-
-      viewer.timeline.addEventListener(
+    //    let wait = 0;
+       var tiemer = "";
+       var time = 1000;//每次点击三秒后才能再次点击 
+       viewer.timeline.addEventListener(
         "mouseup",
-        function(e) {
-           console.log(wait)
-            if(wait == 0){
-                let end = new Date(that.allDate.endT),
+        function(e) {  
+                tiemer = setTimeout(function(){
+                let end = new Date(that.allDate.endT),
                     start = new Date(that.allDate.startT),
                     s = end.getTime() - start.getTime()
                 let a = e.pageX-Number($("#visualization").css('margin-left').split('px')[0]).toFixed(2),
@@ -1725,7 +1725,7 @@ export default {
                     window.Map.FlyCompare.ClearPath();
                     that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
                     that.$refs["myreplay"].$refs['myterrace'].setLineOption(false);
-                     $.ajax({
+                    $.ajax({
                         type: "get",
                         // dataType: "json",
                         url: `${globalUrl.host}/find/findSystemStatus`,
@@ -1768,18 +1768,19 @@ export default {
                             }
                         }
                     })
-                    wait = 2;
-            }else{ 
-                setInterval(()=>{
-                    if(wait > 0){
-                        wait--;
-                    }else{
-                        wait = 0;
-                    }                  
-                },1000)              
-                that.$message('请不要频繁点击跳转！')
+                },time);
+                    // wait = 2;
+            // else{ 
+            //     setInterval(()=>{
+            //         if(wait > 0){
+            //             wait--;
+            //         }else{
+            //             wait = 0;
+            //         }                  
+            //     },1000)              
+            //     that.$message('请不要频繁点击跳转！')
                 
-            }
+            // }
 
         //   let end = new Date(that.allDate.endT),
         //     start = new Date(that.allDate.startT),

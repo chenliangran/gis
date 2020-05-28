@@ -204,51 +204,489 @@ export function Init(ele,CONFIG){
    
     // var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
     //     Cesium.Cartesian3.fromDegrees(110.199990,19.044240,0.0));
-    scene.primitives.add(Cesium.Model.fromGltf({
-        url : '/static/SampleData/models/fjc-obj/runway.gltf',
-        modelMatrix : Cesium.Transforms.eastNorthUpToFixedFrame(
-            Cesium.Cartesian3.fromDegrees(110.160000,19.044220,0.0)),
-        scale : 100.0
-    }));
-    scene.primitives.add(Cesium.Model.fromGltf({
-        url : '/static/SampleData/models/hzd-obj/airport-terminal.gltf',
-        modelMatrix : Cesium.Transforms.eastNorthUpToFixedFrame(
-            Cesium.Cartesian3.fromDegrees(110.230099,19.049240,0.0)),
-        scale : 500.0
-    }));
-    var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(109.4757074400,18.2844629500,0.0))  
-    var model2 = scene.primitives.add(Cesium.Model.fromGltf({
-        url : '/static/SampleData/models/gaoyaxian/Tower.gltf',
-        modelMatrix : modelMatrix,
-        scale : 2.0
-    }));
-      /*获取3D model 的旋转矩阵modelMatrix*/
-      let l = model2.modelMatrix;
-      //构建一个三阶旋转矩阵。模型旋转一定的角度，fromRotation[Z]来控制旋转轴，toRadians()为旋转角度，转为弧度再参与运算
-    //   let l1 = Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(90));
-    //   var l1 = Cesium.Matrix3.fromRotationX(Cesium.Math.toRadians(90)); 
-      var l1 = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(-90)); 
-      //矩阵计算  // Cesium.Matrix4.multiplyByMatrix3 （矩阵，旋转，结果）
-      Cesium.Matrix4.multiplyByMatrix3(l,l1,l);
-      //将计算结果再赋值给modelMatrix
-      model2.modelMatrix = l;
 
-    var modelMatrix =Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(109.2111189,18.044240,0.0))  
-    var model =  scene.primitives.add(Cesium.Model.fromGltf({
-        url : '/static/SampleData/models/zjpt.gltf',
-        modelMatrix : modelMatrix,
-        scale : 1.0
-    }));
+    var ModelList =[
+        {
+            name:'runway',
+            url:'/static/SampleData/models/fjc-obj/runway.gltf',
+            position:{
+                x:110.160000,
+                y:19.044220,
+                z:0.0
+            },
+            scale:100.0,
+            toRadian:0,
+            fromRotation:null
+        },
+        {
+            name:'terminal',
+            url:'/static/SampleData/models/hzd-obj/airport-terminal.gltf',
+            position:{
+                x:110.230099,
+                y:19.049240,
+                z:0.0
+            },
+            scale:500.0,
+            toRadian:0,
+            fromRotation:null
+        },
+        {
+            name:'runway',
+            url:'/static/SampleData/models/fjc-obj/runway-4.gltf',
+            position:{
+                x:103.160000,
+                y:30.044220,
+                z:0.0
+            },
+            scale:100.0,
+            toRadian:0,
+            fromRotation:null
+        },
+        {
+            name:'terminal',
+            url:'/static/SampleData/models/hzd-obj/airport-terminal-4.gltf',
+            position:{
+                x:103.230099,
+                y:30.049240,
+                z:0.0
+            },
+            scale:500.0,
+            toRadian:0,
+            fromRotation:null
+        },
+        {
+            name:'runway',
+            url:'/static/SampleData/models/fjc-obj/runway-3.gltf',
+            position:{
+                x:110.160000,
+                y:19.944220,
+                z:0.0
+            },
+            scale:100.0,
+            toRadian:0,
+            fromRotation:null
+        },
+        {
+            name:'terminal',
+            url:'/static/SampleData/models/hzd-obj/airport-terminal-3.gltf',
+            position:{
+                x:110.230099,
+                y:19.949240,
+                z:0.0
+            },
+            scale:500.0,
+            toRadian:0,
+            fromRotation:null
+        },
+        {
+            name:'runway',
+            url:'/static/SampleData/models/fjc-obj/runway-1.gltf',
+            position:{
+                x:110.160000,
+                y:23.044220,
+                z:0.0
+            },
+            scale:100.0,
+            toRadian:0,
+            fromRotation:null
+        },
+        {
+            name:'terminal',
+            url:'/static/SampleData/models/hzd-obj/airport-terminal-1.gltf',
+            position:{
+                x:110.230099,
+                y:23.049240,
+                z:0.0
+            },
+            scale:500.0,
+            toRadian:0,
+            fromRotation:null
+        },
+        {
+            name:'runway',
+            url:'/static/SampleData/models/fjc-obj/runway-2.gltf',
+            position:{
+                x:110.160000,
+                y:25.044220,
+                z:0.0
+            },
+            scale:100.0,
+            toRadian:0,
+            fromRotation:null
+        },
+        {
+            name:'terminal',
+            url:'/static/SampleData/models/hzd-obj/airport-terminal-2.gltf',
+            position:{
+                x:110.230099,
+                y:25.049240,
+                z:0.0
+            },
+            scale:500.0,
+            toRadian:0,
+            fromRotation:null
+        },
+        {
+            name:'Tower',
+            url:'/static/SampleData/models/gaoyaxian/Tower.gltf',
+            position:{
+                x:109.5359575500,
+                y:19.2844629500,
+                z:-100.0
+            },
+            scale:1.5,
+            toRadian:-90,
+            fromRotation:null
+        },
+        {
+            name:'ObjPhone',
+            url:'/static/SampleData/models/ObjPhone.gltf',
+            position:{
+                x:109.4757074400,
+                y:19.2844629500,
+                z:2869
+            },
+            scale:1000.0,
+            toRadian:90,
+            fromRotation:null
+        },
+        {
+            name:'Tower',
+            url:'/static/SampleData/models/gaoyaxian/Tower-1.gltf',
+            position:{
+                x:109.4158974400,
+                y:19.2844629500,
+                z:-100.0
+            },
+            scale:1.5,
+            toRadian:-90,
+            fromRotation:null
+        },
+        {
+            name:'ObjPhone',
+            url:'/static/SampleData/models/ObjPhone-1.gltf',
+            position:{
+                x:109.3558974400,
+                y:19.2844629500,
+                z:2869
+            },
+            scale:1000.0,
+            toRadian:90,
+            fromRotation:null
+        },
+        {
+            name:'Tower',
+            url:'/static/SampleData/models/gaoyaxian/Tower-2.gltf',
+            position:{
+                x:109.2958974400,
+                y:19.2844629500,
+                z:0.0
+            },
+            scale:1.5,
+            toRadian:-90,
+            fromRotation:null
+        },
+        {
+            name:'Tower',
+            url:'/static/SampleData/models/gaoyaxian/Tower-3.gltf',
+            position:{
+                x:109.5359575500,
+                y:23.2844629500,
+                z:0.0
+            },
+            scale:1.5,
+            toRadian:-90,
+            fromRotation:null
+        },
+        {
+            name:'ObjPhone',
+            url:'/static/SampleData/models/ObjPhone-2.gltf',
+            position:{
+                x:109.4757074400,
+                y:23.2844629500,
+                z:2869
+            },
+            scale:1000.0,
+            toRadian:90,
+            fromRotation:null
+        },
+        {
+            name:'Tower',
+            url:'/static/SampleData/models/gaoyaxian/Tower-4.gltf',
+            position:{
+                x:109.4158974400,
+                y:23.2844629500,
+                z:0.0
+            },
+            scale:1.5,
+            toRadian:-90,
+            fromRotation:null
+        },
+        {
+            name:'ObjPhone',
+            url:'/static/SampleData/models/ObjPhone-3.gltf',
+            position:{
+                x:109.3558974400,
+                y:23.2844629500,
+                z:2869
+            },
+            scale:1000.0,
+            toRadian:90,
+            fromRotation:null
+        },
+        {
+            name:'Tower',
+            url:'/static/SampleData/models/gaoyaxian/Tower-5.gltf',
+            position:{
+                x:109.2958974400,
+                y:23.2844629500,
+                z:0.0
+            },
+            scale:1.5,
+            toRadian:-90,
+            fromRotation:null
+        },
+        {
+            name:'ConcreteBarrier',
+            url:'/static/SampleData/models/ConcreteBarrier.gltf',
+            position:{
+                x:109.2111189,
+                y:18.044240,
+                z:0.0
+            },
+            scale:1000000,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'Stone5ok17',
+            url:'/static/SampleData/models/Stone5ok17.gltf',
+            position:{
+                x:109.2111189,
+                y:18.3844629500,
+                z:0.0
+            },
+            scale:2,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'Stone5ok17',
+            url:'/static/SampleData/models/Stone5ok17-1.gltf',
+            position:{
+                x:110.2111189,
+                y:19.3844629500,
+                z:0.0
+            },
+            scale:2,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'Stone5ok17',
+            url:'/static/SampleData/models/Stone5ok17-2.gltf',
+            position:{
+                x:111.2111189,
+                y:19.3844629500,
+                z:0.0
+            },
+            scale:2,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'Stone5ok17',
+            url:'/static/SampleData/models/Stone5ok17-3.gltf',
+            position:{
+                x:109.2111189,
+                y:21.3844629500,
+                z:0.0
+            },
+            scale:2,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'Stone5ok17',
+            url:'/static/SampleData/models/Stone5ok17-4.gltf',
+            position:{
+                x:109.2111189,
+                y:22.3844629500,
+                z:0.0
+            },
+            scale:2,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'Stone5ok17',
+            url:'/static/SampleData/models/Stone5ok17-5.gltf',
+            position:{
+                x:113.2111189,
+                y:23.3844629500,
+                z:0.0
+            },
+            scale:2,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'Stone5ok17',
+            url:'/static/SampleData/models/Stone5ok17-6.gltf',
+            position:{
+                x:108.28711189,
+                y:23.3844629500,
+                z:0.0
+            },
+            scale:2,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'Stone5ok17',
+            url:'/static/SampleData/models/Stone5ok17-7.gltf',
+            position:{
+                x:104.28711189,
+                y:30.3844629500,
+                z:0.0
+            },
+            scale:2,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'zjpt',
+            url:'/static/SampleData/models/zjpt-1.gltf',
+            position:{
+                x:108.524477,
+                y:19.167726,
+                z:0.0
+            },
+            scale:1.5,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'zjpt',
+            url:'/static/SampleData/models/zjpt-2.gltf',
+            position:{
+                x:110.463092,
+                y:18.471308,
+                z:0.0
+            },
+            scale:1.5,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'zjpt',
+            url:'/static/SampleData/models/zjpt-4.gltf',
+            position:{
+                x:110.768947,
+                y:19.207059,
+                z:0.0
+            },
+            scale:1.5,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'zjpt',
+            url:'/static/SampleData/models/zjpt-5.gltf',
+            position:{
+                x:110.007759,
+                y:20.119898,
+                z:0.0
+            },
+            scale:1.5,
+            toRadian:90,
+            fromRotation:90
+        },
+        {
+            name:'zjpt',
+            url:'/static/SampleData/models/zjpt-6.gltf',
+            position:{
+                x:108.926917,
+                y:19.872059,
+                z:0.0
+            },
+            scale:1.5,
+            toRadian:90,
+            fromRotation:90
+        }
+    ]
+
+    for(let i=0;i<ModelList.length;i++){
+        let item = ModelList[i]
+        var model
+        var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(item.position.x, item.position.y,item.position.z));  
+/*        let index = url.lastIndexOf("/"); // lastIndexOf("/")  找到最后一个  /  的位置
+        let fileName = url.substr(index + 1); // substr() 截取剩余的字符，即得文件名xxx.doc*/
+        model=scene.primitives.add(Cesium.Model.fromGltf({
+            url : item.url,        //如果为bgltf则为.bgltf
+            modelMatrix : modelMatrix,
+            scale : item.scale  //放大倍数
+        }));
+        /*获取3D model 的旋转矩阵modelMatrix*/
+        let m = model.modelMatrix;
+        //构建一个三阶旋转矩阵。模型旋转一定的角度，fromRotation[Z]来控制旋转轴，toRadians()为旋转角度，转为弧度再参与运算
+        let m1
+        if(item.name=="Tower"){
+            m1 = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(item.toRadian));
+        }else{
+            m1 = Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(item.fromRotation));
+        }
+           
+         
+        //矩阵计算
+        Cesium.Matrix4.multiplyByMatrix3(m,m1,m);
+        //将计算结果再赋值给modelMatrix
+        model.modelMatrix = m;
+    }
+
+    //加载gltf格式数据到cesium，z为模型名称，modelMatrix为模型中心点的经纬度坐标
+
+
+    // scene.primitives.add(Cesium.Model.fromGltf({
+    //     url : '/static/SampleData/models/fjc-obj/runway.gltf',
+    //     modelMatrix : Cesium.Transforms.eastNorthUpToFixedFrame(
+    //         Cesium.Cartesian3.fromDegrees(110.160000,19.044220,0.0)),
+    //     scale : 100.0
+    // }));
+    // scene.primitives.add(Cesium.Model.fromGltf({
+    //     url : '/static/SampleData/models/hzd-obj/airport-terminal.gltf',
+    //     modelMatrix : Cesium.Transforms.eastNorthUpToFixedFrame(
+    //         Cesium.Cartesian3.fromDegrees(110.230099,19.049240,0.0)),
+    //     scale : 500.0
+    // }));
+    // var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(109.4757074400,18.2844629500,0.0))  
+    // var model2 = scene.primitives.add(Cesium.Model.fromGltf({
+    //     url : '/static/SampleData/models/gaoyaxian/Tower.gltf',
+    //     modelMatrix : modelMatrix,
+    //     scale : 2.0
+    // }));
+    //   /*获取3D model 的旋转矩阵modelMatrix*/
+    //   let l = model2.modelMatrix;
+    //   var l1 = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(-90)); 
+    //   Cesium.Matrix4.multiplyByMatrix3(l,l1,l);
+    //   model2.modelMatrix = l;
+
+    // var modelMatrix =Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(109.2111189,18.044240,0.0))  
+    // var model =  scene.primitives.add(Cesium.Model.fromGltf({
+    //     url : '/static/SampleData/models/zjpt.gltf',
+    //     modelMatrix : modelMatrix,
+    //     scale : 1.0
+    // }));
       /*获取3D model 的旋转矩阵modelMatrix*/
-      let m = model.modelMatrix;
+    //   let m = model.modelMatrix;
       //构建一个三阶旋转矩阵。模型旋转一定的角度，fromRotation[Z]来控制旋转轴，toRadians()为旋转角度，转为弧度再参与运算
-      let m1 = Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(90));
+    //   let m1 = Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(90));
     //   var m1 = Cesium.Matrix3.fromRotationX(Cesium.Math.toRadians(90)); 
     //   var m1 = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(90)); 
       //矩阵计算  // Cesium.Matrix4.multiplyByMatrix3 （矩阵，旋转，结果）
-      Cesium.Matrix4.multiplyByMatrix3(m,m1,m);
+    //   Cesium.Matrix4.multiplyByMatrix3(m,m1,m);
       //将计算结果再赋值给modelMatrix
-      model.modelMatrix = m;
+    //   model.modelMatrix = m;
 
     $.get(`${globalUrl.host}/find/findGisPath`, {
         crossDomain: true, 
