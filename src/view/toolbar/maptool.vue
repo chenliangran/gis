@@ -250,18 +250,92 @@ export default {
             }
         },
         search(){
-            this.dialogVisible = true
+            this.dialogVisible = true;
+            this.cityName = ""
         },
         flyCity(){
             this.dialogVisible = false;
+            let that = this;
+            let flag = true;
+            window["Map"].viewer.entities.removeById("searchCity")
             this.cityList.map(s=>{
                 if(s.name == this.cityName){
-                    window.Map.Tool.FlyTo([s.jd, s.wd, 40000]);
+                   window.Map.viewer.entities.add({
+                        position: Cesium.Cartesian3.fromDegrees(Number(s.jd),Number(s.wd),0),
+                        point: {
+                            color: Cesium.Color.RED,    //点位颜色
+                            pixelSize:10             //像素点大小
+                        },
+                        label : {
+                            text : that.cityName,
+                            font : '20px',    //字体样式
+                            fillColor:Cesium.Color.BLUE,        //字体颜色
+                            style: Cesium.LabelStyle.FILL,        //label样式
+                            outlineWidth : 2,
+                            pixelOffset:new Cesium.Cartesian2(10,20)  //偏移
+                        },
+                        id:"searchCity"
+                    });
+                    window.Map.Tool.FlyTo([s.jd, s.wd, 80000]);
+                    flag = false;
                 }
             })
+            if(flag){
+                $.ajax({
+                    type: "get",
+                    url: `${globalUrl.host}/hjx/findQGDLSJbyMC`,
+                    data: {
+                        mc: this.cityName
+                    },
+                    success(data) {
+                        that.cityVisible = false;
+                        if(data.length){
+                            let jwd = data[0].zb;
+                            let jd = jwd.split(",")[0];
+                            let wd = jwd.split(",")[1];
+                            window.Map.viewer.entities.add({
+                                position: Cesium.Cartesian3.fromDegrees(Number(jd),Number(wd),100),
+                                point: {
+                                    color: Cesium.Color.RED,    //点位颜色
+                                    pixelSize:10              //像素点大小
+                                },
+                                label : {
+                                    text : that.cityName,
+                                    font : '20px',    //字体样式
+                                    fillColor:Cesium.Color.BLUE,        //字体颜色
+                                    style: Cesium.LabelStyle.FILL,        //label样式
+                                    outlineWidth : 2,
+                                    pixelOffset:new Cesium.Cartesian2(10,20)  //偏移
+                                },
+                                id:"searchCity"
+                            });
+                            window.Map.Tool.FlyTo([Number(jd), Number(wd), 80000]);
+                        } else {
+                            that.$message("无匹配数据！")
+                        }
+                    }
+                })
+            }
         },
         flyToCity(name,cityList){
             this.dialogVisible = false;
+            window["Map"].viewer.entities.removeById("searchCity")
+            window.Map.viewer.entities.add({
+                position: Cesium.Cartesian3.fromDegrees(cityList.jd,cityList.wd,0),
+                point: {
+                    color: Cesium.Color.RED,    //点位颜色
+                    pixelSize:10         //像素点大小
+                },
+                label : {
+                    text : name,
+                    font : '20px',    //字体样式
+                    fillColor:Cesium.Color.BLUE,        //字体颜色
+                    style: Cesium.LabelStyle.FILL,        //label样式
+                    outlineWidth : 2,
+                    pixelOffset:new Cesium.Cartesian2(10,20)  //偏移
+                },
+                id:"searchCity"
+            });
             window.Map.Tool.FlyTo([cityList.jd, cityList.wd, 40000]);
         }
     },

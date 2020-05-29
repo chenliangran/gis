@@ -23,7 +23,7 @@
                     <i class="icon icon3"></i>
                     <span>参数设置</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag4" style="height:258px">
+                    <div class="menuOption" v-show="flag4" style="height:230px">
                         <p @click="tudeShow(tudeShow)">经纬度设置</p>
                         <p @click="plane">飞机轨迹</p>
                         <p @click="submarine">潜艇轨迹</p>
@@ -31,7 +31,6 @@
                         <p @click="bigTarget">大量目标</p>
                         <p @click="tiles06">精确地图</p>
                         <p @click="airSafe">航空安全管道</p>
-                        <p @click="searchCity">全国行政区查询</p>
                     </div>
                 </li>
                 <li @click="geshi(flag5)">
