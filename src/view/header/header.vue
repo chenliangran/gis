@@ -31,7 +31,7 @@
                         <p @click="bigTarget">大量目标</p>
                         <p @click="tiles06">精确地图</p>
                         <p @click="airSafe">航空安全管道</p>
-                        <p @click="searchCity">全国行政区查询</p>
+                        <p @click="searchCity">符号库</p>
                     </div>
                 </li>
                 <li @click="geshi(flag5)">
@@ -319,19 +319,62 @@
           </span>
         </el-dialog>
         <el-dialog
-                title="全国行政区查询"
+                title="符号库"
                 :visible.sync="cityVisible"
-                width="15%"
+                width="40%"
                 append-to-body
                 :close-on-click-modal="false"
         >
-            <div style="max-height: 600px;overflow: auto">
-                <el-input v-model="cityName" placeholder="请输入行政区名称"></el-input>
+            <div>
+                <div style="margin: 0 auto;width: 70%;height:50px;">
+                    <input
+                    name="file"
+                    @change="readImg($event)"
+                    style="position:absolute;height: 30px;margin-top: 10px;margin-left: 10px;padding-top:5px;"
+                    type="file"
+                    id="file"
+                    class="uploadImgName"
+                    value
+                    accept="image/*"
+                    capture="camera"
+                    >
+                  <el-button @click="uploadImg" style="margin-left:270px;height:30px;line-height:8px;margin-top: 10px;">确定</el-button>     
+                </div>
+                 
+                <div class="wrap">
+                    <el-table
+                        :data="imageData"
+                        stripe
+                        align="center"
+                        :show-overflow-tooltip="true"
+                        style="width: 70%">
+                        <el-table-column
+                            prop="fileName"
+                            label="名称"
+                            width="200">
+                        </el-table-column>
+                        <el-table-column
+                            label="符号"
+                            width="200">
+                            <template slot-scope="scope">
+                                <img :src="scope.row.filePath" :alt="scope.row.fileName" :title="scope.row.fileName"  width="40" height="40"/>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            label="操作"
+                            width="100">
+                            <template slot-scope="scope">
+                                <el-button @click="handleDelete(scope.row)" type="text" size="small">删除</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>                   
+                </div>
             </div>
+           
             <span slot="footer" class="dialog-footer">
-            <el-button @click="cityVisible = false">取 消</el-button>
-            <el-button type="primary" @click="searchCityYes">查 询</el-button>
-          </span>
+                <el-button @click="cityVisible = false">取 消</el-button>
+                <!-- <el-button type="primary" @click="searchCityYes">查 询</el-button> -->
+           </span>
         </el-dialog>
     </div>
 </template>
@@ -423,7 +466,9 @@ export default {
             tyShow:false,
             gdVisible:false,
             cityVisible:false,
-            cityName: ""
+            cityName: "",
+            imageData:[],
+            imgParam:''
             //QTnum:0
 		}
 	},
@@ -1170,9 +1215,96 @@ export default {
             window.Map.viewer.zoomTo(entity)
         },
         searchCity(){
-            this.cityName="";
-            this.cityVisible = true;
+            let _that = this
+            $.ajax({
+                type: "get",
+                url: `${globalUrl.host}/file/getAllFHPic`,
+                dataType: "json",
+                contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                success(data) {
+                    _that.imageData= data
+                    console.log(_that.imageData)
+                }
+            })
+            _that.cityName="";
+            _that.cityVisible = true;
+
         },
+        readImg(){
+
+            console.log("上传文件", event);
+            let that = this;
+            that.imgParam =''
+            let file = event.target.files[0];
+        
+            that.uploadImgName = file.name;
+        
+            let param = new FormData(); // 创建form对象
+            param.append("file", file, file.name); // 通过append向form对象添加数据
+            console.log(param.get("file")); // FormData私有类对象，访问不到，可以通过get判断值是否传进去
+            that.imgParam = param
+            
+        },
+        handleDelete(row){
+            console.log(row,'-----------')
+            let that = this
+             $.ajax({
+                type: "get",
+                dataType: "json",
+                url: `${globalUrl.host}/file/deleteFHKbyName`,
+                contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                data:{
+                    fileName:row.fileName
+                },
+                success: function (data) {
+                    if(data){
+                        $.ajax({
+                            type: "get",
+                            url: `${globalUrl.host}/file/getAllFHPic`,
+                            dataType: "json",
+                            contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                            success(data) {
+                                that.imageData= data
+                            }
+                        })
+                    }else{
+                        that.$message.error('删除失败！');
+                    }
+                }
+            })
+        },
+        uploadImg(){
+            let _that = this
+            if(_that.imgParam){
+                $.ajax({
+                    type: "post",
+                    url: `${globalUrl.host}/file/upload`,
+                    dataType: "json",
+                    data:_that.imgParam,
+                //ajax2.0可以不用设置请求头，但是jq帮我们自动设置了，这样的话需要我们自己取消掉
+                    contentType:false,
+                    //取消帮我们格式化数据，是什么就是什么
+                    processData:false,
+                    success(data) {
+                        
+                        $.ajax({
+                            type: "get",
+                            url: `${globalUrl.host}/file/getAllFHPic`,
+                            dataType: "json",
+                            contentType: "application/json;charset=UTF-8",//指定消息请求类型
+                            success(data) {
+                                _that.imageData= data
+                               $(".uploadImgName")[0].value= '';
+                            }
+                        })
+                    }
+                })  
+            }else{
+                 _that.$message.error('请选择上传符号！');
+            }
+             
+        },
+
         searchCityYes(){
             let that = this;
             $.ajax({
@@ -1537,5 +1669,22 @@ export default {
         vertical-align: middle !important;
         width: 25%;
         margin-bottom:0px !important;
+    }
+    .wrap{
+        overflow: hidden;
+    }
+    .wrap .el-table{
+        width: 70%;
+        margin: 0 auto;
+        max-height: 500px;
+        overflow: auto;
+        text-align: center;
+        border: 1px solid #EBEEF5;
+    }
+   .wrap .el-table--border::after, .wrap .el-table--group::after, .wrap .el-table::before {
+        content: '';
+        position: absolute;
+        background: none;
+        z-index: 1;
     }
 </style>

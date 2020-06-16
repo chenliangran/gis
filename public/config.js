@@ -1,7 +1,7 @@
 let productionPORT = window.location.port,
 env = {
-    development:'http://127.0.0.1:10000',
-    //development:'http://192.168.0.1:10000',
+    //development:'http://127.0.0.1:10000',
+    development:'http://192.168.0.111:10000',
     production:'http://'+window.location.hostname +":"+productionPORT
 }
   

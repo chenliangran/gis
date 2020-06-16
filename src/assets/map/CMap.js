@@ -213,122 +213,62 @@ export function Init(ele,CONFIG){
 
     var ModelList =[
         {
-            name:'runway',
-            url:'/static/SampleData/models/fjc-obj/runway.gltf',
+            name:'terminal',
+            url:'/static/SampleData/models/AirPort.gltf',
             position:{
-                x:110.160000,
-                y:19.044220,
+                x:110.390099,
+                y:19.699240,
                 z:0.0
             },
-            scale:100.0,
+            scale:50.0,
             toRadian:0,
             fromRotation:null
         },
         {
             name:'terminal',
-            url:'/static/SampleData/models/hzd-obj/airport-terminal.gltf',
+            url:'/static/SampleData/models/AirPort.gltf',
             position:{
-                x:110.230099,
-                y:19.049240,
+                x:108.980099,
+                y:18.989240,
                 z:0.0
             },
-            scale:500.0,
+            scale:50.0,
             toRadian:0,
             fromRotation:null
         },
         {
-            name:'runway',
-            url:'/static/SampleData/models/fjc-obj/runway-4.gltf',
+            name:'terminal',
+            url:'/static/SampleData/models/AirPort.gltf',
             position:{
                 x:103.160000,
                 y:30.044220,
                 z:0.0
             },
-            scale:100.0,
+            scale:50.0,
             toRadian:0,
             fromRotation:null
         },
         {
             name:'terminal',
-            url:'/static/SampleData/models/hzd-obj/airport-terminal-4.gltf',
-            position:{
-                x:103.230099,
-                y:30.049240,
-                z:0.0
-            },
-            scale:500.0,
-            toRadian:0,
-            fromRotation:null
-        },
-        {
-            name:'runway',
-            url:'/static/SampleData/models/fjc-obj/runway-3.gltf',
-            position:{
-                x:110.160000,
-                y:19.944220,
-                z:0.0
-            },
-            scale:100.0,
-            toRadian:0,
-            fromRotation:null
-        },
-        {
-            name:'terminal',
-            url:'/static/SampleData/models/hzd-obj/airport-terminal-3.gltf',
-            position:{
-                x:110.230099,
-                y:19.949240,
-                z:0.0
-            },
-            scale:500.0,
-            toRadian:0,
-            fromRotation:null
-        },
-        {
-            name:'runway',
-            url:'/static/SampleData/models/fjc-obj/runway-1.gltf',
+            url:'/static/SampleData/models/AirPort.gltf',
             position:{
                 x:110.160000,
                 y:23.044220,
                 z:0.0
             },
-            scale:100.0,
+            scale:50.0,
             toRadian:0,
             fromRotation:null
         },
         {
             name:'terminal',
-            url:'/static/SampleData/models/hzd-obj/airport-terminal-1.gltf',
-            position:{
-                x:110.230099,
-                y:23.049240,
-                z:0.0
-            },
-            scale:500.0,
-            toRadian:0,
-            fromRotation:null
-        },
-        {
-            name:'runway',
-            url:'/static/SampleData/models/fjc-obj/runway-2.gltf',
-            position:{
-                x:110.160000,
-                y:25.044220,
-                z:0.0
-            },
-            scale:100.0,
-            toRadian:0,
-            fromRotation:null
-        },
-        {
-            name:'terminal',
-            url:'/static/SampleData/models/hzd-obj/airport-terminal-2.gltf',
+            url:'/static/SampleData/models/AirPort.gltf',
             position:{
                 x:110.230099,
                 y:25.049240,
                 z:0.0
             },
-            scale:500.0,
+            scale:50.0,
             toRadian:0,
             fromRotation:null
         },
@@ -358,7 +298,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'Tower',
-            url:'/static/SampleData/models/gaoyaxian/Tower-1.gltf',
+            url:'/static/SampleData/models/gaoyaxian/Tower.gltf',
             position:{
                 x:109.4158974400,
                 y:19.2844629500,
@@ -370,7 +310,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'ObjPhone',
-            url:'/static/SampleData/models/ObjPhone-1.gltf',
+            url:'/static/SampleData/models/ObjPhone.gltf',
             position:{
                 x:109.3558974400,
                 y:19.2844629500,
@@ -382,7 +322,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'Tower',
-            url:'/static/SampleData/models/gaoyaxian/Tower-2.gltf',
+            url:'/static/SampleData/models/gaoyaxian/Tower.gltf',
             position:{
                 x:109.2958974400,
                 y:19.2844629500,
@@ -394,7 +334,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'Tower',
-            url:'/static/SampleData/models/gaoyaxian/Tower-3.gltf',
+            url:'/static/SampleData/models/gaoyaxian/Tower.gltf',
             position:{
                 x:109.5359575500,
                 y:23.2844629500,
@@ -406,7 +346,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'ObjPhone',
-            url:'/static/SampleData/models/ObjPhone-2.gltf',
+            url:'/static/SampleData/models/ObjPhone.gltf',
             position:{
                 x:109.4757074400,
                 y:23.2844629500,
@@ -418,7 +358,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'Tower',
-            url:'/static/SampleData/models/gaoyaxian/Tower-4.gltf',
+            url:'/static/SampleData/models/gaoyaxian/Tower.gltf',
             position:{
                 x:109.4158974400,
                 y:23.2844629500,
@@ -430,7 +370,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'ObjPhone',
-            url:'/static/SampleData/models/ObjPhone-3.gltf',
+            url:'/static/SampleData/models/ObjPhone.gltf',
             position:{
                 x:109.3558974400,
                 y:23.2844629500,
@@ -442,7 +382,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'Tower',
-            url:'/static/SampleData/models/gaoyaxian/Tower-5.gltf',
+            url:'/static/SampleData/models/gaoyaxian/Tower.gltf',
             position:{
                 x:109.2958974400,
                 y:23.2844629500,
@@ -478,7 +418,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'Stone5ok17',
-            url:'/static/SampleData/models/Stone5ok17-1.gltf',
+            url:'/static/SampleData/models/Stone5ok17.gltf',
             position:{
                 x:110.2111189,
                 y:19.3844629500,
@@ -490,7 +430,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'Stone5ok17',
-            url:'/static/SampleData/models/Stone5ok17-2.gltf',
+            url:'/static/SampleData/models/Stone5ok17.gltf',
             position:{
                 x:111.2111189,
                 y:19.3844629500,
@@ -502,7 +442,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'Stone5ok17',
-            url:'/static/SampleData/models/Stone5ok17-3.gltf',
+            url:'/static/SampleData/models/Stone5ok17.gltf',
             position:{
                 x:109.2111189,
                 y:21.3844629500,
@@ -514,7 +454,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'Stone5ok17',
-            url:'/static/SampleData/models/Stone5ok17-4.gltf',
+            url:'/static/SampleData/models/Stone5ok17.gltf',
             position:{
                 x:109.2111189,
                 y:22.3844629500,
@@ -526,7 +466,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'Stone5ok17',
-            url:'/static/SampleData/models/Stone5ok17-5.gltf',
+            url:'/static/SampleData/models/Stone5ok17.gltf',
             position:{
                 x:113.2111189,
                 y:23.3844629500,
@@ -538,7 +478,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'Stone5ok17',
-            url:'/static/SampleData/models/Stone5ok17-6.gltf',
+            url:'/static/SampleData/models/Stone5ok17.gltf',
             position:{
                 x:108.28711189,
                 y:23.3844629500,
@@ -550,7 +490,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'Stone5ok17',
-            url:'/static/SampleData/models/Stone5ok17-7.gltf',
+            url:'/static/SampleData/models/Stone5ok17.gltf',
             position:{
                 x:104.28711189,
                 y:30.3844629500,
@@ -562,7 +502,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'zjpt',
-            url:'/static/SampleData/models/zjpt-1.gltf',
+            url:'/static/SampleData/models/zjpt.gltf',
             position:{
                 x:108.524477,
                 y:19.167726,
@@ -574,7 +514,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'zjpt',
-            url:'/static/SampleData/models/zjpt-2.gltf',
+            url:'/static/SampleData/models/zjpt-1.gltf',
             position:{
                 x:110.463092,
                 y:18.471308,
@@ -586,7 +526,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'zjpt',
-            url:'/static/SampleData/models/zjpt-4.gltf',
+            url:'/static/SampleData/models/zjpt-2.gltf',
             position:{
                 x:110.768947,
                 y:19.207059,
@@ -598,7 +538,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'zjpt',
-            url:'/static/SampleData/models/zjpt-5.gltf',
+            url:'/static/SampleData/models/zjpt-4.gltf',
             position:{
                 x:110.007759,
                 y:20.119898,
@@ -610,7 +550,7 @@ export function Init(ele,CONFIG){
         },
         {
             name:'zjpt',
-            url:'/static/SampleData/models/zjpt-6.gltf',
+            url:'/static/SampleData/models/zjpt-5.gltf',
             position:{
                 x:108.926917,
                 y:19.872059,
