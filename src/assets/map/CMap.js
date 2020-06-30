@@ -128,12 +128,7 @@ export function Init(ele,CONFIG){
             show:false
         }))
     })
-    const Tileset06 = viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
-            url:"http://192.168.0.111:8080/earthview/services/file/GetFileData/tileset06/tileset06.json",
-            
-        }),
-      Tool.FlyTo([110.160000,19.044220,0])
-    );
+
   
     // viewer.zoomTo(Tileset)
     // let landMap = imageryLayers.addImageryProvider(new Cesium.ArcGisMapServerImageryProvider({
@@ -643,7 +638,6 @@ export function Init(ele,CONFIG){
             if(!viewerImagery[item.name]){
                 if(item.type == 'haitu'){
                     //海图
-
                     let haitu = new Cesium.UrlTemplateImageryProvider({
                         url : item.url,
                         ellipsoid: Cesium.Ellipsoid.WGS84,
@@ -665,7 +659,7 @@ export function Init(ele,CONFIG){
                 }else if(item.type == 'mercator'){
                      //海图
                      //http://localhost:8080/earthview/services/新地图3/MapService/WMTS?service=wmts&request=GetTile&version=1.0.0&style=default&LAYER=新地图3_Mercator_Web&TILEMATRIX=2&TILEROW=1&TILECOL=1&FORMAT=image/png&TileMatrixSet=OGC_WebMercator
-                     let haitu = new Cesium.UrlTemplateImageryProvider({
+                     let haitumercator = new Cesium.UrlTemplateImageryProvider({
                         url : item.url,             
                         tilingScheme: new Cesium.WebMercatorTilingScheme({
                             numberOfLevelZeroTilesX : 1,
@@ -683,7 +677,7 @@ export function Init(ele,CONFIG){
                             c : (provider,x,y,level) => x
                         }
                     })
-                    viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(haitu)
+                    viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(haitumercator)
                     viewerImagery[item.name].show = false
                 }else if(item.type == 'qita' && item.name !="jysl格式"){
                     let wmts = new Cesium.UrlTemplateImageryProvider({
@@ -741,6 +735,31 @@ export function Init(ele,CONFIG){
                     
                     viewerImagery[item.name] = viewer.imageryLayers.addImageryProvider(wmts)
                     viewerImagery[item.name].show = false
+                }else if(item.type == 'jqdt' && item.name == 'jqdt'){
+                    var translation=Cesium.Cartesian3.fromArray([110.160000, 19.044220, 0]);
+                    var mTileset06= Cesium.Matrix4.fromTranslation(translation);
+
+                   
+                    const Tileset06 = viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
+                            url:item.url,
+                            //modelMatrix: mTileset06 //形状矩阵
+                        }),
+                    );
+                    Tileset06.readyPromise.then(function (tileset) {
+                        console.log('------------------------------------')
+                        var cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center);
+                        cartographic.longitude = 120;
+                        cartographic.latitude = 30;
+                        cartographic.height = 0;
+                        var surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height);
+                        var offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude,height);
+                        var translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
+                        Tileset06.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
+                    });
+                    //     //生效
+                    //Tileset06._modelMatrix = mTileset06;
+                    // Tool.FlyTo([110.160000,19.044220,0])
+                   
                 }
             }
         })

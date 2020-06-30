@@ -23,7 +23,7 @@
                     <i class="icon icon3"></i>
                     <span>参数设置</span>
                      <i class="icon icon8"></i>
-                    <div class="menuOption" v-show="flag4" style="height:230px">
+                    <div class="menuOption" v-show="flag4" style="height:260px">
                         <p @click="tudeShow(tudeShow)">经纬度设置</p>
                         <p @click="plane">飞机轨迹</p>
                         <p @click="submarine">潜艇轨迹</p>
@@ -481,8 +481,8 @@ export default {
             if (this.tiles06Show) {
 
                 // window.Map.viewer.scene.primitives.add(Tileset)
-                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[0])
-                window.Map.Tileset._primitives[0].show = this.tiles06Show
+                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[31])
+                window.Map.Tileset._primitives[31].show = this.tiles06Show
             }
         },
         handleChecked(menuData){
@@ -499,11 +499,12 @@ export default {
             window.Map.viewerImagery['haitu'].show = false
             window.Map.viewerImagery['StereoGraphic'].show = false;
             window.Map.viewerImagery['Ronbinson'].show = false;
-            if(s == "mercator"){
-                window.Map.viewerImagery['haitu'].show = true
-            } else {
-                window.Map.viewerImagery[s].show = true;
-            }
+            // if(s == "mercator"){
+            //     window.Map.viewerImagery['mercator'].show = true
+            // } else {
+            //     window.Map.viewerImagery[s].show = true;
+            // }
+            window.Map.viewerImagery[s].show = true;
         },
         mapType1(mapType){
             window.Map.viewerImagery['haitu'].show = false
@@ -640,8 +641,8 @@ export default {
             if(this.tilesShow){
 
                 // window.Map.viewer.scene.primitives.add(Tileset)
-                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[5])
-                window.Map.Tileset._primitives[5].show = this.tilesShow
+                window.Map.viewer.zoomTo(window.Map.Tileset._primitives[30])
+                window.Map.Tileset._primitives[30].show = this.tilesShow
             }
            
         },
